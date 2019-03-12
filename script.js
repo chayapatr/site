@@ -46,7 +46,7 @@ const quote = {
     ],
     6: [
         [`here's johnny!`],
-        `jack torrence - the shining (1980)`
+        `jack torrance - the shining (1980)`
     ],
     7: [
         [`open the pod bay doors, hal.`],
