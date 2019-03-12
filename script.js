@@ -16,7 +16,6 @@ window.addEventListener('keydown', e => {
     if (c.includes('twitter')) window.location.href = "https://twitter.com/rtapayahc";
     if (c.includes('ArrowUpArrowUpArrowDownArrowDownArrowLeftArrowRightArrowLeftArrowRightba'))
     document.getElementById('hidden').classList.remove('invisible')
-    console.log(c)
 })
 let random = Math.floor(Math.random() * 11)
 const quote = {
