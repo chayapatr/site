@@ -4,18 +4,35 @@ let text = new Typewriter(document.getElementById('text'), {
 let d = new Date()
 document.getElementById('footer').innerText = `${d.getFullYear()}, chayapatr.com`
 text
-.typeString('chayapatr archiwaranguprok')
-.pauseFor(2500)
-.deleteAll()
-.pauseFor(1500)
+    .typeString('chayapatr archiwaranguprok')
+    .pauseFor(2500)
+    .deleteAll()
+    .pauseFor(1500)
 let c = "";
 window.addEventListener('keydown', e => {
     c += e.key
     if (c.includes('maryys')) window.location.href = "https://twitter.com/m_maryys";
-    if (c.includes('twitter')) window.location.href = "https://twitter.com/rtapayahc";
+    if (c.includes('twitter')) document.getElementById('twitter').classList.remove('invisible');
+    if (c.includes('countdown')) {
+        setInterval(() => {
+            document.getElementById('countdown').innerText = `ycc camp : ${updateTime(1553821200000)}`
+        }, 1000)
+    }
     if (c.includes('ArrowUpArrowUpArrowDownArrowDownArrowLeftArrowRightArrowLeftArrowRightba'))
-    document.getElementById('hidden').classList.remove('invisible')
+        document.getElementById('hidden').classList.remove('invisible')
+    if(c.includes('clear')){
+        c = ''
+        // TODO : something cool
+    }
 })
+let updateTime = el => {
+    let countdown = Math.floor((el - Date.now()) / 1000);
+    let day = Math.floor(countdown / 86400);
+    let hour = Math.floor((countdown % 86400) / 3600);
+    let minute = Math.floor((countdown % 3600) / 60);
+    let sec = (countdown % 3600) % 60;
+    return `${day}d ${hour}h ${minute}m ${sec}s`;
+}
 let random = Math.floor(Math.random() * 11)
 const quote = {
     0: [

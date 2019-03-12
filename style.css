@@ -20,7 +20,6 @@ li {
     display: inline-block;
     list-style-type: none;
     padding-left: 30px;
-    padding-right: 30px;
 }
 
 .invisible{
@@ -39,7 +38,11 @@ li {
 }
 
 #hidden {
-    color: salmon;
+    color: #ED433D;
+}
+
+#countdown {
+    color: #3C4F7F;
 }
 
 a {
@@ -60,7 +63,7 @@ a:hover {
     text-align: center;
 }
 
-@media only screen and (max-width: 1023px) {
+@media only screen and (max-width: 540px) {
     #text {
         font-size: 18px;
     }
@@ -68,7 +71,7 @@ a:hover {
     #under {
         font-size: 12px;
         padding-top: 10px;
-        padding-bottom: 50px;
+        padding-bottom: 20px;
     }
 
     #footer {
