@@ -8,7 +8,6 @@ text
 .pauseFor(2500)
 .deleteAll()
 .pauseFor(1500)
-const a = [77, 65, 82, 89, 83]
 let c = "";
 window.addEventListener('keydown', e => {
     c += e.key
@@ -24,7 +23,7 @@ const quote = {
         `carl denham - king kong (1933)`
     ],
     1: [
-        [`it's too bad she won't live`, 2000, true, `but the again, `, 500, `who does?`],
+        [`it's too bad she won't live`, 2000, true, `but then again, `, 500, `who does?`],
         `eduardo gaff - blade runner (1982)`
     ],
     2: [
@@ -49,7 +48,7 @@ const quote = {
     ],
     7: [
         [`open the pod bay doors, hal.`],
-        `2001: a space odyssey (1968)`
+        `david bowman - 2001: a space odyssey (1968)`
     ],
     8: [
         [`a martini. `, 1000, `shaken, not stirred.`],
