@@ -71,6 +71,10 @@ a:hover {
         padding-bottom: 50px;
     }
 
+    #footer {
+        font-size: 12px;
+    }
+
     li {
         padding-left: 0;
         padding-right: 0;
@@ -90,6 +94,10 @@ a:hover {
     }
 
     #under {
+        font-size: 10px;
+    }
+
+    #footer {
         font-size: 10px;
     }
 
