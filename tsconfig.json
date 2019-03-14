@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "removeComments": true,
+        "outFile": "script.js"
+    },
+    "include": [
+        "./*"
+    ],
+    "target": "ES5"
+}

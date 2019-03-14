@@ -1,40 +1,40 @@
 let text = new Typewriter(document.getElementById('text'), {
     autoStart: true
 });
-let d = new Date()
+let d: Date = new Date()
 document.getElementById('footer').innerText = `${d.getFullYear()}, chayapatr.com`
 text
     .typeString('chayapatr archiwaranguprok')
     .pauseFor(2500)
     .deleteAll()
     .pauseFor(1500)
-let c = "";
+let c: string = "";
 window.addEventListener('keydown', e => {
     c += e.key
-    if (c.includes('maryys')) window.location.href = "https://twitter.com/m_maryys";
-    if (c.includes('twitter')) document.getElementById('twitter').classList.remove('invisible');
-    if (c.includes('countdown')) {
+    if (c.indexOf('maryys') >= 0) window.location.href = "https://twitter.com/m_maryys";
+    if (c.indexOf('twitter') >= 0) document.getElementById('twitter').classList.remove('invisible');
+    if (c.indexOf('countdown') >= 0) {
         setInterval(() => {
             document.getElementById('countdown').innerText = `ycc camp : ${updateTime(1553821200000)}`
         }, 1000)
     }
-    if (c.includes('ArrowUpArrowUpArrowDownArrowDownArrowLeftArrowRightArrowLeftArrowRightba'))
+    if (c.indexOf('ArrowUpArrowUpArrowDownArrowDownArrowLeftArrowRightArrowLeftArrowRightba') >= 0)
         document.getElementById('hidden').classList.remove('invisible')
-    if(c.includes('clear')){
+    if(c.indexOf('clear') >= 0){
         c = ''
         // TODO : something cool
     }
 })
-let updateTime = el => {
-    let countdown = Math.floor((el - Date.now()) / 1000);
-    let day = Math.floor(countdown / 86400);
-    let hour = Math.floor((countdown % 86400) / 3600);
-    let minute = Math.floor((countdown % 3600) / 60);
-    let sec = (countdown % 3600) % 60;
+let updateTime = (el: number) :string => {
+    let countdown: number = Math.floor((el - Date.now()) / 1000);
+    let day: number = Math.floor(countdown / 86400);
+    let hour: number = Math.floor((countdown % 86400) / 3600);
+    let minute: number = Math.floor((countdown % 3600) / 60);
+    let sec: number = (countdown % 3600) % 60;
     return `${day}d ${hour}h ${minute}m ${sec}s`;
 }
-let random = Math.floor(Math.random() * 11)
-const quote = {
+let random: number = Math.floor(Math.random() * 11)
+const quote: any = {
     0: [
         [`it was beauty killed the beast.`],
         `carl denham - king kong (1933)`
@@ -80,7 +80,7 @@ const quote = {
         `the 1st rule of fight club - fight club (1999)`
     ]
 }
-const addQuote = (random, num) => {
+const addQuote = (random: number, num: number): void => {
     quote[random][num].forEach(el => {
         switch (typeof (el)) {
             case "string":
@@ -102,6 +102,6 @@ const addQuote = (random, num) => {
             });
             under.typeString(quote[random][1]).start()
         })
-        .start();
+        .start()
 }
-addQuote(random, 0, text)
+addQuote(random, 0)

@@ -1,0 +1,14 @@
+{
+  "name": "land",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/chayapatr/site.git",
+  "author": "chayapatr <chayapatr.arc@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "typescript": "^3.3.3333"
+  },
+  "scripts": {
+    "run": "tsc script.ts"
+  }
+}
