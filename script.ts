@@ -1,3 +1,4 @@
+// @ts-ignore
 let text = new Typewriter(document.getElementById('text'), {
     autoStart: true
 });
@@ -96,6 +97,7 @@ const addQuote = (random: number, num: number): void => {
     text
         .pauseFor(1000)
         .callFunction(() => {
+            // @ts-ignore
             let under = new Typewriter(document.getElementById('under'), {
                 autoStart: true,
                 cursor: '&nbsp'

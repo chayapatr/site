@@ -9,6 +9,6 @@
     "typescript": "^3.3.3333"
   },
   "scripts": {
-    "run": "tsc script.ts"
+    "build": "tsc script.ts"
   }
 }
