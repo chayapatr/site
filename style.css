@@ -132,7 +132,7 @@ div.img {
     width: calc(33.3% - 0.25rem);
     height: 40vw;
     margin-bottom: 0.5rem;
-    background: salmon;
+    background: whitesmoke;
     overflow: hidden;
     transition: transform .3s;
 }
