@@ -1,12 +1,13 @@
 <script lang="ts">
-	import Image from '../Components/Image.svelte';
-	// import Image from 'svelte-image'
+	// import Image from 'svelte-image';
+	import Image from '../Components/Image.svelte'
 	export let gallary: TImage[];
 
 	const images = gallary.map((image) => {
-		const file = image.img.split('.')[0]
+		const file = image.img.split('.')[0];
 		return [
-			file, 
+			// `g/${file}-400.png 375w,g/${file}-800.png 768w,g/${file}.png 1024w,`,
+			file,
 			image.title
 		];
 	});
@@ -15,6 +16,7 @@
 <section class="wrapper">
 	{#each images as image}
 		<div class="work">
+			<!-- <img srcset={image[0]} src={image[1]} alt={image[2]} /> -->
 			<Image {image} />
 		</div>
 	{/each}

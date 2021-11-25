@@ -1,5 +1,5 @@
 import preprocess from 'svelte-preprocess';
-import adapter from '@sveltejs/adapter-static';
+import adapter from '@sveltejs/adapter-netlify';
 import image from 'svelte-image';
 
 /** @type {import('@sveltejs/kit').Config} */
@@ -22,9 +22,6 @@ const config = {
 		target: '#svelte',
 		adapter: adapter(),
 		vite: {
-			optimizeDeps: {
-				include: ['blurhash']
-			},
 			files: {
 				assets: 'src/static'
 			},
