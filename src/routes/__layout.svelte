@@ -1,6 +1,13 @@
 <script>
-	import Navbar from '../Components/Navbar.svelte'
+	import Navbar from '../Components/Navbar.svelte';
 </script>
+
+<Navbar />
+<div class="nav-back" />
+
+<main>
+	<slot />
+</main>
 
 <style>
 	main {
@@ -10,19 +17,12 @@
 		margin: 0 auto;
 		box-sizing: border-box;
 	}
-    .nav-back {
-        height: 45px;
-    }
-    @media screen and (max-width: 768px) {
-        .nav-back {
-            height: 75px;
-        }
-    }
+	.nav-back {
+		height: 45px;
+	}
+	@media screen and (max-width: 768px) {
+		.nav-back {
+			height: 75px;
+		}
+	}
 </style>
-
-<Navbar />
-<div class="nav-back"></div>
-
-<main>
-    <slot></slot>
-</main>
