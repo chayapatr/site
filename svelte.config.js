@@ -10,7 +10,7 @@ const config = {
 		image({
 			sizes: [400, 800],
 			outputDir: 'g/',
-			publicDir: './static/',
+			publicDir: './static/assets/',
 			processFolders: ['./'],
 			processFoldersSizes: [400, 800]
 		}),

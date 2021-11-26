@@ -99,9 +99,6 @@
 		object-fit: cover;
 		margin-right: 30px;
 	}
-    .image-wrapper img {
-        width: 100%;
-    }
 	.me-small {
 		display: none;
 	}

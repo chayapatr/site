@@ -1,6 +1,6 @@
 <script lang="ts">
 	// import Image from 'svelte-image';
-	import Image from '../Components/Image.svelte'
+	import Image from '../Components/Image.svelte';
 	export let gallary: TImage[];
 
 	const images = gallary.map((image) => {
