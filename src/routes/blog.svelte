@@ -61,13 +61,11 @@
 </div>
 
 <style>
-	.wrapper {
-		margin-bottom: 15px;
-	}
     .items-wrapper {
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
+        margin-top: 20px;
     }
     .post-wrapper {
         display: flex;

@@ -19,7 +19,7 @@
 		{#if detail}
 			<a href={image[2]}>
 				<h2>{image[1]}</h2>
-				<div class="img detail"><Image {image} /></div>
+				<div class="img"><Image {image} /></div>
 			</a>
 		{:else}
 			<div class="img"><Image {image} /></div>
@@ -33,20 +33,20 @@
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: space-between;
-		padding: 15px 0;
 		column-gap: 10px;
 		row-gap: 15px;
 	}
 
 	.work {
 		width: calc(33.33% - 8.33px);
-		aspect-ratio: 1/1;
 		overflow: hidden;
+		padding: 0;
 	}
 
 	.work a {
 		display: block;
 		position: relative;
+		aspect-ratio: 1/1;
 	}
 
 	.work h2{ 
@@ -68,11 +68,11 @@
 		transition: 0.25s ease-in-out;
 	}
 
-	.work :global(.img.detail) {
+	.work :global(.img) {
 		scale: 1.02;
 	}
 
-	.work:hover :global(.img.detail) {
+	.work:hover :global(.img) {
 		scale: 1.01;
 		filter: blur(2px);
 		transition: 0.2s ease-in-out;
@@ -82,9 +82,7 @@
 		.wrapper {
 			flex-direction: column;
 			padding: 0 15px;
-			row-gap: 0px;
 		}
-
 		.work {
 			width: 100%;
 		}

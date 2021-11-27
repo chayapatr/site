@@ -86,7 +86,7 @@
 	.title-wrapper {
 		display: flex;
 		align-items: flex-end;
-		margin: 30px 0;
+		margin: 30px 0 0;
 	}
 	.image-wrapper {
 		width: calc(66.66% - 8.33px);
