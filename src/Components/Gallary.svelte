@@ -86,5 +86,15 @@
 		.work {
 			width: 100%;
 		}
+		.work :global(.img) {
+			scale: 1;
+		}
+		.work:hover :global(.img) {
+			scale: 1;
+			filter: none;
+		}
+		.work h2 {
+			display: none;
+		}
 	}
 </style>
