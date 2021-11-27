@@ -1,13 +1,25 @@
 <script>
 	import Navbar from '../Components/Navbar.svelte';
+	import Transition from '../Components/Transition.svelte';
+	export let key
+</script>
+
+<script context="module">
+	export const load = async ({ page }) => ({
+	  props: {
+		key: page.path,
+	  },
+	})
 </script>
 
 <Navbar />
 <div class="nav-back" />
 
-<main>
-	<slot />
-</main>
+<Transition refresh={key}>
+	<main>
+    	<slot />
+	</main>
+</Transition>
 
 <style>
 	main {

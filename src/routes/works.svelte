@@ -14,9 +14,6 @@
 </div>
 
 <style>
-	.wrapper {
-		padding: 0 15px;
-	}
 	p {
 		font-size: 40px;
 		line-height: 40px;

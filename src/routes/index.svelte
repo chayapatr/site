@@ -1,6 +1,5 @@
 <script lang="ts">
-	import Image from 'svelte-image';
-	import Carousel from '../Components/Carousel.svelte';
+	import Image from '../Components/Image.svelte';
 	import Gallary from '../Components/Gallary.svelte';
 	const talks = [
 		{
@@ -8,7 +7,7 @@
 			img: 'tedsq.png'
 		},
 		{
-			title: 'Hacktoberfest 2020',
+			title: 'Hacktoberfest Thailand 2020',
 			img: 'hacktoberfest.png'
 		},
 		{
@@ -18,40 +17,39 @@
 	];
 	const works = [
 		{
-			title: 'MESSE',
+			title: 'Molecular Encoded Storage for Space Exploration',
+			link: 'messe',
 			img: 'messe.png'
 		},
 		{
-			title: 'Recursive Mono Thai',
+			title: 'Recursive (Mono?) Sans Thai',
+			link: 'recthai',
 			img: 'recthai.png'
 		},
 		{
-			title: 'bkkjs',
+			title: 'BKK.JS',
+			link: 'bkkjs',
 			img: 'bkkjs.png'
 		},
 		{
-			title: 'the 5th stupid hackathon thailand',
+			title: 'The Stupid Hackathon Thailand',
+			link: 'sht',
 			img: 'sht5.png'
 		},
 		{
-			title: 'spaceth',
+			title: 'SPACETH.CO',
+			link: 'spaceth',
 			img: 'spaceth.png'
 		},
 		{
-			title: 'forgotten',
+			title: 'Forgotten',
+			link: 'forgotten',
 			img: 'forgotten.png'
 		},
 		{
-			title: 'toi15',
+			title: 'The 15th Thailand Olympiad in Informatics',
+			link: 'toi15',
 			img: 'toi.png'
-		},
-		{
-			title: 'forgotten',
-			img: 'forgotten.png'
-		},
-		{
-			title: 'forgotten',
-			img: 'forgotten.png'
 		}
 	];
 </script>
@@ -66,8 +64,7 @@
 	</div>
 	<div class="title-wrapper">
 		<div class="image-wrapper">
-			<Image src="profile.png" alt="profile" />
-			<!-- <img src="profile.png" srcset="g/profile-400.png 375w,g/profile-800.png 768w,g/profile.png 1024w," alt="profile" /> -->
+			<Image image={["profile", "profile"]} />
 		</div>
 		<h2 class="me-large">&lt;- (This is me)</h2>
 		<h1 class="me-small">^ (This is me)</h1>
@@ -76,16 +73,13 @@
 <div class="wrapper">
 	<h1>Works/Projects</h1>
 </div>
-<Gallary gallary={works} />
+<Gallary gallary={works} detail={true}/>
 <div class="wrapper">
 	<h1>Talks/Keynotes</h1>
 </div>
-<Gallary gallary={talks} />
+<Gallary gallary={talks} detail={true}/>
 
 <style>
-	.wrapper {
-		padding: 0 15px;
-	}
 	.introduction {
 		max-width: 80%;
 	}

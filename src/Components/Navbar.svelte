@@ -1,11 +1,11 @@
 <nav>
 	<div class="name-wrapper">
-		<h1>Chayapatr</h1>
+		<h1><a href="/">Chayapatr</a></h1>
 	</div>
 	<div class="menu-wrapper">
-		<h3>Blog</h3>
-		<h3>Gallary</h3>
-		<h3>About</h3>
+		<h3><a href="/gallary">Gallary</a></h3>
+		<h3><a href="/blog">Blog</a></h3>
+		<h3><a href="/about">About</a></h3>
 	</div>
 	<div class="menu-small-wrapper">
 		<span />
@@ -30,6 +30,14 @@
 		font-size: 24px;
 		letter-spacing: 0px;
 		line-height: 24px;
+	}
+	a {
+		text-decoration: none;
+		color: #000;
+	}
+	a:hover {
+		color: #444;
+		transition: 0.15s;
 	}
 	.name-wrapper {
 		margin-left: 12px;
