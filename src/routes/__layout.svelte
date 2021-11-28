@@ -34,7 +34,7 @@
 	}
 	@media screen and (max-width: 768px) {
 		.nav-back {
-			height: 75px;
+			height: 45px;
 		}
 	}
 </style>
