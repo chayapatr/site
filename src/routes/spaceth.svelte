@@ -17,7 +17,7 @@
 		primarily focuses on the history, technology, and the possibilities of future space exploration
 		both in scientific and social aspects.
 	</p>
-    <img class="w-full aspect-video object-cover border-2 border-neutral-900" src="https://spaceth.co/wp-content/uploads/2021/07/IMG_2713-2048x1536.jpg" alt="">
+  <img class="w-full aspect-video object-cover border-2 border-neutral-900" src="https://spaceth.co/wp-content/uploads/2021/07/IMG_2713-2048x1536.jpg" alt="">
   <h6>Blue Origin NS-13 Launch Live with <a href="https://nutn0n.com" class="underline">nutn0n</a></h6>
 </section>
 

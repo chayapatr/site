@@ -5,8 +5,8 @@
 			link: '/'
 		},
 		{
-			name: 'works',
-			link: '/works'
+			name: 'things',
+			link: '/things'
 		},
 		{
 			name: 'write',
