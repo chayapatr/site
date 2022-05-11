@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  .pub-large-section {
+    @apply w-full md:w-5/6 lg:w-3/4
+  }
+}
+
+* {
+  @apply font-sans text-neutral-900;
+}
+
+h1 {
+  @apply font-serif text-3xl sm:text-4xl md:text-6xl lg:text-7xl tracking-tight;
+}
+
+h2 {
+  @apply font-sans text-3xl sm:text-4xl md:text-6xl lg:text-7xl tracking-tight underline pb-2 lg:pb-4;
+}
+
+h6 {
+  @apply font-sans text-xl pt-2 pb-4;
+}
+
+p {
+  @apply font-serif text-xl md:text-3xl lg:text-5xl pb-2 lg:pb-6 lg:leading-tight tracking-tight;
+}
+
+a {
+  @apply hover:text-blue-500;
+}
+
+section {
+  @apply pb-4 lg:pb-10
+}
