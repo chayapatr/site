@@ -1,0 +1,198 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+
+const works = {
+  codes: {
+    text: "codes & crafts",
+    list: [
+      {
+        name: "oknize [🚧 wip]",
+        org: ["creatorsgarten"],
+        link: "",
+        year: 2023,
+      },
+      { name: "thaiui [🚧 wip]", org: [], link: "", year: 2023 },
+      {
+        name: "cluster.wiki [🚧 wip]",
+        org: ["creatorsgarten"],
+        link: "",
+        year: 2023,
+      },
+      { name: "contentsgarten", org: ["creatorsgarten"], link: "", year: 2022 },
+      {
+        name: "messe",
+        org: ["spaceth"],
+        link: "messe",
+        year: 2020,
+      },
+    ],
+  },
+  peoples: {
+    text: "communities & collaborations",
+    list: [
+      { name: "garden zero", org: ["creatorsgarten"], link: "", year: 2023 },
+      { name: "bangkok art council [🚧 wip]", org: [], link: "", year: 2023 },
+    ],
+  },
+  contents: {
+    text: "contents",
+    list: [
+      {
+        name: "thaipbs: starstuff เรื่องเล่าจากดวงดาว",
+        org: ["spaceth"],
+        link: "",
+        year: 2022,
+      },
+      {
+        name: "chasing new horizons (thai translation)",
+        org: [],
+        link: "",
+        year: 2022,
+      },
+      {
+        name: "futuretales lab: future of space movement",
+        org: ["spaceth"],
+        link: "",
+        year: 2022,
+      },
+    ],
+  },
+  events: {
+    text: "event-based projects",
+    list: [
+      {
+        name: "bangkok open source hackathon",
+        org: ["creatorsgarten", "bma"],
+        link: "",
+        year: 2023,
+      },
+      { name: "ai space challenge", org: ["spaceth"], link: "", year: 2022 },
+      {
+        name: `"sciยศาสตร์": superstition night in the science month`,
+        org: ["spaceth", "bma"],
+        link: "",
+        year: 2022,
+      },
+      {
+        name: "how to learn (almost) anything",
+        org: ["spaceth"],
+        link: "",
+        year: 2022,
+      },
+      { name: "hacktoberfest thailand series", org: [], link: "", year: 2019 },
+      {
+        name: "stupid hackathon thailand series",
+        org: ["creatorsgarten"],
+        link: "",
+        year: 2017,
+      },
+    ],
+  },
+  "arts & lives": {
+    text: "arts & lives",
+    list: [
+      {
+        name: "algorave [🚧 wip]",
+        org: ["creatorsgarten"],
+        link: "",
+        year: 2022,
+      },
+      {
+        name: "instrument not allowed [🚧 wip]",
+        org: ["spaceth"],
+        link: "messe",
+        year: 2020,
+      },
+      { name: "pds band contest", org: ["🏫"], link: "", year: 2020 },
+      { name: "forgotten, a theatrical play", org: [], link: "", year: 2020 },
+    ],
+  },
+  "side projects": {
+    text: "personal side projects",
+    list: [
+      { name: "tea interpreter [🚧 wip]", org: [], link: "", year: 2023 },
+      { name: "algorithm visualizer [🚧 wip]", org: [], link: "", year: 2023 },
+      { name: "century per dot", org: [], link: "", year: 2021 },
+    ],
+  },
+};
+
+const org = {
+  spaceth: "🪐",
+  creatorsgarten: "🪴",
+  bma: "🏙️",
+};
+
+const orgMap = (x) => {
+  return x.map((y) => org[y] ?? y);
+};
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <body>
+    <Header title={SITE_TITLE} />
+    <main class="pc grid gap-8">
+      <h1 class="text-3xl border-y border-black py-3 font-medium">
+        works by pub
+      </h1>
+      <div class="flex flex-wrap gap-3">
+        <div>
+          🪴 → <a href="" class="px-1">creatorsgarten</a>
+        </div>
+        <div>🪐 → <a href="" class="px-1">spaceth.co</a></div>
+        <div>
+          🏙️ → <a href="" class="px-1">bangkok metropolitan administration</a>
+        </div>
+        <div>
+          🏫 → <a href="" class="px-1">patumwan demonstration school</a>
+        </div>
+      </div>
+      {
+        Object.entries(works).map(([k, v]: any) => {
+          return (
+            <div>
+              <h2 class="text-2xl font-medium mb-3" id={k}>
+                {v.text}
+              </h2>
+              <ul class="grid gap-5">
+                {v.list.map(
+                  (x: {
+                    name: string;
+                    org: string[];
+                    link: string;
+                    year: number;
+                  }) => {
+                    return (
+                      <a
+                        class="group border-b hover:bg-transparent group-hover:border-b-2 transition-all border-neutral-600 py-1 my-1 grid grid-cols-6 lg:grid-cols-10"
+                        href=""
+                      >
+                        <h3 class="group-hover:font-medium text-lg col-span-4 lg:col-span-8">
+                          {x.name}
+                        </h3>
+                        <h3 class="group-hover:font-medium text-lg text-end">
+                          {orgMap(x.org).join(" | ")}
+                        </h3>
+                        <h3 class="group-hover:font-medium text-lg text-end">
+                          {x.year}
+                        </h3>
+                      </a>
+                    );
+                  }
+                )}
+              </ul>
+            </div>
+          );
+        })
+      }
+    </main>
+    <Footer />
+  </body>
+</html>

@@ -1,9 +1,9 @@
 ---
-import HeaderLink from './HeaderLink.astro';
-import { SITE_TITLE } from '../consts';
+import HeaderLink from "./HeaderLink.astro";
+import { SITE_TITLE } from "../consts";
 ---
 
-<header>
+<!-- <header>
 	<h2>
 		{SITE_TITLE}
 	</h2>
@@ -14,12 +14,18 @@ import { SITE_TITLE } from '../consts';
 		<HeaderLink href="https://twitter.com/astrodotbuild" target="_blank">Twitter</HeaderLink>
 		<HeaderLink href="https://github.com/withastro/astro" target="_blank">GitHub</HeaderLink>
 	</nav>
+</header> -->
+<header class="flex justify-between items-center pc py-3">
+  <div><a href="/">madeby.pub</a></div>
+  <ul class="flex gap-1">
+    <li><a href="works">works</a></li>
+    <li><a href="">displays</a></li>
+    <li><a href="">me</a></li>
+  </ul>
 </header>
+
 <style>
-	header {
-		margin: 0em 0 2em;
-	}
-	h2 {
-		margin: 0.5em 0;
-	}
+  li > a {
+    @apply px-1;
+  }
 </style>
