@@ -1,0 +1,88 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import Card from "../components/Card.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import PubLinks from "../components/PubLinks.astro";
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <body>
+    <Header title={SITE_TITLE} />
+    <main class="pc grid gap-8 pb-3">
+      <h1 class="text-3xl border-y border-black py-3 font-medium pr-2">
+        typical about section and a personal dumpster fire 🔥
+      </h1>
+      <div class="x">
+        1. I rant out my thoughts and personal experiences on Medium, which can
+        be accessed from <a href="chayapatr.medium.com">chayapatr.medium.com</a>
+      </div>
+      <div class="x">
+        2. I write about space and science stuff at Spaceth.co, here's my author
+        page: <a href="spaceth.co/author/chayapatr"
+          >spaceth.co/author/chayapatr</a
+        >
+      </div>
+      <div class="x">
+        3. I'm hosting a podcast called "Starstuff เรื่องเล่าจากดวงดาว" (eng:
+        stories from the stars) at ThaiPBS (Thailand's variant of PBS/BBC).
+        (Going to reach 100 episodes in ~2 months!). It is available on <a
+          href="">Apple Podcast</a
+        >, <a href="">Spotify</a>,
+        <a href="">Google Podcast</a>, etc., and also as a <a href=""
+          >video podcast on Youtube</a
+        >!
+      </div>
+      <PubLinks />
+      <div class="x">
+        4. (about me?) My name is Pub (or Chayapatr Archiwaranguprok - or ชยภัทร
+        อาชีวระงับโรค in Thai). I'm a 20-yo (self-entitled) interdisciplinary
+        maker. I currently work as a curator (and as a co-founder, if it is
+        considered work?) at Creatorsgarten, a collective of geeky creators
+        joined together to create cool and meaningful things
+      </div>
+      <div class="x">
+        5. I also work as Editor-in-Chief at Spaceth.co, a space/science-focused
+        media and space activist group aiming to promote science communication
+        and space democratization in Thailand and Southeast Asia.
+      </div>
+      <div class="x">
+        6. I once sent dna storage to space, made a theatrical play, translated
+        a book, received a bronze medal at a national computer olympiad, and won
+        ✊✋✌️ for 30 rounds straight.
+      </div>
+      <div class="x">
+        7. I resigned from computer engineering at Chulalongkorn University to
+        (study/do research?) at the University of the Thai Chamber of Commerce
+        (technically, I'm in my undergrad degree in cs). I'm working to publish
+        my learning log/journey/notes on this website. it's surely gonna be
+        interesting -- stay tuned!
+      </div>
+      <div class="x">
+        8. feel free to look around and get in touch. Thanks again for being
+        here!
+      </div>
+      <div class="x">
+        9. here're my <a href="github.com/chayapatr">github</a>, <a
+          href="fb.me/chayapatr">facebook</a
+        >, <a href="instagram.com/chayapatr">instagram</a>, and <a
+          href="mailto:chayapatr.arc@gmail.com">email</a
+        >
+      </div>
+    </main>
+    <Footer />
+    <style>
+      a {
+        @apply text-blue-600 hover:text-white hover:bg-blue-600 !important;
+      }
+      .x {
+        @apply text-xl leading-normal lowercase;
+      }
+    </style>
+  </body>
+</html>

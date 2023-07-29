@@ -91,7 +91,7 @@ const works = {
       },
     ],
   },
-  "arts & lives": {
+  arts: {
     text: "arts & lives",
     list: [
       {
@@ -110,7 +110,7 @@ const works = {
       { name: "forgotten, a theatrical play", org: [], link: "", year: 2020 },
     ],
   },
-  "side projects": {
+  side: {
     text: "personal side projects",
     list: [
       { name: "tea interpreter [🚧 wip]", org: [], link: "", year: 2023 },
@@ -140,9 +140,9 @@ const orgMap = (x) => {
     <Header title={SITE_TITLE} />
     <main class="pc grid gap-8">
       <h1 class="text-3xl border-y border-black py-3 font-medium">
-        works by pub
+        pub's works
       </h1>
-      <div class="flex flex-wrap gap-3">
+      <div class="flex flex-wrap gap-3 text-lg">
         <div>
           🪴 → <a href="" class="px-1">creatorsgarten</a>
         </div>

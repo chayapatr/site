@@ -1,0 +1,179 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+
+const appearances = {
+  talks: {
+    text: "talks & panels",
+    list: [
+      {
+        name: "tortilla endofunctors, and more jokes about monads",
+        host: "functional programming meetup",
+        date: "19 may 2023",
+        link: "",
+        type: "talk",
+        img: "tortilla.jpeg",
+      },
+      {
+        name: "science odyssey ปรากฏการณ์หนีตามวิทยาศาสตร์",
+        host: "national book fair 2023 / matichon / sundogs",
+        date: " 31 march 2023",
+        link: "https://www.youtube.com/watch?v=H4pBwLyJ6MI",
+        type: "panel",
+        img: "book.jpeg",
+      },
+      {
+        name: "reality is not what it seems opening panel",
+        host: "sophia publishing",
+        date: "23 april 2021",
+        link: "https://web.facebook.com/SophiaPublishing/videos/%E0%B8%A1%E0%B8%B2%E0%B9%81%E0%B8%A5%E0%B9%89%E0%B8%A7-sophia-readival-%E0%B8%81%E0%B8%B1%E0%B8%9A%E0%B8%81%E0%B8%B2%E0%B8%A3%E0%B9%80%E0%B8%9B%E0%B8%B4%E0%B8%94%E0%B8%95%E0%B8%B1%E0%B8%A7%E0%B8%AB%E0%B8%99%E0%B8%B1%E0%B8%87%E0%B8%AA%E0%B8%B7%E0%B8%AD%E0%B9%80%E0%B8%A5%E0%B9%88%E0%B8%A1%E0%B9%81%E0%B8%A3%E0%B8%81%E0%B8%82%E0%B8%AD%E0%B8%87%E0%B8%AA%E0%B8%B3%E0%B8%99%E0%B8%B1%E0%B8%81%E0%B8%9E%E0%B8%B4%E0%B8%A1%E0%B8%9E%E0%B9%8C-2/3846079268803766?_rdc=1&_rdr",
+        type: "panel",
+        img: "sophia.png",
+      },
+      {
+        name: "how to drink bubble tea or (finding the underlying patterns of the universe)",
+        host: "tedxutcc",
+        date: "21 march 2021",
+        type: "talk",
+        img: "ted.jpeg",
+      },
+      {
+        name: "they dig into the soil and talk by the hole",
+        host: "bangkok citycity gallery",
+        date: "30 january 2021",
+        link: "https://bookshoplibrary.com/activity/archive/y-2021/they-dig-into-the-soil-and-talk-by-the-hole/",
+        type: "panel",
+        img: "bccg.avif",
+      },
+      {
+        name: "building an open source dna storage algorithm for a space mission",
+        host: "hacktoberfest thailand 2020",
+        date: "17 october 2020",
+        link: "https://www.facebook.com/StupidHackTH/posts/1284881585178078",
+        type: "talk",
+        img: "hacktober.jpeg",
+      },
+    ],
+  },
+  interviews: {
+    text: "interviews",
+    list: [
+      {
+        name: "นิตยสาร สารคดี ฉบับที่ 449 สิงหาคม 2565 Space Mission",
+        host: "Sarakadee Magazine",
+        date: "August 2022",
+        link: "https://www.facebook.com/watch/live/?v=789068861666134&ref=search",
+        type: "interview",
+        img: "sarakadee.jpeg",
+      },
+      {
+        name: "การศึกษาไทยพัฒนาอุตสาหกรรมอวกาศได้แค่ไหน ฟังมุมมองจากผู้ทำสื่อ SPACETH.CO",
+        host: "The People ",
+        date: "20 July 2022",
+        link: "https://www.facebook.com/watch/live/?v=789068861666134&ref=search",
+        type: "interview",
+        img: "people.webp",
+      },
+    ],
+  },
+  awards: {
+    text: "awards & speeches",
+    list: [
+      {
+        name: "the 15th thailand olympiad in informatics (bronze medal)",
+        host: "ipst",
+        date: "2021",
+        link: "https://www.facebook.com/watch/live/?v=789068861666134&ref=search",
+        type: "interview",
+        img: "toi15.webp",
+      },
+      {
+        name: "mahidol science communicator award 2022",
+        host: "mahidol university",
+        date: "28 october 2022",
+        link: "https://www.facebook.com/watch/live/?v=789068861666134&ref=search",
+        type: "interview",
+        img: "mahidol.jpeg",
+      },
+      {
+        name: "people of the year award 2022",
+        host: "the people",
+        date: " 7 april 2022",
+        link: "https://www.facebook.com/watch/live/?v=789068861666134&ref=search",
+        type: "interview",
+        img: "peopleaward.jpeg",
+      },
+    ],
+  },
+};
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <body>
+    <Header title={SITE_TITLE} />
+    <main class="pc grid gap-8 mb-3">
+      <h1 class="text-3xl border-y border-black py-3 font-medium pr-2">
+        pub's appearances
+      </h1>
+      {
+        Object.entries(appearances).map(([k, v]) => {
+          return (
+            <div id={k} class="grid gap-3">
+              <h2 class="text-2xl font-medium">{v.text}</h2>
+              <div class="columns lg:columns-2 gap-6">
+                {v.list.map((x) => {
+                  return (
+                    <a
+                      class="grid mb-6 break-inside-avoid-column hover:underline hover:bg-transparent hover:text-neutral-950"
+                      href={x.link}
+                    >
+                      <img src={x.img} class="w-full mb-3" />
+                      <p>
+                        <span class="font-medium">{x.host} · </span>
+                        {x.name}
+                      </p>
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })
+      }
+      <div id="classes" class="grid gap-1">
+        <h2 class="text-2xl font-medium">classes</h2>
+        <ul class="list-disc list-outside pl-4 text-lg">
+          <li>
+            <span class="font-medium">guest lecturer</span> "science communication
+            for life sciences" at mahidol university (2021)
+          </li>
+          <li>
+            <span class="font-medium">guest lecturer</span> “space and lunar exploration
+            for architect” with space zab company at bangkok university (2020)
+          </li>
+          <li>
+            <span class="font-medium">voluntary teaher</span> storytelling class
+            for saturday school at wat pathum wanaram school (2019)
+          </li>
+          <li>
+            <span class="font-medium">guest lecturer</span> the promotion of academic
+            olympiad and development of science education foundation's computer camp
+            at satri mahapruttharam school (2019)
+          </li>
+        </ul>
+      </div>
+    </main>
+    <Footer />
+    <style>
+      li > a {
+        @apply px-1;
+      }
+    </style>
+  </body>
+</html>

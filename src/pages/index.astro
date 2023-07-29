@@ -4,6 +4,7 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import Card from "../components/Card.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import PubLinks from "../components/PubLinks.astro";
 ---
 
 <!DOCTYPE html>
@@ -19,23 +20,26 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
         thailand.
       </h1>
       <div>
-        <div class="grid md:grid-cols-3 gap-3">
+        <div class="grid md:grid-cols-2 gap-3">
           <Card image="spaceth.jpeg" name="spaceth.co" />
           <Card image="grtn.jpeg" name="creatorsgarten" />
-          <div
-            class="pr-3 md:px-3 items-center justify-center flex text-lg md:text-base"
-          >
-            I'm currently working as a curator at creatorsgarten collective, and
-            as an editor-in-chief at spaceth.co
-          </div>
+        </div>
+        <div class="text-lg pr-2 mt-4 border-y border-black py-1">
+          i'm currently working as an curator at <span class="font-medium"
+            >creatorsgarten</span
+          >, a collective of geeky creators who joined together to create cool,
+          meaning things, and as an editor-in-chief at <span class="font-medium"
+            >spaceth.co</span
+          >, a space-focused media, promoting space democratization in thailand
+          and southeast asia
         </div>
       </div>
       <div class="grid gap-3">
         <div class="flex justify-between items-end border-b border-black">
           <h2 class="text-2xl font-medium">works</h2>
-          <h2 class="text-lg">more →</h2>
+          <h2 class="text-lg"><a href="works">more →</a></h2>
         </div>
-        <div class="grid md:grid-cols-3 gap-3">
+        <div class="grid md:grid-cols-2 gap-3">
           <!-- <Card />
           <Card />
           <Card />
@@ -46,7 +50,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
             [
               ["starstuff", "starstuff.png"],
               ["messe", "messe.jpeg"],
-              ["book", "book.jpeg"],
+              ["forgotten, a theatrical play", "forgotten.webp"],
               ["bangkok open source hackathon", "bosh.webp"],
               ["chasing new horizons", "pluto.jpeg"],
               ["stupid hackathon in thailand", "sht7.jpeg"],
@@ -56,37 +60,28 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
           }
         </div>
         <ul
-          class="hidden md:flex w-full justify-between py-1 border-t border-black"
+          class="hidden md:flex w-full justify-between py-1 border-t border-black font-medium"
         >
-          <li>codes</li>
-          <li>peoples</li>
-          <li>contents</li>
-          <li>events</li>
-          <li>arts & lives</li>
-          <li>side projects</li>
+          <li><a href="/works#codes" class="pl-0">codes</a></li>
+          <li><a href="/works#peoples">peoples</a></li>
+          <li><a href="/works#contents">contents</a></li>
+          <li><a href="/works#events">events</a></li>
+          <li><a href="/works#arts">arts & lives</a></li>
+          <li><a href="/works#side" class="pr-0">side projects</a></li>
         </ul>
       </div>
-      <div class="bg-neutral-900 p-4 text-white">
-        <div class="grid md:grid-cols-3 gap-y-4 text-xl">
-          <!-- <Card />
-          <Card />
-          <Card /> -->
-          <div class="flex md:justify-center md:items-center">
-            📚 personal blog ↗
-          </div>
-          <div class="flex md:justify-center md:items-center">📸 gallery ↗</div>
-          <div class="flex md:justify-center md:items-center">
-            🪴 digital garden ↗
-          </div>
-        </div>
-      </div>
+      <PubLinks />
       <div class="grid gap-3">
         <div class="flex justify-between items-end border-b border-black">
-          <h2 class="text-2xl font-medium">displays</h2>
-          <h2 class="text-lg">more →</h2>
+          <h2 class="text-2xl font-medium">appearances</h2>
+          <h2 class="text-lg"><a href="appearances">more →</a></h2>
         </div>
-        <div class="grid md:grid-cols-3 gap-3">
+        <div class="grid md:grid-cols-2 gap-3">
           <Card name="ted x utcc" image="ted.jpeg" />
+          <Card
+            name="they dig into the soil and talk by the hole"
+            image="bccg.avif"
+          />
           <Card name="science odyssey" image="book.jpeg" />
           <Card
             name="the 15th thailand olympiad in informatics"
@@ -94,15 +89,20 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
           />
         </div>
         <ul
-          class="hidden md:flex w-full justify-between py-1 border-t border-black"
+          class="hidden md:flex w-full justify-between py-1 border-t border-black font-medium"
         >
-          <li>talks & panels</li>
-          <li>interviews</li>
-          <li>lectures</li>
-          <li>awards & speeches</li>
+          <li><a href="appearances#talks" class="pl-0">talks & panels</a></li>
+          <li><a href="appearances#interviews">interviews</a></li>
+          <li><a href="appearances#awards">awards & speeches</a></li>
+          <li><a href="appearances#classes" class="pr-0">classes</a></li>
         </ul>
       </div>
     </main>
     <Footer />
+    <style>
+      li > a {
+        @apply px-1;
+      }
+    </style>
   </body>
 </html>
