@@ -2,11 +2,11 @@
 import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
-import Card from "../components/Card.astro";
+import GardenList from "../components/ExpandedList.svelte";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
-import PubLinks from "../components/PubLinks.astro";
+import List from "../components/List.svelte";
 
-const entries = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const post = await Astro.glob("../content/blog/*");
 ---
 
 <!DOCTYPE html>
@@ -18,16 +18,25 @@ const entries = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     <Header title={SITE_TITLE} />
     <main class="pc grid gap-8">
       <h1 class="text-3xl border-y border-black py-3 font-medium pr-2">
-        pub's digital garden
+        🪴 pub's digital garden
       </h1>
       <div class="grid md:grid-cols-4 gap-8">
         <div class="md:col-span-3 grid gap-5">
           {
-            entries.map((x) => {
+            post.map((x) => {
               return (
-                <div class="text-lg border-b border-black py-1 my-1 flex justify-between">
-                  <div>{x}. chasing new horizons</div>
-                  <div>🌟</div>
+                <div>
+                  {x.frontmatter.list ? (
+                    <GardenList
+                      title={x.frontmatter.title}
+                      list={x.frontmatter.list.map((y) => {
+                        return { l: y };
+                      })}
+                      client:visible
+                    />
+                  ) : (
+                    <List l={x.frontmatter.title} r2="🏕️" />
+                  )}
                 </div>
               );
             })
@@ -45,8 +54,6 @@ const entries = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
       li > a {
         @apply px-1;
       }
-    </style>
-    <style>
       p {
         @apply text-justify;
       }

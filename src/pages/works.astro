@@ -3,6 +3,8 @@ import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import ExpandedList from "../components/ExpandedList.svelte";
+import List from "../components/List.svelte";
 
 const works = {
   codes: {
@@ -64,23 +66,38 @@ const works = {
     text: "event-based projects",
     list: [
       {
-        name: "bangkok open source hackathon",
-        org: ["creatorsgarten", "bma"],
-        link: "",
-        year: 2023,
+        expand: "hackathons & competitions",
+        list: [
+          {
+            name: "bangkok open source hackathon",
+            org: ["creatorsgarten", "bma"],
+            link: "",
+            year: 2023,
+          },
+          {
+            name: "ai space challenge",
+            org: ["spaceth"],
+            link: "",
+            year: 2022,
+          },
+        ],
       },
-      { name: "ai space challenge", org: ["spaceth"], link: "", year: 2022 },
       {
-        name: `"sciยศาสตร์": superstition night in the science month`,
-        org: ["spaceth", "bma"],
-        link: "",
-        year: 2022,
-      },
-      {
-        name: "how to learn (almost) anything",
-        org: ["spaceth"],
-        link: "",
-        year: 2022,
+        expand: "antidisciplinary meetups",
+        list: [
+          {
+            name: `"sciยศาสตร์": superstition night in the science month`,
+            org: ["spaceth", "bma"],
+            link: "",
+            year: 2022,
+          },
+          {
+            name: "how to learn (almost) anything",
+            org: ["spaceth"],
+            link: "",
+            year: 2022,
+          },
+        ],
       },
       { name: "hacktoberfest thailand series", org: [], link: "", year: 2019 },
       {
@@ -122,7 +139,7 @@ const works = {
 
 const org = {
   spaceth: "🪐",
-  creatorsgarten: "🪴",
+  creatorsgarten: "🏕️",
   bma: "🏙️",
 };
 
@@ -140,11 +157,11 @@ const orgMap = (x) => {
     <Header title={SITE_TITLE} />
     <main class="pc grid gap-8">
       <h1 class="text-3xl border-y border-black py-3 font-medium">
-        pub's works
+        👾 pub's works
       </h1>
       <div class="flex flex-wrap gap-3 text-lg">
         <div>
-          🪴 → <a href="" class="px-1">creatorsgarten</a>
+          🏕️ → <a href="" class="px-1">creatorsgarten</a>
         </div>
         <div>🪐 → <a href="" class="px-1">spaceth.co</a></div>
         <div>
@@ -162,31 +179,33 @@ const orgMap = (x) => {
                 {v.text}
               </h2>
               <ul class="grid gap-5">
-                {v.list.map(
-                  (x: {
-                    name: string;
-                    org: string[];
-                    link: string;
-                    year: number;
-                  }) => {
-                    return (
-                      <a
-                        class="group border-b hover:bg-transparent group-hover:border-b-2 transition-all border-neutral-600 py-1 my-1 grid grid-cols-6 lg:grid-cols-10"
-                        href=""
-                      >
-                        <h3 class="group-hover:font-medium text-lg col-span-4 lg:col-span-8">
-                          {x.name}
-                        </h3>
-                        <h3 class="group-hover:font-medium text-lg text-end">
-                          {orgMap(x.org).join(" | ")}
-                        </h3>
-                        <h3 class="group-hover:font-medium text-lg text-end">
-                          {x.year}
-                        </h3>
-                      </a>
-                    );
-                  }
-                )}
+                {v.list.map((x: any) => {
+                  return (
+                    <div>
+                      {x.expand ? (
+                        <div>
+                          <ExpandedList
+                            title={x.expand}
+                            list={x.list.map((y) => {
+                              return {
+                                l: y.name,
+                                r1: orgMap(y.org).join(" | "),
+                                r2: y.year,
+                              };
+                            })}
+                            client:visible
+                          />
+                        </div>
+                      ) : (
+                        <List
+                          l={x.name}
+                          r1={orgMap(x.org).join(" | ")}
+                          r2={x.year}
+                        />
+                      )}
+                    </div>
+                  );
+                })}
               </ul>
             </div>
           );

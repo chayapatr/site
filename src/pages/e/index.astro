@@ -15,13 +15,17 @@ import PubLinks from "../../components/PubLinks.astro";
   <body>
     <Header title={SITE_TITLE} />
     <main class="pc grid gap-8">
-      <h1 class="text-3xl border-y border-black py-3 font-medium pr-2">
-        <a href="/works" class="font-regular">← works</a> / molecular encoded storage
-        for space exploration (messe)
-      </h1>
+      <div class="border-y border-black">
+        <h1 class="text-3xl border-b border-black py-3 font-medium pr-2">
+          molecular encoded storage for space exploration
+        </h1>
+        <div class="py-2 flex justify-between">
+          <a href="/works">← works</a>
+          <h3 class="">last update: 2 july 2023</h3>
+        </div>
+      </div>
       <img src="messe.jpeg" alt="" class="aspect-[21/9] object-cover" />
-      <h3 class="text-xl border-y border-black py-3">site: spaceth.co/messe</h3>
-      <div class="grid gap-4 mb-4 text-lg">
+      <div class="grid gap-4 mb-4 md:text-lg">
         <p class="font-medium">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut
           sollicitudin aliquet eros dapibus elementum. Vestibulum suscipit

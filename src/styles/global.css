@@ -36,7 +36,7 @@ body {
     "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol";
   font-weight: 400;
-  @apply mx-auto px-3 sm:px-4 lg:px-6 bg-gradient-to-b from-neutral-50 to-neutral-100 text-neutral-900;
+  @apply mx-auto px-3 sm:px-4 lg:px-6 bg-gradient-to-b from-neutral-50 to-neutral-100 text-neutral-900 lowercase;
 }
 
 .pc {
@@ -92,4 +92,8 @@ blockquote {
   padding: 2px 0px 2px 20px;
   margin: 0px;
   font-style: italic;
+}
+
+.list-el {
+  @apply text-lg border-b border-black py-1 my-1 flex justify-between hover:font-medium hover:bg-transparent hover:text-neutral-950;
 }
