@@ -1,0 +1,74 @@
+---
+import BaseHead from "../../components/BaseHead.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import Card from "../../components/Card.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../../consts";
+import PubLinks from "../../components/PubLinks.astro";
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <body>
+    <Header title={SITE_TITLE} />
+    <main class="pc grid gap-8">
+      <h1 class="text-3xl border-y border-black py-3 font-medium pr-2">
+        <a href="/works" class="font-regular">← works</a> / molecular encoded storage
+        for space exploration (messe)
+      </h1>
+      <img src="messe.jpeg" alt="" class="aspect-[21/9] object-cover" />
+      <h3 class="text-xl border-y border-black py-3">site: spaceth.co/messe</h3>
+      <div class="grid gap-4 mb-4 text-lg">
+        <p class="font-medium">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut
+          sollicitudin aliquet eros dapibus elementum. Vestibulum suscipit
+          dapibus mauris, at porttitor ex consequat id. Nunc gravida dui
+          facilisis rutrum elementum. Nullam eleifend semper dolor, non eleifend
+          erat lacinia eu. Nulla sed est malesuada, feugiat quam eget, dictum
+          augue. Vestibulum rhoncus congue mauris porttitor convallis. Etiam
+          efficitur interdum velit vitae posuere. Sed non purus lorem.
+        </p>
+
+        <p>
+          Duis nec mauris libero. Sed elementum vehicula tempor. Duis metus
+          mauris, luctus ut accumsan ut, venenatis ac elit. Suspendisse potenti.
+          Pellentesque scelerisque suscipit libero vel faucibus. Suspendisse
+          gravida, neque eget vestibulum tempus, quam est lobortis nunc, mollis
+          ornare lectus erat at arcu. Aenean nec justo nisl. Fusce ac lorem
+          varius, sodales ante id, pulvinar metus. Cras at quam vel erat
+          consequat consectetur in scelerisque velit. Sed in ipsum ac enim
+          faucibus tempus quis at augue. Aliquam maximus nisl ac nulla maximus
+          ultricies. Maecenas viverra hendrerit dolor. Nulla posuere magna sed
+          nibh consequat, sit amet porta nisi malesuada. Nam auctor mi sit amet
+          massa aliquam, at facilisis risus lobortis. Suspendisse pulvinar eu
+          urna id facilisis.
+        </p>
+
+        <p>
+          Etiam non pulvinar dolor. Quisque nec velit consequat purus aliquet
+          pharetra quis vel erat. Quisque at pharetra risus. Suspendisse erat
+          felis, placerat id erat vulputate, ullamcorper varius lectus. Lorem
+          ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque cursus
+          tortor vel laoreet lobortis. Phasellus facilisis tellus nisl, nec
+          rutrum metus rutrum quis. Aliquam eros ante, tempor sed erat ut,
+          tristique porttitor ante. Pellentesque ultrices sem eget dolor dapibus
+          viverra. Sed gravida sapien non ex efficitur eleifend.
+        </p>
+      </div>
+    </main>
+    <Footer />
+    <style>
+      li > a {
+        @apply px-1;
+      }
+    </style>
+    <style>
+      p {
+        @apply text-justify;
+      }
+    </style>
+  </body>
+</html>
