@@ -23,7 +23,12 @@ const works = {
         link: "",
         year: 2023,
       },
-      { name: "contentsgarten", org: ["creatorsgarten"], link: "", year: 2022 },
+      {
+        name: "contentsgarten",
+        org: ["creatorsgarten"],
+        link: "contentsgarten",
+        year: 2022,
+      },
       {
         name: "messe",
         org: ["spaceth"],
@@ -35,8 +40,13 @@ const works = {
   peoples: {
     text: "communities & collaborations",
     list: [
-      { name: "garden zero", org: ["creatorsgarten"], link: "", year: 2023 },
-      { name: "bangkok art council [🚧 wip]", org: [], link: "", year: 2023 },
+      { name: "garden zero", org: ["creatorsgarten"], link: "g0", year: 2023 },
+      {
+        name: "bangkok art council [🚧 wip]",
+        org: [],
+        link: "bac",
+        year: 2023,
+      },
     ],
   },
   contents: {
@@ -45,19 +55,19 @@ const works = {
       {
         name: "thaipbs: starstuff เรื่องเล่าจากดวงดาว",
         org: ["spaceth"],
-        link: "",
+        link: "starstuff",
         year: 2022,
       },
       {
         name: "chasing new horizons (thai translation)",
         org: [],
-        link: "",
+        link: "chasing",
         year: 2022,
       },
       {
         name: "futuretales lab: future of space movement",
         org: ["spaceth"],
-        link: "",
+        link: "ftlr",
         year: 2022,
       },
     ],
@@ -71,14 +81,20 @@ const works = {
           {
             name: "bangkok open source hackathon",
             org: ["creatorsgarten", "bma"],
-            link: "",
+            link: "bosh",
             year: 2023,
           },
           {
             name: "ai space challenge",
             org: ["spaceth"],
-            link: "",
+            link: "aispace",
             year: 2022,
+          },
+          {
+            name: "stupid hackathon thailand series",
+            org: ["creatorsgarten"],
+            link: "sht",
+            year: 2017,
           },
         ],
       },
@@ -88,43 +104,72 @@ const works = {
           {
             name: `"sciยศาสตร์": superstition night in the science month`,
             org: ["spaceth", "bma"],
-            link: "",
+            link: "scisart",
+            year: 2022,
+          },
+          {
+            name: "biological aesthetic of nature",
+            org: ["creatorsgarten"],
+            link: "bio",
             year: 2022,
           },
           {
             name: "how to learn (almost) anything",
+            org: ["creatorsgarten"],
+            link: "htlaa",
+            year: 2022,
+          },
+          {
+            name: "design the universe",
             org: ["spaceth"],
+            link: "dtu",
+            year: 2020,
+          },
+        ],
+      },
+      {
+        expand: "technology & software engineering",
+        list: [
+          {
+            name: "side-projects showdown",
+            org: ["spaceth"],
+            link: "",
+            year: 2020,
+          },
+          {
+            name: "creative coding meetup",
+            org: ["creatorsgarten"],
+            link: "",
+            year: 2023,
+          },
+          {
+            name: `codegolf party`,
+            org: ["creatorsgarten"],
             link: "",
             year: 2022,
           },
         ],
       },
       { name: "hacktoberfest thailand series", org: [], link: "", year: 2019 },
-      {
-        name: "stupid hackathon thailand series",
-        org: ["creatorsgarten"],
-        link: "",
-        year: 2017,
-      },
     ],
   },
   arts: {
     text: "arts & lives",
     list: [
       {
+        name: "instrument not allowed [🚧 wip]",
+        org: ["creatorsgarten"],
+        link: "messe",
+        year: 2023,
+      },
+      {
         name: "algorave [🚧 wip]",
         org: ["creatorsgarten"],
         link: "",
-        year: 2022,
-      },
-      {
-        name: "instrument not allowed [🚧 wip]",
-        org: ["spaceth"],
-        link: "messe",
-        year: 2020,
+        year: 2023,
       },
       { name: "pds band contest", org: ["🏫"], link: "", year: 2020 },
-      { name: "forgotten, a theatrical play", org: [], link: "", year: 2020 },
+      { name: "forgotten: a theatrical play", org: [], link: "", year: 2020 },
     ],
   },
   side: {

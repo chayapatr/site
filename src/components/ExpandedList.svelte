@@ -16,7 +16,12 @@
   </div>
   <div class={`grid gap-5  mb-2 ${expand || "hidden"}`}>
     {#each list as el}
-      <List l={"• " + el?.l} r1={el?.r1} r2={el?.r2} />
+      <List
+        l={"• " + el?.l}
+        r1={el?.r1}
+        r2={el?.r2}
+        a={`${el.l.split(" ")[0]}`}
+      />
     {/each}
   </div>
 </div>
