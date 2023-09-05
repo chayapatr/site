@@ -1,0 +1,11 @@
+---
+const { imgs } = Astro.props;
+---
+
+<div class="grid md:grid-cols-2 gap-4 my-8">
+  {
+    imgs.map((img: string) => {
+      return <img src={img} class="aspect-video object-cover m-0" />;
+    })
+  }
+</div>
