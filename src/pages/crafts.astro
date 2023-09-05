@@ -17,7 +17,9 @@ import { Content } from "../content/main/crafts.mdx";
     <!-- <Header title={SITE_TITLE} /> -->
     <main class="grid gap-4">
       <Menu dir="crafts" />
-      <div class="prose prose-lg">
+      <div
+        class="prose prose-lg grid md:grid-cols-3 gap-x-8 prose-headings:mr-2 prose-ul:col-span-2 prose-p:col-span-2 prose-img:aspect-video prose-img:object-cover"
+      >
         <Content components={{ Gallery }} />
       </div>
     </main>

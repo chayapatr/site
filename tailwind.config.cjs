@@ -29,11 +29,15 @@ module.exports = {
               margin: "1.25rem 0 0.75rem 0",
             },
             p: {
-              marginBottom: "20px",
+              marginBottom: "1rem",
+            },
+            img: {
+              margin: "1rem 0",
             },
             ul: {
               paddingLeft: "1rem",
               color: "#000",
+              margin: "1rem 0",
             },
             "ul > li": {
               paddingLeft: "0",
