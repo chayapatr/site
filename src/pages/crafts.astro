@@ -29,15 +29,15 @@ const r = [{
     <main class="grid gap-4">
       <Menu dir="crafts" />
       <div
-        class="prose prose-lg grid md:grid-cols-3 gap-x-8 prose-headings:mr-2 prose-ul:col-span-2 prose-p:col-span-2 prose-img:aspect-video prose-img:object-cover"
+        class="prose grid md:grid-cols-3 gap-x-8 prose-headings:m-0 prose-ul:col-span-2 prose-p:col-span-2 prose-img:aspect-video prose-img:object-cover prose-img:mt-0 prose-img:mb-3"
       >
         <Content components={{ Gallery }} />
       </div>
-      <Draggable x={30} y={520} p="md:p-2" rand={true} client:load>
-      <div class="flex flex-col gap-4 flex-wrap">
-          <div class="break-words">{r.name}</div>
-          <img src={r.img} class="w-48 rounded-sm" />
-      </div>
+      <Draggable x={30} y={520} p="md:p-2" rand={true} fixed={true} custom={"hidden md:block"} client:load>
+          <div class="flex flex-col gap-4 flex-wrap">
+            <div class="break-words">{r.name}</div>
+            <img src={r.img} class="w-48 rounded-sm" />
+          </div>
       </Draggable>
     </main>
 </BaseLayout>

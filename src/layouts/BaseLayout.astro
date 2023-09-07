@@ -7,12 +7,16 @@ import History from "../components/History.svelte";
 import Draggable from "../components/Draggable.svelte";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 import { ViewTransitions } from 'astro:transitions';
+
+const { footer = true } = Astro.props
 ---
 
 <script>
     document.addEventListener("mousemove", (e) => {
         document.querySelector("#s").innerText = `${e.clientX}, ${e.clientY}`
     })
+
+
 </script>
 <!doctype html>
 <html lang="en">
@@ -23,14 +27,23 @@ import { ViewTransitions } from 'astro:transitions';
   <body>
     <!-- <Header title={SITE_TITLE} />
     <Draggable client:load>  -->
-    <Draggable right={true} show={false} client:load>
+    <Draggable right={true} show={false} fixed={true} client:load>
         <History client:load />
     </Draggable>
     <slot />
-    <Footer />
-    <Draggable color="hidden md:block" right={true} bottom={true} client:load>
-        <div id="s" class=" text-sm text-purple-500">X, Y</div>
+    {footer ? <Footer /> : null}
+    <Draggable custom="hidden md:block" right={true} bottom={true} fixed={true} client:load>
+        <div id="s" class="text-sm text-purple-500">X, Y</div>
     </Draggable>
     <!-- </Draggable>  -->
   </body>
+
 </html>
+<style>
+    .trail {
+    position: absolute;
+    height: 6px; width: 6px;
+    border-radius: 3px;
+    background: teal;
+  }
+</style>

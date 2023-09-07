@@ -8,10 +8,13 @@
     export let bottom = false
 
     export let show = true
+    export let alwaysShow = false
     export let rand = false
 
     export let color
     export let p
+    export let custom
+    export let fixed = false
 
     let el
     let drag = false
@@ -76,17 +79,22 @@
 <svelte:window on:mousemove={g}  on:mouseup={() => drag = false} />
 
 <div
-    class={`relative md:absolute hover:cursor-grab select-none md:border md:shadow-sm md:hover:shadow-md md:border-neutral-300 transition-shadow ${p || "md:p-4" } border-dashed md:border-2  ${color ? color : "md:bg-white"}`}
+    class={`relative ${fixed ? "md:fixed" : "md:absolute"} hover:cursor-grab select-none px-4 md:p-0 ${custom}`}
     bind:this={el}
     on:mousedown={() => drag = true}
-    style={`${right ? "right:" : "left:"} ${x}px; ${bottom ? "bottom: " : "top: "} ${y}px`}
+    style={`${right ? "right:" : "left:"} ${x}px; ${bottom ? "bottom: " : "top: "} ${y}px;z-index:1;`}
     transition:slide
 >
-    {#if drag && show}
-        <div transition:slide class="text-xs text-teal-500 mb-2">X: {x}, Y: {y}</div>
+<div class={`md:border md:shadow-sm md:hover:shadow-md md:border-neutral-300 transition-shadow ${p || "md:p-4" } border-dashed md:border-2  ${color ? color : "md:bg-white"}`}>
+    {#if alwaysShow || (drag && show)}
+        <div transition:slide class="hidden md:block text-xs text-teal-500 mb-2">X: {x}, Y: {y}</div>
     {/if}
+    <div>
     <slot />
-    {#if drag && show}
-        <div transition:slide class="text-xs text-teal-500 mt-2">drag: {drag}</div>
+    </div>
+    {#if alwaysShow || (drag && show)}
+        <div transition:slide class="hidden md:block text-xs text-teal-500 mt-2">drag: {drag}</div>
     {/if}
+</div>
+<div class="h-0 md:h-12"></div>
 </div>

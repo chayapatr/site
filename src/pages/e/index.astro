@@ -26,7 +26,7 @@ const posts = await getCollection("garden").then(y => y.filter(x => x.id.split("
               </ul>
           </div>
           <div class="hidden md:block" aria-hidden="true">
-            <Draggable x={-10} y={-15} color="bg-gray-50" show={false} client:load>
+            <Draggable x={-10} y={-15} show={false} client:load>
                 <ul>
                   {
                     posts.map((x) => (

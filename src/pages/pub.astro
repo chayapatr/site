@@ -120,7 +120,7 @@ const appearances = {
           <Content />
         </div>
         <div class="hidden md:block" aria-hidden="true">
-          <Draggable x={-20} y={10} color="bg-gray-50" show={false} client:load>
+          <Draggable x={-20} y={10} show={false} client:load>
             <Content />
           </Draggable>
         </div>
@@ -132,7 +132,7 @@ const appearances = {
             return (
               <div id={k}>
                 <h2 class="font-medium text-[1.75rem] mb-1">{v.text}</h2>
-                <div class="columns lg:columns-2 gap-6">
+                <div class="columns md:columns-2 gap-6">
                   {v.list.map((x) => {
                     return (
                       <a

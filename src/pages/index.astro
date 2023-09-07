@@ -20,9 +20,9 @@ const posts = await Astro.glob('../content/garden/*.md');
             <Content components={{ Gallery }} />
         </div>
         <div class="hidden xl:block">
-            <Draggable x={30} y={520} p="md:p-2" rand={true} client:load>
+            <Draggable x={30} y={520} p="md:p-2" rand={true} fixed={true} client:load>
                 <div class="grid gap-4 ">
-                    <div>(Me at TEDxUTCC)</div>
+                    <div>(Pub at TEDxUTCC)</div>
                     <img src="ted.jpeg" class="w-48 rounded-sm" />
                 </div>
             </Draggable>

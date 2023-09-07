@@ -2,11 +2,9 @@
 import { type CollectionEntry, getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
-import BaseHead from "../../components/BaseHead.astro";
-import Footer from "../../components/Footer.astro";
 import Menu from "../../components/Menu.astro";
 import History from "../../components/History.svelte";
-import { SITE_TITLE, SITE_DESCRIPTION } from "../../consts";
+import Draggable from "../../components/Draggable.svelte";
 
 export async function getStaticPaths() {
   const posts = await getCollection("garden");
@@ -21,16 +19,18 @@ const post = Astro.props;
 const { Content } = await post.render();
 ---
 
-<BaseLayout>
-    <main class="grid gap-4">
+<BaseLayout footer={false}>
+    <main class="grid gap-4 mb-4">
       <Menu cur="(Back to Entries)" url="/e" />
       <h2 class="text-4xl">
         {post.data.title}
       </h2>
-      <div class="prose prose-lg">
-        <!-- <BlogPost {...post.data}> -->
-        <Content />
-        <!-- </BlogPost> -->
+      <div class="relative mx-2">
+          <Draggable x={-30} alwaysShow={true} client:load>
+              <div class="prose prose-lg md:w-[48rem]">
+                  <Content />
+            </div>
+          </Draggable>
       </div>
     </main>
 </BaseLayout>
