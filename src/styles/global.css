@@ -6,21 +6,21 @@
 
 @font-face {
   font-family: "Basier Circle";
-  src: url("fonts/basier-regular.woff2") format("woff2");
+  src: url("/fonts/basier-regular.woff2") format("woff2");
   font-weight: 400;
   font-style: regular;
 }
 
 @font-face {
   font-family: "Basier Circle";
-  src: url("fonts/basier-medium.woff2") format("woff2");
+  src: url("/fonts/basier-medium.woff2") format("woff2");
   font-weight: 500;
   font-style: regular;
 }
 
 @font-face {
   font-family: "Voxel";
-  src: url("fonts/voxel.otf") format("opentype");
+  src: url("/fonts/voxel.otf") format("opentype");
   font-weight: 500;
   font-style: regular;
 }

@@ -1,5 +1,5 @@
 ---
-const { dir } = Astro.props;
+const { dir, cur } = Astro.props;
 ---
 
 <div class="flex flex-col gap-4 mt-2">
@@ -16,6 +16,13 @@ const { dir } = Astro.props;
     <li class={`${dir === "pub" ? "selected" : ""}`}>
       <a href="/pub">Pub</a>
     </li>
+    {
+      cur ? (
+        <li class="selected">
+          <a href="#">{cur}</a>
+        </li>
+      ) : null
+    }
   </ul>
 </div>
 

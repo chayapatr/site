@@ -4,6 +4,7 @@ import Footer from "../components/Footer.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 import Menu from "../components/Menu.astro";
 import Gallery from "../components/Gallery.astro";
+import History from "../components/History.svelte";
 
 import { Content } from "../content/main/crafts.mdx";
 ---
@@ -23,6 +24,7 @@ import { Content } from "../content/main/crafts.mdx";
         <Content components={{ Gallery }} />
       </div>
     </main>
+    <History client:load />
     <Footer />
   </body>
 </html>

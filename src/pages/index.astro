@@ -3,6 +3,8 @@ import BaseHead from "../components/BaseHead.astro";
 import Footer from "../components/Footer.astro";
 import Menu from "../components/Menu.astro";
 import Gallery from "../components/Gallery.astro";
+import History from "../components/History.svelte";
+import Test from "../components/Test.svelte";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 
 import { Content } from "../content/main/stories.mdx";
@@ -15,12 +17,16 @@ import { Content } from "../content/main/stories.mdx";
   </head>
   <body>
     <!-- <Header title={SITE_TITLE} /> -->
+    <Test client:load show={true} /><Test client:load show={true} />
+    <Test client:load>
     <main class="grid gap-4">
       <Menu dir="stories" />
       <div class="prose prose-lg">
         <Content components={{ Gallery }} />
       </div>
     </main>
+    <History client:load />
     <Footer />
+    </Test>
   </body>
 </html>
