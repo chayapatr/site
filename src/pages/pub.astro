@@ -2,6 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Menu from "../components/Menu.astro";
 import History from "../components/History.svelte";
+import Draggable from "../components/Draggable.svelte";
 
 import { Content } from "../content/main/pub.md";
 
@@ -112,11 +113,19 @@ const appearances = {
 ---
 
 <BaseLayout>
-    <main class="grid gap-4">
+    <main class="grid">
       <Menu dir="pub" />
-      <div class="prose prose-lg">
-        <Content />
+      <div class="prose prose-lg relative md:my-8">
+        <div class="opacity-100 md:opacity-0">
+          <Content />
+        </div>
+        <div class="hidden md:block" aria-hidden="true">
+          <Draggable x={-10} y={-15} color="bg-gray-50" client:load>
+            <Content />
+          </Draggable>
+        </div>
       </div>
+
       <div class="my-4 grid gap-8">
         {
           Object.entries(appearances).map(([k, v]) => {

@@ -1,22 +1,34 @@
 <script>
-    let el
-    export let left = 0
-    export let top = 0
-    let drag = false
+    export let x = 10
+    export let y = 10
+
+    export let right = false
+    export let bottom = false
+
     export let show = false
+    export let color
+    export let p = 4
+
+    let el
+    let drag = false
 
     const g = (e) => {
       if(drag) {
-          left += e.movementX
-          top += e.movementY
+          right ? x -= e.movementX : x += e.movementX
+          bottom ? y -= e.movementY : y += e.movementY
         }
     }
 </script>
 
 <svelte:window on:mousemove={g}  on:mouseup={() => drag = false} />
-<div class={`relative lg:absolute hover:cursor-grab select-none lg:border lg:shadow-md lg:border-neutral-300 lg:p-4 lg:bg-gradient-to-b from-white to-neutral-50`} bind:this={el} on:mousedown={() => drag = true} style={`left: ${left}px; top: ${top}px`}>
+<div
+    class={`relative md:absolute hover:cursor-grab select-none md:border md:shadow-md md:border-neutral-300 md:p-${p} border-dashed md:border-2  ${color ? color : "md:bg-gray-50"}`}
+    bind:this={el}
+    on:mousedown={() => drag = true}
+    style={`${right ? "right:" : "left:"} ${x}px; ${bottom ? "bottom: " : "top: "} ${y}px`}
+>
     {#if show}
-    <div>{left} {top} {drag}</div>
+        <div>{x} {y} {drag}</div>
     {/if}
     <slot />
 </div>

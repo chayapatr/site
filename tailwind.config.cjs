@@ -13,7 +13,7 @@ module.exports = {
               fontFamily: "Voxel",
               fontSize: "1.35rem",
               textDecoration: "none",
-              color: colors.violet[500],
+              color: colors.purple[500],
               "&:hover": {
                 backgroundColor: colors.yellow[300],
                 color: colors.neutral[900],

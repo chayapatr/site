@@ -19,12 +19,16 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
   </head>
   <body>
-    <!-- <Header title={SITE_TITLE} /> -->
-    { /* <Draggable client:load> */ }
+    <!-- <Header title={SITE_TITLE} />
+    <Draggable client:load>  -->
+    <Draggable right={true} client:load>
+        <History client:load />
+    </Draggable>
     <slot />
-    <History client:load />
     <Footer />
-    <div id="s" class="fixed bottom-0 right-0 m-6 text-sm text-purple-500"></div>
-    { /* </Draggable> */ }
+    <Draggable color="hidden md:block" right={true} bottom={true} client:load>
+        <div id="s" class=" text-sm text-purple-500">X, Y</div>
+    </Draggable>
+    <!-- </Draggable>  -->
   </body>
 </html>
