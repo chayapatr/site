@@ -1,21 +1,12 @@
 ---
-import BaseHead from "../components/BaseHead.astro";
-import Footer from "../components/Footer.astro";
-import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 import Menu from "../components/Menu.astro";
 import Gallery from "../components/Gallery.astro";
-import History from "../components/History.svelte";
+import BaseLayout from "../layouts/BaseLayout.astro";
 
 import { Content } from "../content/main/crafts.mdx";
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-  </head>
-  <body>
-    <!-- <Header title={SITE_TITLE} /> -->
+<BaseLayout>
     <main class="grid gap-4">
       <Menu dir="crafts" />
       <div
@@ -24,7 +15,4 @@ import { Content } from "../content/main/crafts.mdx";
         <Content components={{ Gallery }} />
       </div>
     </main>
-    <History client:load />
-    <Footer />
-  </body>
-</html>
+</BaseLayout>

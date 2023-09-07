@@ -14,7 +14,7 @@
 </script>
 
 <svelte:window on:mousemove={g}  on:mouseup={() => drag = false} />
-<div class={`fixed hover:cursor-grab select-none border shadow-md border-neutral-300 p-4 bg-gradient-to-b from-white to-neutral-50`} bind:this={el} on:mousedown={() => drag = true} style={`left: ${left}px; top: ${top}px`}>
+<div class={`relative lg:absolute hover:cursor-grab select-none lg:border lg:shadow-md lg:border-neutral-300 lg:p-4 lg:bg-gradient-to-b from-white to-neutral-50`} bind:this={el} on:mousedown={() => drag = true} style={`left: ${left}px; top: ${top}px`}>
     {#if show}
     <div>{left} {top} {drag}</div>
     {/if}

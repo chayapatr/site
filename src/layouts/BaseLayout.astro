@@ -1,0 +1,30 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+import Menu from "../components/Menu.astro";
+import Gallery from "../components/Gallery.astro";
+import History from "../components/History.svelte";
+import Draggable from "../components/Draggable.svelte";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+---
+
+<script>
+    document.addEventListener("mousemove", (e) => {
+        document.querySelector("#s").innerText = `${e.clientX}, ${e.clientY}`
+    })
+</script>
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <body>
+    <!-- <Header title={SITE_TITLE} /> -->
+    { /* <Draggable client:load> */ }
+    <slot />
+    <History client:load />
+    <Footer />
+    <div id="s" class="fixed bottom-0 right-0 m-6 text-sm text-purple-500"></div>
+    { /* </Draggable> */ }
+  </body>
+</html>

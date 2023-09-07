@@ -1,29 +1,26 @@
 ---
-import BaseHead from "../components/BaseHead.astro";
-import Footer from "../components/Footer.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
 import Menu from "../components/Menu.astro";
 import Gallery from "../components/Gallery.astro";
-import History from "../components/History.svelte";
-import Test from "../components/Test.svelte";
-import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import Draggable from "../components/Draggable.svelte"
 
 import { Content } from "../content/main/stories.mdx";
+
+// const posts = await Astro.glob('../content/main/(pub.md|crafts.mdx)');
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-  </head>
-  <body>
-    <!-- <Header title={SITE_TITLE} /> -->
+<BaseLayout>
     <main class="grid gap-4">
-      <Menu dir="stories" />
-      <div class="prose prose-lg">
+        <Menu dir="stories" />
+        <div class="prose prose-lg">
         <Content components={{ Gallery }} />
-      </div>
+        </div>
     </main>
-    <History client:load />
-    <Footer />
-  </body>
-</html>
+</BaseLayout>
+
+{ /* posts.map(post =>
+    <Draggable show={true} client:load >
+        <main class="prose prose-lg">
+            {<post.Content components={{ Gallery }} />}
+        </main>
+    </Draggable>) */}
