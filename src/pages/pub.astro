@@ -115,12 +115,12 @@ const appearances = {
 <BaseLayout>
     <main class="grid">
       <Menu dir="pub" />
-      <div class="prose prose-lg relative md:my-8">
-        <div class="opacity-100 md:opacity-0">
+      <div class="prose prose-lg relative">
+        <div class="opacity-100 md:opacity-0 md:my-12">
           <Content />
         </div>
         <div class="hidden md:block" aria-hidden="true">
-          <Draggable x={-10} y={-15} color="bg-gray-50" client:load>
+          <Draggable x={-20} y={10} color="bg-gray-50" show={false} client:load>
             <Content />
           </Draggable>
         </div>

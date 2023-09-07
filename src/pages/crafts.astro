@@ -1,9 +1,28 @@
 ---
 import Menu from "../components/Menu.astro";
 import Gallery from "../components/Gallery.astro";
+import Draggable from "../components/Draggable.svelte";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 import { Content } from "../content/main/crafts.mdx";
+
+const r = [{
+      name: "MESSE",
+      img: "messe.jpeg"
+    }, {
+      name: "Chasing New Horizons",
+      img: "pluto.jpeg"
+    }, {
+      name: "Forgotten",
+      img: "forgotten.webp"
+    }, {
+      name: "Sciยศาสตร์ Night",
+      img: "scisart.jpeg"
+    }, {
+      name: "BKK Open Source Hack",
+      img: "bosh.webp"
+    }
+][Math.floor(Math.random() * 5)]
 ---
 
 <BaseLayout>
@@ -14,5 +33,11 @@ import { Content } from "../content/main/crafts.mdx";
       >
         <Content components={{ Gallery }} />
       </div>
+      <Draggable x={30} y={520} p="md:p-2" rand={true} client:load>
+      <div class="flex flex-col gap-4 flex-wrap">
+          <div class="break-words">{r.name}</div>
+          <img src={r.img} class="w-48 rounded-sm" />
+      </div>
+      </Draggable>
     </main>
 </BaseLayout>

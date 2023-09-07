@@ -6,6 +6,7 @@ import Gallery from "../components/Gallery.astro";
 import History from "../components/History.svelte";
 import Draggable from "../components/Draggable.svelte";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import { ViewTransitions } from 'astro:transitions';
 ---
 
 <script>
@@ -17,11 +18,12 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 <html lang="en">
   <head>
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <ViewTransitions />
   </head>
   <body>
     <!-- <Header title={SITE_TITLE} />
     <Draggable client:load>  -->
-    <Draggable right={true} client:load>
+    <Draggable right={true} show={false} client:load>
         <History client:load />
     </Draggable>
     <slot />

@@ -30,7 +30,7 @@
 
 body {
   font-family: "Basier Circle", "Anuphan", sans-serif;
-  @apply mx-auto py-2 md:px-4 lg:px-0 md:py-8  min-h-[100vh] bg-white;
+  @apply mx-auto py-2 md:px-4 lg:px-0 md:py-8  min-h-[100vh] bg-neutral-50;
 }
 
 main {
