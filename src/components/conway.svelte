@@ -94,10 +94,10 @@
     <p class="font-['Basier_Circle']">{JSON.stringify(dp)}</p>
 </div>
 {/if}
+</div>
 
 <style>
     .cell {
         @apply aspect-square border-[0.5px] border-neutral-300 flex justify-center items-center text-xs text-neutral-200;
     }
 </style>
-</div>
