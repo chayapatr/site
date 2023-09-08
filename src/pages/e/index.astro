@@ -16,7 +16,7 @@ const posts = await getCollection("garden").then(y => y.filter(x => x.id.split("
         <div class="prose prose-lg relative">
           <div >
             <Draggable x={-10} show={false} client:load>
-                <ul class=" md:grid md:grid-cols-2 md:w-[48rem]">
+                <ul class=" md:grid md:grid-cols-2 md:w-[40rem] lg:w-[48rem]">
                   {
                     posts.map((x) => (
                       <li>
