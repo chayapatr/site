@@ -26,7 +26,10 @@ const { Content } = await post.render();
         {post.data.title}
       </h2>
       <div class="relative mx-2">
-          <Draggable x={-30} alwaysShow={true} client:load>
+          <div class="md:hidden prose prose-lg md:w-[48rem]">
+              <Content />
+            </div>
+          <Draggable custom={"hidden md:block"} x={-30} alwaysShow={true} client:load>
               <div class="prose prose-lg md:w-[48rem]">
                   <Content />
             </div>

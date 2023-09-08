@@ -4,3 +4,4 @@
 - Social Profiles: [Facebook](https://fb.me/chayapatr) / [IG](https://instagram.com/chayapatr) / [Letterboxd](https://letterboxd.com/chayapatr) @chayapatr
 - [Github](https://github.com/chayapatr) @chayapatr
 - [Digital Garden](/e)
+- [Play Conway's game of life](/p/conway): tried to make it playable with regular pages but wasn't able to (me <- skill issue)

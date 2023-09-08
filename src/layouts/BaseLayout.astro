@@ -5,6 +5,7 @@ import Menu from "../components/Menu.astro";
 import Gallery from "../components/Gallery.astro";
 import History from "../components/History.svelte";
 import Draggable from "../components/Draggable.svelte";
+import Conway from "../components/Conway.svelte";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 import { ViewTransitions } from 'astro:transitions';
 
@@ -38,7 +39,11 @@ const { footer = true } = Astro.props
         <div id="s" class="text-sm text-purple-500">X, Y</div>
     </Draggable>
     <!-- </Draggable>  -->
+
   </body>
+  <div class="fixed top-0 left-0 opacity-30" style="z-index:-1;">
+      <Conway client:load />
+  </div>
 
 </html>
 <style>
