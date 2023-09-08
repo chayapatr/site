@@ -22,17 +22,13 @@
       const min = 0
       const maxRow = grid.length - 1
       const maxCell = grid[i].length - 1
-
       let neighbor = 0
 
-      // console.log("new loop!")
       for(let x=-1;x<2;x++) {
         for(let y=-1;y<2;y++) {
           if(x === 0 && y === 0) continue
           if(i+x < min || j+y < min || i+x > maxRow || j+y > maxCell) continue
           neighbor += grid[i+x][j+y] ? 1 : 0
-          // grid[i+x][j+y] ? console.log(`neighbor of [${i},${j}] found at [${ i+x},${y+j}] it [${x}, ${y}]`) : null
-          // if(grid[i+x][j+y]) console.log(`check cell [${i},${j}] at [${i+x},${j+y}] = ${grid[i+x][j+y]}`)
         }
       }
       return neighbor
@@ -46,14 +42,10 @@
           if(grid[i][j] === 1) {
             if (neighbor < 2) newGrid[i][j] = 0
             else if (neighbor === 2 || neighbor === 3) newGrid[i][j] = 1
-            else {
-              // console.log(`rip cell ${i}, ${j}`)
-              newGrid[i][j] = 0
-            }
+            else newGrid[i][j] = 0
           } else {
             if (neighbor === 3) newGrid[i][j] = 1
           }
-          if(neighbor > 3) console.log("akjsdfhapsdfhlasjhdflajks;df", i, j)
         }
       }
       return newGrid
@@ -88,7 +80,6 @@
                     style={dp ? `width: ${dp.w / grid[0].length}px` : null}
                     on:mouseenter={() => {
                       grid[i][j] = grid[i][j] ? 0 : 1
-                      console.log(`add cell at [${i}, ${j}]`)
                     }}
                 />
             {/each}
