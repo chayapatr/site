@@ -27,6 +27,7 @@ module.exports = {
             h3: {
               fontSize: "1.2rem",
               margin: "1.25rem 0 0.75rem 0",
+              fontWeight: 500,
             },
             p: {
               marginBottom: "1rem",

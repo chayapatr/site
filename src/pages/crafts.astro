@@ -8,19 +8,19 @@ import { Content } from "../content/main/crafts.mdx";
 
 const r = [{
       name: "MESSE",
-      img: "messe.jpeg"
+      img: "/messe.jpeg"
     }, {
       name: "Chasing New Horizons",
-      img: "pluto.jpeg"
+      img: "/pluto.jpeg"
     }, {
       name: "Forgotten",
-      img: "forgotten.webp"
+      img: "/forgotten.webp"
     }, {
       name: "Sciยศาสตร์ Night",
-      img: "scisart.jpeg"
+      img: "/scisart.jpeg"
     }, {
       name: "BKK Open Source Hack",
-      img: "bosh.webp"
+      img: "/bosh.webp"
     }
 ][Math.floor(Math.random() * 5)]
 ---
@@ -29,7 +29,7 @@ const r = [{
     <main class="grid gap-4">
       <Menu dir="crafts" />
       <div
-        class="prose grid md:grid-cols-3 gap-x-8 prose-headings:m-0 prose-ul:col-span-2 prose-p:col-span-2 prose-img:aspect-video prose-img:object-cover prose-img:mt-0 prose-img:mb-3"
+        class="prose prose-lg grid md:grid-cols-3 gap-x-8 prose-headings:m-0 prose-ul:col-span-2 prose-p:col-span-2 prose-img:aspect-video prose-img:object-cover prose-img:mt-0 prose-img:mb-3"
       >
         <Content components={{ Gallery }} />
       </div>
