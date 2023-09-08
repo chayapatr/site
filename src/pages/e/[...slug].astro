@@ -23,7 +23,7 @@ const { Content } = await post.render();
     <main class="grid gap-4 mb-4">
       <Menu cur="(Back to 🪴)" url="/e" />
       <h2 class="text-4xl">
-        <a class="text-teal-500" href="/e">🪴 Garden</a> / {post.data.title}
+        {post.data.title}
       </h2>
       <div class="relative mx-2">
           <Draggable x={-30} alwaysShow={true} client:load>
@@ -33,4 +33,7 @@ const { Content } = await post.render();
           </Draggable>
       </div>
     </main>
+    <Draggable x={30} bottom={true} show={false} fixed={true} color={"md:bg-green-50"} custom={"hidden md:block"} client:load>
+            <a class="text-purple-500 font-medium hover:bg-yellow-300 hover:text-neutral-950" href="/e">(Back to 🪴)</a>
+    </Draggable>
 </BaseLayout>
