@@ -9,13 +9,12 @@ title: "Horror Movies"
 - The Descent
 - The Babadook
 - The Wailing
-- It Follows
 - Gonjiam
 - The Autopsy of Jane Doe
 - Light Out
 - The Visit
 - Hell House llc
 - V/H/S
-- Lake Mundo
+- Lake Mungo
 
 **_(gonna start a horror movie club someday)_**

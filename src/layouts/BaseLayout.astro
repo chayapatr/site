@@ -31,7 +31,9 @@ const { footer = true } = Astro.props
         <History client:load />
     </Draggable>
     <slot />
-    {footer ? <Footer /> : null}
+    <div class={`${footer || "md:hidden"}`}>
+    <Footer />
+    </div>
     <Draggable custom="hidden md:block" right={true} bottom={true} fixed={true} client:load>
         <div id="s" class="text-sm text-purple-500">X, Y</div>
     </Draggable>

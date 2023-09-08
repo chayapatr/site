@@ -8,26 +8,15 @@ import { getCollection } from "astro:content";
 const posts = await getCollection("garden").then(y => y.filter(x => x.id.split("/").length === 1 || x.id.split("/")[1] === "index.md"))
 ---
 
-<BaseLayout>
+<BaseLayout footer={false}>
     <main class="grid gap-4">
-      <Menu cur="Entries" />
+      <Menu cur="Garden" />
       <div class="prose prose-lg">
-        <h2>Page Lists</h2>
-        <div class="prose prose-lg relative md:my-8">
-          <div class="opacity-100 md:opacity-0">
-              <ul>
-                {
-                  posts.map((x) => (
-                    <li>
-                      <a href={`/e/${x.slug}`}>{x.data.title}</a>
-                    </li>
-                  ))
-                }
-              </ul>
-          </div>
-          <div class="hidden md:block" aria-hidden="true">
-            <Draggable x={-10} y={-15} show={false} client:load>
-                <ul>
+        <h2>🪴 Digital Garden</h2>
+        <div class="prose prose-lg relative">
+          <div >
+            <Draggable x={-10} show={false} client:load>
+                <ul class=" md:grid md:grid-cols-2 md:w-[48rem]">
                   {
                     posts.map((x) => (
                       <li>

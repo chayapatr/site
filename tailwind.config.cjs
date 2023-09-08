@@ -10,7 +10,6 @@ module.exports = {
           css: {
             color: colors.neutral[950],
             a: {
-              fontFamily: "Voxel",
               fontSize: "1.35rem",
               textDecoration: "none",
               color: colors.purple[500],

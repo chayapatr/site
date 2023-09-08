@@ -65,11 +65,10 @@ strong,
 b {
   font-weight: 700;
 }
-a {
-  color: var(--accent);
-}
-a:hover {
-  color: var(--accent);
+
+.prose a {
+  font-family: "Voxel", Anuphan, san-serif;
+  font-weight: 400;
 }
 
 textarea {
