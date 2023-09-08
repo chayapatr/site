@@ -68,6 +68,7 @@
 
 <svelte:window on:resize={() => {dp = updateDP(); grid = updateGrid()}} />
 
+<div>
 <div
     class="absolute bg-neutral-50 top-0 left-0 flex justify-start items-start flex-col"
     style={dp ? `height: ${dp.h}px; width: ${dp.w}px` : null}
@@ -99,3 +100,4 @@
         @apply aspect-square border-[0.5px] border-neutral-300 flex justify-center items-center text-xs text-neutral-200;
     }
 </style>
+</div>
