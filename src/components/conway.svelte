@@ -66,38 +66,4 @@
     // Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
 </script>
 
-<svelte:window on:resize={() => {dp = updateDP(); grid = updateGrid()}} />
-
-<div>
-<div
-    class="absolute bg-neutral-50 top-0 left-0 flex justify-start items-start flex-col"
-    style={dp ? `height: ${dp.h}px; width: ${dp.w}px` : null}
->
-    {#each grid as row, i}
-        <div class="flex">
-            {#each row as cell, j}
-                <div
-                    class={`cell ${grid[i][j] ? "bg-neutral-300" : "bg-neutral-100"}`}
-                    style={dp ? `width: ${dp.w / grid[0].length}px` : null}
-                    on:mouseenter={() => {
-                      grid[i][j] = grid[i][j] ? 0 : 1
-                    }}
-                />
-            {/each}
-        </div>
-    {/each}
-</div>
-
-{#if stats}
-<div class="absolute top-0 left-0 m-4 p-4 border-2 border-neutral-300 rounded-md shadow-md bg-white">
-    <h2 class="text-xl">Stats for nerds</h2>
-    <p class="font-['Basier_Circle']">{JSON.stringify(dp)}</p>
-</div>
-{/if}
-</div>
-
-<style>
-    .cell {
-        @apply aspect-square border-[0.5px] border-neutral-300 flex justify-center items-center text-xs text-neutral-200;
-    }
-</style>
+<div>Hello world!</div>
