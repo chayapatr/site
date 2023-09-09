@@ -1,13 +1,13 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro"
-import Conway from "../../../components/Conway.svelte"
+import Cw from "../../../components/Cw.svelte"
 import Levels from "./levels.svelte"
 import Draggable from "../../../components/Draggable.svelte"
 import "../../../styles/global.css";
 ---
 
 <BaseLayout footer={false}>
-    <Conway stats={true} client:load />
+    <Cw stats={true} client:load />
     <Draggable x={30} bottom={true} show={false} fixed={true} custom={"hidden md:block"} client:load>
             <a class="text-purple-500 font-medium hover:bg-yellow-300 hover:text-neutral-950 px-3 py-2 rounded-md bg-neutral-100 border-2 border-neutral-300" href="/pub">(Back)</a>
     </Draggable>
