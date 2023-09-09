@@ -1,4 +1,6 @@
 <script>
+    import chroma from "chroma-js"
+
 	import Draggable from '../../../components/Draggable.svelte'
 	import ColorScale from './colorScale.svelte'
 	const colors = Object.entries({
@@ -44,6 +46,8 @@
 		'th-white': '#FAFAFA',
 		'th-black': '#00080b' // นิลกาฬ
 	}).map(([k, v]) => v)
+
+	const ap = ["#FE6F5C", "#F8D147", "#56D25B", "#0088CB", "#387AE6", "#66788E", "#808080"]
 
 	let show = false
 
@@ -120,12 +124,54 @@
 		]
 	}
 
-	const fns = [lChange, scssMix]
+	const round = (x) => {
+	   return Math.round(x * 1000) / 1000
+	}
+
+	const oklch = (color) => {
+	   let arr = chroma(color).oklch()
+		arr[0] = 0.5
+		return arr
+		// return [Math.round(lch[0] * 10) / 10, lch[1], lch[2]]
+	}
+
+	const preset = [98.2, 93, 85.1, 76.5, 67.65, 57.8, 47.6, 40.4, 32.4, 23.55].map(x => x * 0.01)
+
+	const oklchLShift = (rgb) => {
+	     const arr = oklch(rgb)
+	     const range = [...Array(19).keys()].map(x => x * 0.05).reverse()
+	     return range.map(x => [x, round(arr[1]), round(arr[2]) || 0]).map(x => `oklch(${x.join(" ")})`)
+	}
+
+	const chromaShift = (rgb) => {
+	   const arr = oklch(rgb)
+		const range = [...Array(19).keys()].map(x => x * 0.05).reverse()
+		const changeL = preset
+			.map(x => [x, round(arr[1]), round(arr[2])])
+
+		// .map(x => chroma.oklch(...[x, round(arr[1]), round(arr[2])]))
+
+	     const chromaShift = [
+				...[...Array(9).keys()].map(x => x + 1).map(x => x * 0.3).reverse().map(x => chroma.oklch(...arr).brighten(x)),
+				chroma.oklch(...arr),
+				...[...Array(9).keys()].map(x => x + 1).map(x => x * 0.3).map(x => chroma.oklch(...arr).darken(x)),
+			]
+
+        return chromaShift
+	}
+
+	console.log(chroma)
+
+	const fns = [lChange, scssMix, chromaShift, oklchLShift] // lChange
 
 	// https://gist.github.com/jedfoster/7939513
 	// https://tailwind-color-analytics.netlify.app/
 	// https://notes.dt.in.th/OklchPlot
 	// check grayscale with ibm tone
+	// https://accessiblepalette.com/
+	//
+
+	let gray = false
 </script>
 
 <div class="grid gap-4 mb-8">
@@ -136,25 +182,55 @@
 				<button class="px-2 py-1 border-2 bg-neutral-100 rounded-md" on:click={() => (show = !show)}
 					>Show</button
 				>
+				<button class="px-2 py-1 border-2 bg-neutral-100 rounded-md" on:click={() => (gray = !gray)}
+					>Gray</button
+				>
 			</div>
 		</div>
 	</Draggable>
 	<h1 class="text-4xl">Color</h1>
 
+	<!-- <div class={!gray || "grayscale"}>
+	{#each colors as color}
+	<div class="flex">
+	   {#each oklchTransform(color) as code}
+			<div class="w-10 aspect-square text-xs flex justify-center items-center"
+			     style={`background-color: oklch(${code.join(" ")})`}>
+					{#if show}{Math.round(code[0] * 100) / 100}{/if}
+			</div>
+		{/each}
+	</div>
+	{/each}
+	</div> -->
+
 	{#each fns as fn}
-		<div class="grid gap-8 my-4">
+		  <div class={`grid gap-8 my-4 ${!gray || "grayscale"}`}>
 			<div class="flex flex-wrap flex-col">
 				<h1 class="text-4xl mb-4">{fn.name}</h1>
 				{#each colors as color}
-					<ColorScale shades={fn(color)} org={color} {show} />
+					<ColorScale shades={fn(color)} org={color} show={show} />
 				{/each}
 			</div>
+
+			<!--
 			<div class="flex flex-wrap flex-col grayscale">
 				<h1 class="text-2xl mb-4">Grayscale test</h1>
 				{#each colors as color}
 					<ColorScale shades={fn(color)} org={color} {show} />
 				{/each}
 			</div>
+			-->
 		</div>
 	{/each}
+
+	<h1 class="text-4xl mb-4">Comparison</h1>
+	<div class={`flex flex-wrap ${!gray || "grayscale"}`}>
+	{#each colors as color}
+	   {#each fns as fn, i}
+				<div class="flex gap-2">
+				    <ColorScale shades={fn(color)} org={color} show={show} /> {i + 1}
+				</div>
+		{/each}
+	{/each}
+	</div>
 </div>
