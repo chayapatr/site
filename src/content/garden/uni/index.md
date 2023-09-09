@@ -1,14 +1,15 @@
 ---
-title: "University works"
+title: 'University works'
 ---
+
 ## Projects
 
 - Papers -> SAC / CHI / CNT
 - ThaiUI
 - Recipes for a computer
 - Recipes for a program
-	- Algorithms
-	- Information theory
+  - Algorithms
+  - Information theory
 - Algorithm Visualizer
 - TEA Interpreter (Crafting Interpreter)
 - CoffeeOS

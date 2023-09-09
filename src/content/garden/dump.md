@@ -1,5 +1,5 @@
 ---
-title: "Dumpster"
+title: 'Dumpster'
 ---
 
 ## Cool code snippets

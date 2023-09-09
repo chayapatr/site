@@ -1,41 +1,41 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
-import Menu from "../components/Menu.astro";
-import Gallery from "../components/Gallery.astro";
-import Draggable from "../components/Draggable.svelte"
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Menu from '../components/Menu.astro'
+import Gallery from '../components/Gallery.astro'
+import Draggable from '../components/Draggable.svelte'
 
-import { Content } from "../content/main/stories.mdx";
+import { Content } from '../content/main/stories.mdx'
 
-const posts = await Astro.glob('../content/garden/*.md');
+const posts = await Astro.glob('../content/garden/*.md')
 ---
 
 <script is:inline>
-    console.log(document, window)
+	console.log(document, window)
 </script>
 
 <BaseLayout>
-
-
-    <main class="grid gap-4">
-        <Menu dir="stories" />
-        <div class="prose prose-lg">
-            <Content components={{ Gallery }} />
-        </div>
-        <div class="hidden xl:block">
-            <Draggable x={30} y={520} p="md:p-2" rand={true} fixed={true} client:load>
-                <div class="grid gap-4 ">
-                    <div>(Pub at TEDxUTCC)</div>
-                    <img src="ted.jpeg" class="w-48 rounded-sm" />
-                </div>
-            </Draggable>
-        </div>
-    </main>
+	<main class="grid gap-4">
+		<Menu dir="stories" />
+		<div class="prose prose-lg">
+			<Content components={{ Gallery }} />
+		</div>
+		<div class="hidden xl:block">
+			<Draggable x={30} y={520} p="md:p-2" rand={true} fixed={true} client:load>
+				<div class="grid gap-4">
+					<div>(Pub at TEDxUTCC)</div>
+					<img src="ted.jpeg" class="w-48 rounded-sm" />
+				</div>
+			</Draggable>
+		</div>
+	</main>
 </BaseLayout>
 
-{ /* posts.map((post) =>
+{
+	/* posts.map((post) =>
     <Draggable show={true} client:load >
         <main class="prose prose-lg">
             {<post.Content components={{ Gallery }} />}
         </main>
     </Draggable>
-) */ }
+) */
+}

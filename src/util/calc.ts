@@ -1,1 +1,1 @@
-const w3xl: number = 768;
+const w3xl: number = 768

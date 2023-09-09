@@ -1,36 +1,36 @@
 ---
-const { dir, cur, url } = Astro.props;
+const { dir, cur, url } = Astro.props
 ---
 
-<div class="flex flex-col gap-4 mt-2">
-  <h1 class="text-4xl lg:text-6xl">👋 Hi, my name is Pub.</h1>
-  <h1 class="text-4xl lg:text-6xl">I live in Bangkok.</h1>
+<div class="mt-2 flex flex-col gap-4">
+	<h1 class="text-4xl lg:text-6xl">👋 Hi, my name is Pub.</h1>
+	<h1 class="text-4xl lg:text-6xl">I live in Bangkok.</h1>
 
-  <ul class="flex gap-4 mb-4">
-    <li class={`${dir === "stories" ? "selected" : ""}`}>
-      <a href="/">Stories</a>
-    </li>
-    <li class={`${dir === "crafts" ? "selected" : ""}`}>
-      <a href="/crafts">Crafts</a>
-    </li>
-    <li class={`${dir === "pub" ? "selected" : ""}`}>
-      <a href="/pub">Pub</a>
-    </li>
-    {
-      cur ? (
-        <li class="selected">
-          <a href={url ?? "#" }>{cur}</a>
-        </li>
-      ) : null
-    }
-  </ul>
+	<ul class="mb-4 flex gap-4">
+		<li class={`${dir === 'stories' ? 'selected' : ''}`}>
+			<a href="/">Stories</a>
+		</li>
+		<li class={`${dir === 'crafts' ? 'selected' : ''}`}>
+			<a href="/crafts">Crafts</a>
+		</li>
+		<li class={`${dir === 'pub' ? 'selected' : ''}`}>
+			<a href="/pub">Pub</a>
+		</li>
+		{
+			cur ? (
+				<li class="selected">
+					<a href={url ?? '#'}>{cur}</a>
+				</li>
+			) : null
+		}
+	</ul>
 </div>
 
 <style>
-  .selected {
-    @apply text-teal-500 font-medium;
-  }
-  a {
-    @apply hover:text-neutral-950 hover:bg-yellow-300
-  }
+	.selected {
+		@apply font-medium text-teal-500;
+	}
+	a {
+		@apply hover:bg-yellow-300 hover:text-neutral-950;
+	}
 </style>

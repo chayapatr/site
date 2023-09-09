@@ -1,3 +1,3 @@
 ---
-title: "Linguistics"
+title: 'Linguistics'
 ---

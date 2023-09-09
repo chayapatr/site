@@ -1,56 +1,53 @@
 ---
-import BaseHead from "../components/BaseHead.astro";
-import Footer from "../components/Footer.astro";
-import Menu from "../components/Menu.astro";
-import Gallery from "../components/Gallery.astro";
-import History from "../components/History.svelte";
-import Draggable from "../components/Draggable.svelte";
-import Cw from "../components/Cw.svelte";
-import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
-import { ViewTransitions } from 'astro:transitions';
+import BaseHead from '../components/BaseHead.astro'
+import Footer from '../components/Footer.astro'
+import Menu from '../components/Menu.astro'
+import Gallery from '../components/Gallery.astro'
+import History from '../components/History.svelte'
+import Draggable from '../components/Draggable.svelte'
+import Cw from '../components/Cw.svelte'
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts'
+import { ViewTransitions } from 'astro:transitions'
 
 const { footer = true } = Astro.props
 ---
 
 <script>
-    document.addEventListener("mousemove", (e) => {
-        document.querySelector("#s").innerText = `${e.clientX}, ${e.clientY}`
-    })
-
-
+	document.addEventListener('mousemove', (e) => {
+		document.querySelector('#s').innerText = `${e.clientX}, ${e.clientY}`
+	})
 </script>
-<!doctype html>
 <html lang="en">
-  <head>
-    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-    <ViewTransitions />
-  </head>
-  <body>
-    <!-- <Header title={SITE_TITLE} />
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<ViewTransitions />
+	</head>
+	<body>
+		<!-- <Header title={SITE_TITLE} />
     <Draggable client:load>  -->
-    <Draggable right={true} show={false} fixed={true} client:load>
-        <History client:load />
-    </Draggable>
-    <slot />
-    <div class={`${footer || "md:hidden"}`}>
-    <Footer />
-    </div>
-    <Draggable custom="hidden md:block" right={true} bottom={true} fixed={true} client:load>
-        <div id="s" class="text-sm text-purple-500">X, Y</div>
-    </Draggable>
-    <!-- </Draggable>  -->
+		<Draggable right={true} show={false} fixed={true} client:load>
+			<History client:load />
+		</Draggable>
+		<slot />
+		<div class={`${footer || 'md:hidden'}`}>
+			<Footer />
+		</div>
+		<Draggable custom="hidden md:block" right={true} bottom={true} fixed={true} client:load>
+			<div id="s" class="text-sm text-purple-500">X, Y</div>
+		</Draggable>
+		<!-- </Draggable>  -->
 
-  </body>
-  <div class="fixed top-0 left-0 opacity-30" style="z-index:-1;">
-      <Cw client:load />
-  </div>
-
+		<div class="fixed left-0 top-0 opacity-30" style="z-index:-1;">
+			<Cw client:load />
+		</div>
+		<style>
+			.trail {
+				position: absolute;
+				height: 6px;
+				width: 6px;
+				border-radius: 3px;
+				background: teal;
+			}
+		</style>
+	</body>
 </html>
-<style>
-    .trail {
-    position: absolute;
-    height: 6px; width: 6px;
-    border-radius: 3px;
-    background: teal;
-  }
-</style>

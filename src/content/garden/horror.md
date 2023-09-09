@@ -1,5 +1,5 @@
 ---
-title: "Horror Movies"
+title: 'Horror Movies'
 ---
 
 - [Letterboxd Watchlog](https://letterboxd.com/chayapatr)

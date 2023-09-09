@@ -1,32 +1,35 @@
 ---
-import Menu from "../../components/Menu.astro";
-import Draggable from "../../components/Draggable.svelte";
-import BaseLayout from "../../layouts/BaseLayout.astro"
+import Menu from '../../components/Menu.astro'
+import Draggable from '../../components/Draggable.svelte'
+import BaseLayout from '../../layouts/BaseLayout.astro'
 
-import { getCollection } from "astro:content";
+import { getCollection } from 'astro:content'
 
-const posts = await getCollection("garden").then(y => y.filter(x => x.id.split("/").length === 1 || x.id.split("/")[1] === "index.md"))
+const posts = await getCollection('garden').then((y) =>
+	y.filter((x) => x.id.split('/').length === 1 || x.id.split('/')[1] === 'index.md')
+)
 ---
 
 <BaseLayout footer={false}>
-    <main class="grid gap-4">
-      <Menu cur="Garden" />
-      <div class="prose prose-lg">
-        <h2>🪴 Digital Garden</h2>
-        <div class="prose prose-lg relative">
-          <div >
-            <Draggable x={-10} show={false} client:load>
-                <ul class=" md:grid md:grid-cols-2 md:w-[40rem] lg:w-[48rem]">
-                  {
-                    posts.map((x) => (
-                      <li>
-                        <a href={`/e/${x.slug}`}>{x.data.title}</a>
-                      </li>
-                    ))
-                  }
-                </ul>
-            </Draggable>
-          </div>
-      </div>
-    </main>
+	<main class="grid gap-4">
+		<Menu cur="Garden" />
+		<div class="prose prose-lg">
+			<h2>🪴 Digital Garden</h2>
+			<div class="prose prose-lg relative">
+				<div>
+					<Draggable x={-10} show={false} client:load>
+						<ul class="md:grid md:w-[40rem] md:grid-cols-2 lg:w-[48rem]">
+							{
+								posts.map((x) => (
+									<li>
+										<a href={`/e/${x.slug}`}>{x.data.title}</a>
+									</li>
+								))
+							}
+						</ul>
+					</Draggable>
+				</div>
+			</div>
+		</div>
+	</main>
 </BaseLayout>
