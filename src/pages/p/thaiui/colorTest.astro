@@ -1,0 +1,61 @@
+---
+import BaseHead from '../../../components/BaseHead.astro'
+import GeneratePalette from './GeneratePalette.svelte'
+
+const hs = [...Array(120).keys()].map((x) => x * 3)
+const ls = [...Array(33).keys()].map((x) => x * 3).reverse()
+---
+
+<!doctype html>
+<html>
+	<head>
+		<BaseHead />
+	</head>
+
+	<div class="grid gap-8">
+		<GeneratePalette client:load />
+
+		<div class="wrap flex">
+			{
+				hs.map((h) => (
+					<div class="flex flex-col">
+						{ls.map((l) => (
+							<div class="aspect-square w-2" style={`background-color: hsl(${h} 100% ${l}%)`} />
+						))}
+					</div>
+				))
+			}
+		</div>
+
+		<div class="wrap flex">
+			{
+				hs.map((h) => (
+					<div class="flex flex-col">
+						{ls.map((l) => (
+							<div class="aspect-square w-2" style={`background-color: oklch(${l}% 0.2 ${h})`} />
+						))}
+					</div>
+				))
+			}
+		</div>
+
+		<div class="wrap flex">
+			{
+				hs.map((h) => (
+					<div class="flex flex-col">
+						{ls.map((l) => (
+							<div class="aspect-square w-2" style={`background-color: oklch(${l}% 0.8 ${h})`} />
+						))}
+					</div>
+				))
+			}
+		</div>
+	</div>
+
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+		}
+	</style>
+</html>

@@ -1,5 +1,5 @@
 <script>
-    import chroma from "chroma-js"
+	import chroma from 'chroma-js'
 
 	import Draggable from '../../../components/Draggable.svelte'
 	import ColorScale from './colorScale.svelte'
@@ -47,7 +47,7 @@
 		'th-black': '#00080b' // นิลกาฬ
 	}).map(([k, v]) => v)
 
-	const ap = ["#FE6F5C", "#F8D147", "#56D25B", "#0088CB", "#387AE6", "#66788E", "#808080"]
+	const ap = ['#FE6F5C', '#F8D147', '#56D25B', '#0088CB', '#387AE6', '#66788E', '#808080']
 
 	let show = false
 
@@ -125,44 +125,75 @@
 	}
 
 	const round = (x) => {
-	   return Math.round(x * 1000) / 1000
+		return Math.round(x * 1000) / 1000
 	}
 
 	const oklch = (color) => {
-	   let arr = chroma(color).oklch()
+		let arr = chroma(color).oklch()
 		arr[0] = 0.5
 		return arr
 		// return [Math.round(lch[0] * 10) / 10, lch[1], lch[2]]
 	}
 
-	const preset = [98.2, 93, 85.1, 76.5, 67.65, 57.8, 47.6, 40.4, 32.4, 23.55].map(x => x * 0.01)
+	const preset = [98.2, 93, 85.1, 76.5, 67.65, 57.8, 47.6, 40.4, 32.4, 23.55].map((x) => x * 0.01)
 
 	const oklchLShift = (rgb) => {
-	     const arr = oklch(rgb)
-	     const range = [...Array(19).keys()].map(x => x * 0.05).reverse()
-	     return range.map(x => [x, round(arr[1]), round(arr[2]) || 0]).map(x => `oklch(${x.join(" ")})`)
+		const arr = oklch(rgb)
+		const range = [...Array(19).keys()].map((x) => x * 0.05).reverse()
+		return range
+			.map((x) => [x, round(arr[1]), round(arr[2]) || 0])
+			.map((x) => `oklch(${x.join(' ')})`)
 	}
 
 	const chromaShift = (rgb) => {
-	   const arr = oklch(rgb)
-		const range = [...Array(19).keys()].map(x => x * 0.05).reverse()
-		const changeL = preset
-			.map(x => [x, round(arr[1]), round(arr[2])])
+		const arr = oklch(rgb)
+		const range = [...Array(19).keys()].map((x) => x * 0.05).reverse()
+		const changeL = preset.map((x) => [x, round(arr[1]), round(arr[2])])
 
 		// .map(x => chroma.oklch(...[x, round(arr[1]), round(arr[2])]))
 
-	     const chromaShift = [
-				...[...Array(9).keys()].map(x => x + 1).map(x => x * 0.3).reverse().map(x => chroma.oklch(...arr).brighten(x)),
-				chroma.oklch(...arr),
-				...[...Array(9).keys()].map(x => x + 1).map(x => x * 0.3).map(x => chroma.oklch(...arr).darken(x)),
-			]
+		const chromaShift = [
+			...[...Array(9).keys()]
+				.map((x) => x + 1)
+				.map((x) => x * 0.3)
+				.reverse()
+				.map((x) => chroma.oklch(...arr).brighten(x)),
+			chroma.oklch(...arr),
+			...[...Array(9).keys()]
+				.map((x) => x + 1)
+				.map((x) => x * 0.3)
+				.map((x) => chroma.oklch(...arr).darken(x))
+		]
 
-        return chromaShift
+		return chromaShift
 	}
 
-	console.log(chroma)
 
-	const fns = [lChange, scssMix, chromaShift, oklchLShift] // lChange
+	// const shades = [98.2, 93.95, 85.1, 76.5, 67.65, 57.8, 47.6, 40.4, 32.4, 23.55]
+	const shades = [...Array(19).keys()].map((x) => x * 5).reverse()
+	const accessiblePalette = (color) => {
+	       const clean = (color) => color[0] === "#" ? color.slice(1) : color
+			const scale = chroma.scale(['black', clean(color), 'white']).correctLightness()
+
+			const getColorFromScale = (scale, lightness) => {
+				const color = scale(lightness / 100)
+				return chroma(color)
+			}
+
+			const applyHueCorrection = (chromaColor, hueCorrection, index) => {
+				const totalShades = shades.length
+				const hueAdjustment = (hueCorrection / totalShades) * (index + 1)
+				return chromaColor.set('lch.h', chromaColor.lch()[2] + hueAdjustment)
+			}
+
+			return shades.map((shade) => {
+				const chromaColorWithLightness = getColorFromScale(scale, shade)
+				const chromaColorWithCorrectedHue = applyHueCorrection(chromaColorWithLightness, 0, shade)
+				return chromaColorWithCorrectedHue.hex()
+			})
+		}
+
+	const fns = [lChange, scssMix, chromaShift, oklchLShift, accessiblePalette] // lChange
 
 	// https://gist.github.com/jedfoster/7939513
 	// https://tailwind-color-analytics.netlify.app/
@@ -204,11 +235,11 @@
 	</div> -->
 
 	{#each fns as fn}
-		  <div class={`grid gap-8 my-4 ${!gray || "grayscale"}`}>
+		<div class={`grid gap-8 my-4 ${!gray || 'grayscale'}`}>
 			<div class="flex flex-wrap flex-col">
 				<h1 class="text-4xl mb-4">{fn.name}</h1>
 				{#each colors as color}
-					<ColorScale shades={fn(color)} org={color} show={show} />
+					<ColorScale shades={fn(color)} org={color} {show} />
 				{/each}
 			</div>
 
@@ -224,13 +255,14 @@
 	{/each}
 
 	<h1 class="text-4xl mb-4">Comparison</h1>
-	<div class={`flex flex-wrap ${!gray || "grayscale"}`}>
-	{#each colors as color}
-	   {#each fns as fn, i}
+	<div class={`flex flex-wrap ${!gray || 'grayscale'}`}>
+		{#each colors as color}
+			{#each fns as fn, i}
 				<div class="flex gap-2">
-				    <ColorScale shades={fn(color)} org={color} show={show} /> {i + 1}
+					<ColorScale shades={fn(color)} org={color} {show} />
+					{i + 1}
 				</div>
+			{/each}
 		{/each}
-	{/each}
 	</div>
 </div>
