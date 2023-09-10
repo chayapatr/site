@@ -25,6 +25,17 @@
 		'th-white': '#FAFAFA'
 	}).map(([k, v]) => v)
 
+	let hueShift = {
+	   '#c9242b': -15,
+	   '#f36e31': -10,
+	   '#f4d25d': -30,
+	   '#356740': 5,
+	   '#69b496': 10,
+	   '#0c4da2': 0,
+	   '#695095': 15,
+	   '#FAFAFA': 0
+	}
+
 	const colorsFull = Object.entries({
 		'th-red': '#c9242b', // แดงชาด
 		'th-dark-red': '#951519', // แดงตัด
@@ -186,9 +197,9 @@
 				return chromaColor.set('lch.h', chromaColor.lch()[2] + hueAdjustment)
 			}
 
-			return shades.map((shade) => {
+			return shades.map((shade, index) => {
 				const chromaColorWithLightness = getColorFromScale(scale, shade)
-				const chromaColorWithCorrectedHue = applyHueCorrection(chromaColorWithLightness, 0, shade)
+				const chromaColorWithCorrectedHue = applyHueCorrection(chromaColorWithLightness, hueShift[color], index)
 				return chromaColorWithCorrectedHue.hex()
 			})
 		}
@@ -203,18 +214,22 @@
 	//
 
 	let gray = false
+	let highlight = false
 </script>
 
 <div class="grid gap-4 mb-8">
-	<Draggable rand={true} show={false} fixed={true}>
+	<Draggable rand={true} show={false} bottom={true} right={true} fixed={true}>
 		<div class="grid gap-2">
 			<h1 class="text-2xl">Color Setting</h1>
-			<div>
+			<div class="grid grid-cols-2 gap-2">
 				<button class="px-2 py-1 border-2 bg-neutral-100 rounded-md" on:click={() => (show = !show)}
 					>Show</button
 				>
 				<button class="px-2 py-1 border-2 bg-neutral-100 rounded-md" on:click={() => (gray = !gray)}
 					>Gray</button
+				>
+				<button class="px-2 py-1 border-2 bg-neutral-100 rounded-md" on:click={() => (highlight = !highlight)}
+					>Highlight ({highlight})</button
 				>
 			</div>
 		</div>
@@ -239,7 +254,7 @@
 			<div class="flex flex-wrap flex-col">
 				<h1 class="text-4xl mb-4">{fn.name}</h1>
 				{#each colors as color}
-					<ColorScale shades={fn(color)} org={color} {show} />
+					<ColorScale shades={fn(color)} org={color} {show} {highlight} />
 				{/each}
 			</div>
 
@@ -259,7 +274,7 @@
 		{#each colors as color}
 			{#each fns as fn, i}
 				<div class="flex gap-2">
-					<ColorScale shades={fn(color)} org={color} {show} />
+					<ColorScale shades={fn(color)} org={color} {show} {highlight} />
 					{i + 1}
 				</div>
 			{/each}
