@@ -1,5 +1,0 @@
----
-title: 'Cat'
----
-
-meow

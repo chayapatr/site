@@ -151,6 +151,7 @@
 	const oklchLShift = (rgb) => {
 		const arr = oklch(rgb)
 		const range = [...Array(19).keys()].map((x) => x * 0.05).reverse()
+
 		return range
 			.map((x) => [x, round(arr[1]), round(arr[2]) || 0])
 			.map((x) => `oklch(${x.join(' ')})`)
@@ -218,7 +219,7 @@
 </script>
 
 <div class="grid gap-4 mb-8">
-	<Draggable rand={true} show={false} bottom={true} right={true} fixed={true}>
+	<Draggable show={false} bottom={true} right={true} fixed={true}>
 		<div class="grid gap-2">
 			<h1 class="text-2xl">Color Setting</h1>
 			<div class="grid grid-cols-2 gap-2">

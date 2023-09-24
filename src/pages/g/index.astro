@@ -1,0 +1,57 @@
+---
+import Menu from '../../components/Menu.astro'
+import Draggable from '../../components/Draggable.svelte'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+
+import { getCollection } from 'astro:content'
+
+const posts = await getCollection('garden')
+
+const grouped = posts
+	.map((x) => {
+		const splitted = x.id.split('/')
+		const cat = splitted.length === 1 ? '' : splitted[0]
+		return { ...x, cat }
+	})
+	.reduce((acc, cur) => {
+		const cat = cur.cat || 'main'
+		cat in acc ? acc[cat].push(cur) : (acc[cat] = [cur])
+		return acc
+	}, {})
+---
+
+<BaseLayout>
+	<main class="grid gap-4">
+		<Menu dir="garden" />
+		<div class="prose prose-lg">
+			<h2>Digital Garden</h2>
+			<div class="prose prose-lg relative">
+				<div>
+					{
+						Object.entries(grouped).map(([cat, v], i) => {
+							return (
+								<div class="mb-4">
+									<h3>
+										{['⛰️', '🏕️', '🗻'][i % 3] + ' '}
+										{cat}
+									</h3>
+									{v}
+									<section class="grid gap-2 md:w-[40rem] md:grid-cols-2 md:gap-4 lg:w-[48rem]">
+										{v.map((x) => (
+											<a
+												class="border-[1.5px] border-neutral-300 bg-white px-4 py-2"
+												href={`/g/${x.slug}`}
+											>
+												{x.data.title}
+											</a>
+										))}
+									</section>
+								</div>
+							)
+						})
+					}
+				</div>
+			</div>
+		</div>
+	</main>
+</BaseLayout>

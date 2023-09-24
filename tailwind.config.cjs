@@ -41,6 +41,9 @@ module.exports = {
 						},
 						'ul > li': {
 							paddingLeft: '0'
+						},
+						strong: {
+							fontWeight: 500
 						}
 					}
 				}

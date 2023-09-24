@@ -52,6 +52,7 @@
 	let show = false
 </script>
 
+
 <div>
     <button class="px-2 py-1 border" on:click={() => { gray = !gray }}>gray</button>
     <button class="px-2 py-1 border" on:click={() => { show = !show }}>show</button>

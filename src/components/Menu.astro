@@ -14,7 +14,10 @@ const { dir, cur, url } = Astro.props
 			<a href="/crafts">Crafts</a>
 		</li>
 		<li class={`${dir === 'pub' ? 'selected' : ''}`}>
-			<a href="/pub">Pub</a>
+			<a href="/me">Pub</a>
+		</li>
+		<li class={`${dir === 'garden' ? 'selected' : ''}`}>
+			<a href="/g">Garden</a>
 		</li>
 		{
 			cur ? (
