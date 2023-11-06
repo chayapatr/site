@@ -25,6 +25,20 @@
 	font-style: regular;
 }
 
+@font-face {
+	font-family: 'Zed Mono Extended';
+	src: url('/fonts/zed-mono-extended.ttf') format('truetype');
+	font-weight: 500;
+	font-style: regular;
+}
+
+@font-face {
+	font-family: 'Anuphan';
+	src: url('/fonts/Anuphan-Regular.ttf') format('truetype');
+	font-weight: 500;
+	font-style: regular;
+}
+
 :root {
 }
 
@@ -43,7 +57,7 @@ h3,
 h4,
 h5,
 h6 {
-	font-family: 'zed mono extended', sans-serif;
+	font-family: 'Zed Mono Extended', sans-serif;
 }
 h1 {
 	font-size: 3em;
