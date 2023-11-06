@@ -10,18 +10,21 @@ module.exports = {
 					css: {
 						color: colors.neutral[950],
 						a: {
-							fontSize: '1.35rem',
+							// fontSize: '1.35rem',
 							textDecoration: 'none',
 							color: colors.purple[500],
+							letterSpacing: '-0.025em',
 							'&:hover': {
 								backgroundColor: colors.yellow[300],
 								color: colors.neutral[900]
 							}
 						},
 						h2: {
-							fontSize: '1.75rem',
+							fontSize: '1.3rem',
 							margin: '1.25rem 0 0.75rem 0',
-							fontWeight: 500
+							fontWeight: 500,
+							letterSpacing: '-0.025em',
+							textDecoration: 'underline'
 						},
 						h3: {
 							fontSize: '1.2rem',
@@ -29,7 +32,8 @@ module.exports = {
 							fontWeight: 500
 						},
 						p: {
-							marginBottom: '1rem'
+							marginBottom: '1rem',
+							fontSize: '1.05rem'
 						},
 						img: {
 							margin: '1rem 0'
@@ -40,7 +44,8 @@ module.exports = {
 							margin: '1rem 0'
 						},
 						'ul > li': {
-							paddingLeft: '0'
+							paddingLeft: '0',
+							fontSize: '1.05rem'
 						},
 						strong: {
 							fontWeight: 500

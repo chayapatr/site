@@ -89,7 +89,7 @@
 >
 	<div
 		class={`md:border md:shadow-sm md:hover:shadow-md md:border-neutral-300 transition-shadow ${
-			p || 'md:p-4'
+			p || 'md:px-6 md:py-4'
 		} border-dashed md:border-2  ${color ? color : 'md:bg-white'}`}
 	>
 		{#if alwaysShow || (drag && show)}

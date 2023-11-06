@@ -1,0 +1,11 @@
+---
+const { arr } = Astro.props
+---
+
+<ul class="my-8 grid gap-4 md:grid-cols-2">
+	{
+		arr.map((li: string) => {
+			return <li>{li}</li>
+		})
+	}
+</ul>

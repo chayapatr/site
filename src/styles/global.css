@@ -43,20 +43,20 @@ h3,
 h4,
 h5,
 h6 {
-	font-family: 'voxel', sans-serif;
+	font-family: 'zed mono extended', sans-serif;
 }
 h1 {
-	font-size: 3.052em;
+	font-size: 3em;
 }
 h2 {
-	font-size: 2.441em;
+	font-size: 2em;
 }
 h3 {
-	font-size: 1.953em;
+	font-size: 1.75em;
 	font-family: 'Basier Circle', sans-serif;
 }
 h4 {
-	font-size: 1.563em;
+	font-size: 1.5em;
 }
 h5 {
 	font-size: 1.25em;
@@ -67,8 +67,13 @@ b {
 }
 
 .prose a {
-	font-family: 'Voxel', Anuphan, san-serif;
+	font-family: 'Zed Mono Extended', Anuphan, san-serif;
 	font-weight: 400;
+	@apply tracking-tight;
+}
+
+.prose-content {
+	@apply prose prose-lg prose-ul:grid prose-ul:grid-cols-1 md:prose-ul:grid-cols-2 prose-li:m-1 prose-img:aspect-video prose-img:object-cover prose-ul:gap-x-4 prose-img:mt-1 prose-img:mb-3 hover:prose-img:scale-[1.008] prose-img:transition-all;
 }
 
 textarea {
