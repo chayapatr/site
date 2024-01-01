@@ -1,0 +1,58 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import History from "../components/History.svelte";
+import Back from "../components/Back.svelte";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import { ViewTransitions } from "astro:transitions";
+import Draw from "../components/Draw.svelte";
+import DrawPanel from "../components/DrawPanel.svelte";
+
+const { p } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Recursive:CASL,MONO@1,1&family=Shantell+Sans:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <!-- <ViewTransitions /> -->
+  </head>
+  <body>
+    <nav class="relative top-0 left-0 lg:p-8 lg:fixed mb-4 lg:m-0">
+      <ul class="uppercase flex lg:flex-col gap-4 lg:gap-1">
+        {
+          [
+            ["/", "Pub"],
+            ["/s", "Garden"],
+          ].map(([href, title]) => (
+            <li class={`${!(title === p) || "font-medium"} hover:font-medium `}>
+              <a href={href}>{title}</a>
+            </li>
+          ))
+        }
+        {p === "Entry" ? <Back client:load /> : null}
+      </ul>
+    </nav>
+    <div class="hidden fixed lg:flex h-[100svh] top-0 right-0 p-8 items-center">
+      <DrawPanel client:load />
+    </div>
+    <section
+      class="hidden fixed lg:flex gap-4 flex-col top-0 right-0 p-8 text-base"
+    >
+      <History client:load />
+    </section>
+    <div id="frame" class="fixed left-0 top-0 -z-10">
+      <Draw client:load />
+    </div>
+    <!-- <Header title={SITE_TITLE} /> -->
+    <main class="w-full max-w-3xl mx-auto">
+      <slot />
+    </main>
+    <!-- <Footer /> -->
+  </body>
+</html>

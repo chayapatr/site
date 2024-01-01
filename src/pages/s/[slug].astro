@@ -1,0 +1,46 @@
+---
+import { type CollectionEntry, getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+// import BlogPost from "../../layouts/BlogPost.astro";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("s");
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: post,
+  }));
+}
+type Props = CollectionEntry<"s">;
+
+const post = Astro.props;
+const { Content, headings } = await post.render();
+---
+
+<BaseLayout p="Entry">
+  <main class="prose" id="top">
+    <h1 class="mb-6 font-normal">
+      <a href="/s">🏕️</a> → {post.data.title}
+    </h1>
+    <div class="text-justify z-50">
+      <Content />
+    </div>
+  </main>
+  <a href="#top">
+    <div
+      class="fixed bottom-0 right-0 m-8 p-1 text-lg rounded-full border bg-neutral-50 size-10 flex justify-center items-center hover:shadow-sm transition-all"
+    >
+      ⤴
+    </div>
+  </a>
+  <div
+    class="hidden xl:flex max-w-48 fixed bottom-0 left-0 m-8 flex-col gap-1 pl-3 border-l-[1.5px] border-neutral-300 text-sm"
+  >
+    {
+      headings.map((heading) => (
+        <a class="hover:font-medium text-ellipsis" href={`#${heading.slug}`}>
+          {heading.text}
+        </a>
+      ))
+    }
+  </div>
+</BaseLayout>

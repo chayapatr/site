@@ -1,0 +1,25 @@
+---
+import { getCollection } from "astro:content";
+import FormattedDate from "../../components/FormattedDate.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Content from "../../content/main/s.md";
+
+const posts = (await getCollection("s")).filter(
+  (post) => post.data.main === true,
+);
+---
+
+<BaseLayout p="Garden">
+  <section class="prose">
+    <Content />
+    <ul>
+      {
+        posts.map((post) => (
+          <li>
+            <a href={`/s/${post.slug}/`}>{post.data.title}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</BaseLayout>
