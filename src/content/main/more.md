@@ -1,0 +1,27 @@
+## Selected Keynotes
+- [![Make Coding Less Scary](/slides/scary.webp)](https://github.com)
+- [![Designing an Accessible Design System](/slides/thaiui.webp)]()
+- [![Curiosity and Continuous Learning](/slides/learn.webp)]()
+- [![Tortilla Endofunctors](/slides/tortilla.webp)]()
+- [![Thai-franco Year of Innovation (illustraion)](/slides/fr.webp)]()
+- [![The Threat of Automation](/slides/automation.webp)]()
+- [![Recursive Sans Thai](/slides/recursive.webp)]()
+- [![Emotion-based Generative Font](/slides/emotion.webp)]()
+- [![Typography of Code](/slides/code.webp)]()
+- [![Past / Present / Future of Typography and Languages](/slides/languages.webp)]()
+- [![Futura Renner & Metropolis](/slides/metropolis.webp)]()
+- [![SpaceCHI: Molecular Encoded Storage for Space Exploration](/slides/spacechi.webp)]()
+- [![Building an Open Source DNA Storage for a Space Mission](/slides/messe.webp)]()
+- [![The Foundation of Sci-fi Culture](/slides/scifi.webp)]()
+- [![How to Drink a Bubble Tea](/slides/tedxutcc.webp)]()
+- [![Scientific Revolution 101](/slides/revolution.webp)]()
+- [Bangkok Open Source Hackathon]()
+- [Basic Space Laws]()
+
+## Personal Notes
+- 👻 [Horror Movies]()
+- 🏃🏻 [Running]()
+- 📸 [Photography & Graphic Design]()
+- 🎻 [Music]()
+
+### ✓ [Lifetime Checklist]() (Either be done or I die first)

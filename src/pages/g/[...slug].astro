@@ -1,0 +1,53 @@
+---
+import { type CollectionEntry, getCollection } from 'astro:content'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+
+import Menu from '../../components/Menu.astro'
+import History from '../../components/History.svelte'
+import Draggable from '../../components/Draggable.svelte'
+
+export async function getStaticPaths() {
+	const posts = await getCollection('garden')
+	return posts.map((post) => ({
+		params: { slug: post.slug },
+		props: post
+	}))
+}
+// type Props = CollectionEntry<"blog">;
+
+const post = Astro.props
+const { Content } = await post.render()
+---
+
+<BaseLayout footer={false}>
+	<main class="mb-4 grid gap-4">
+		<Menu dir="garden" />
+		<h2 class="text-4xl">
+			{post.data.title}
+		</h2>
+		<div class="relative mx-2">
+			<div class="prose prose-lg md:hidden md:w-[40rem] lg:w-[48rem]">
+				<Content />
+			</div>
+			<Draggable custom={'hidden md:block'} x={-30} alwaysShow={true} client:load>
+				<div class="prose prose-lg md:w-[48rem]">
+					<Content />
+				</div>
+			</Draggable>
+		</div>
+	</main>
+	<Draggable
+		x={30}
+		bottom={true}
+		show={false}
+		fixed={true}
+		color={'md:bg-green-50'}
+		custom={'hidden md:block'}
+		client:load
+	>
+		<a
+			class="rounded-md border-2 border-neutral-300 bg-neutral-100 px-3 py-2 font-medium text-purple-500 hover:bg-yellow-300 hover:text-neutral-950"
+			href="/g">(Back to 🪴)</a
+		>
+	</Draggable>
+</BaseLayout>

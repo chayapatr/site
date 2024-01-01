@@ -1,10 +1,8 @@
 ---
-const today = new Date();
-const drink = ["🧋", "🍸", "☕️", "🍵", "🍺", "🔥", "❤️"][
-  Math.floor(Math.random() * 7)
-];
+const today = new Date()
+const drink = ['🧋', '🍸', '☕️', '🍵', '🍺', '🔥', '❤️'][Math.floor(Math.random() * 7)]
 ---
 
-<footer class="pc py-3 flex justify-center items-center">
-  &copy; {today.getFullYear()} | made with {drink} by pub.
+<footer class="pc flex items-center justify-center py-3">
+	&copy; {today.getFullYear()} | made with {drink} by pub.
 </footer>

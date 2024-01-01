@@ -1,28 +1,59 @@
 ---
-import BaseHead from "../components/BaseHead.astro";
-import Footer from "../components/Footer.astro";
-import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
-import Menu from "../components/Menu.astro";
-import Gallery from "../components/Gallery.astro";
+import Menu from '../components/Menu.astro'
+import Gallery from '../components/Gallery.astro'
+import Draggable from '../components/Draggable.svelte'
+import BaseLayout from '../layouts/BaseLayout.astro'
 
-import { Content } from "../content/main/crafts.mdx";
+import { Content } from '../content/main/crafts.mdx'
+
+const r = [
+	{
+		name: 'MESSE',
+		img: '/messe.jpeg'
+	},
+	{
+		name: 'Chasing New Horizons',
+		img: '/pluto.jpeg'
+	},
+	{
+		name: 'Forgotten',
+		img: '/forgotten.webp'
+	},
+	{
+		name: 'Sciยศาสตร์ Night',
+		img: '/scisart.jpeg'
+	},
+	{
+		name: 'BKK Open Source Hack',
+		img: '/bosh.webp'
+	}
+][Math.floor(Math.random() * 5)]
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-  </head>
-  <body>
-    <!-- <Header title={SITE_TITLE} /> -->
-    <main class="grid gap-4">
-      <Menu dir="crafts" />
-      <div
-        class="prose prose-lg grid md:grid-cols-3 gap-x-8 prose-headings:mr-2 prose-ul:col-span-2 prose-p:col-span-2 prose-img:aspect-video prose-img:object-cover"
-      >
-        <Content components={{ Gallery }} />
-      </div>
-    </main>
-    <Footer />
-  </body>
-</html>
+<BaseLayout>
+	<main class="grid gap-4">
+		<Menu dir="crafts" />
+		<!-- <div
+			class="prose prose-lg grid gap-x-8 prose-headings:m-0 prose-p:col-span-2 prose-li:mt-0 prose-ul:col-span-2 prose-img:mb-3 prose-img:mt-0 prose-img:aspect-video prose-img:object-cover md:grid-cols-3"
+		>
+			<Content components={{ Gallery }} />
+		</div> -->
+		<div class="prose-content -mt-6">
+			<Content components={{ Gallery }} />
+		</div>
+		<Draggable
+			x={30}
+			y={520}
+			p="md:p-2"
+			rand={true}
+			fixed={true}
+			custom={'hidden md:block'}
+			client:load
+		>
+			<div class="flex flex-col flex-wrap gap-4">
+				<div class="break-words">{r.name}</div>
+				<img src={r.img} class="w-48 rounded-sm" />
+			</div>
+		</Draggable>
+	</main>
+</BaseLayout>

@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Menu from '../components/Menu.astro'
+import History from '../components/History.svelte'
+import Draggable from '../components/Draggable.svelte'
+
+import { Content } from '../content/main/me.md'
+import { Content as More } from '../content/main/more.md'
+---
+
+<BaseLayout>
+	<main class="grid">
+		<Menu dir="pub" />
+		<div class="prose prose-lg relative">
+			<div class="opacity-100 md:my-12 md:opacity-0">
+				<Content />
+			</div>
+			<div class="hidden md:block" aria-hidden="true">
+				<Draggable x={-20} y={10} show={false} client:load>
+					<div class="md:w-[40rem] lg:w-[48rem]">
+						<Content />
+					</div>
+				</Draggable>
+			</div>
+		</div>
+		<div class="prose prose-lg prose-ul:grid prose-ul:grid-cols-1 md:prose-ul:grid-cols-2 prose-li:m-1 prose-img:aspect-video prose-img:object-cover hover:prose-img:scale-[1.008] prose-img:transition-all prose-ul:list-none prose-ul:m-0 prose-ul:p-0 prose-ul:gap-2 prose-img:m-0">
+            <More />
+		</div>
+	</main>
+</BaseLayout>
+
+<style>
+	li > a {
+		@apply px-1;
+	}
+</style>

@@ -1,0 +1,26 @@
+---
+import BaseHead from '../../../components/BaseHead.astro'
+import Color from './color.svelte'
+import Type from './type.svelte'
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead />
+	</head>
+
+	<body>
+		<nav class="w-full w-full bg-neutral-900 px-4 py-2 text-xl text-neutral-50">🇹🇭 ThaiUI</nav>
+		<main class="my-4 grid gap-8">
+			<Type client:load />
+			<Color client:load />
+		</main>
+		<style>
+			body {
+				margin: 0;
+				padding: 0;
+			}
+		</style>
+	</body>
+</html>
