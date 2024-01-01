@@ -4,22 +4,25 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 // import BlogPost from "../../layouts/BlogPost.astro";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("s");
+  const posts = await getCollection("g");
   return posts.map((post) => ({
     params: { slug: post.slug },
     props: post,
   }));
 }
-type Props = CollectionEntry<"s">;
+type Props = CollectionEntry<"g">;
 
 const post = Astro.props;
 const { Content, headings } = await post.render();
 ---
 
 <BaseLayout p="Entry">
-  <main class="prose" id="top">
+  <main
+    class="prose prose-img:border prose-img:border-neutral-200 prose-img:shadow-sm"
+    id="top"
+  >
     <h1 class="mb-6 font-normal">
-      <a href="/s">🏕️</a> → {post.data.title}
+      <a href="g">🏕️</a> → {post.data.title}
     </h1>
     <div class="text-justify z-50">
       <Content />

@@ -28,7 +28,7 @@ const { p } = Astro.props;
         {
           [
             ["/", "Pub"],
-            ["/s", "Garden"],
+            ["/g", "Garden"],
           ].map(([href, title]) => (
             <li class={`${!(title === p) || "font-medium"} hover:font-medium `}>
               <a href={href}>{title}</a>
