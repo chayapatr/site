@@ -21,7 +21,20 @@ const { p } = Astro.props;
 
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
     <!-- <ViewTransitions /> -->
-  </head>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZZWM2BB786"
+    ></script><script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-ZZWM2BB786");
+    </script></head
+  >
+
   <body>
     <nav class="relative top-0 left-0 lg:p-8 lg:fixed mb-4 lg:m-0">
       <ul class="uppercase flex lg:flex-col gap-4 lg:gap-1">
