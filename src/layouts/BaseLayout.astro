@@ -3,7 +3,7 @@ import BaseHead from "../components/BaseHead.astro";
 import History from "../components/History.svelte";
 import Back from "../components/Back.svelte";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
-import { ViewTransitions } from "astro:transitions";
+// import { ViewTransitions } from "astro:transitions";
 import Draw from "../components/Draw.svelte";
 import DrawPanel from "../components/DrawPanel.svelte";
 
@@ -24,16 +24,18 @@ const { p } = Astro.props;
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZZWM2BB786"
-    ></script><script>
+    ></script>
+
+    <script>
+      // @ts-nocheck
       window.dataLayer = window.dataLayer || [];
       function gtag() {
         dataLayer.push(arguments);
       }
       gtag("js", new Date());
-
       gtag("config", "G-ZZWM2BB786");
-    </script></head
-  >
+    </script>
+  </head>
 
   <body>
     <nav class="relative top-0 left-0 lg:p-8 lg:fixed mb-4 lg:m-0">
