@@ -8,7 +8,10 @@
       on:click={() => {
         // erase();
         isDrawable.set((!($isDrawable === "true")).toString());
-      }}>{$isDrawable ? ($isDrawable === "true" ? "🖌️" : "👀") : "👽"}</button
+      }}
+      >{$isDrawable === "true" || $isDrawable === undefined
+        ? "🖌️"
+        : "👀"}</button
     >
     <button
       on:click={() => {
