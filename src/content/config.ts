@@ -19,7 +19,7 @@ const g = defineCollection({
 	schema: z.object({
 		title: z.string(),
 		main: z.boolean().default(false),
-		pubDate: z.coerce.date().optional(),
+		pubDate: z.coerce.date(),
 		// index: z.boolean().default(false),
 		freestyle: z.boolean().default(false),
 	}),
