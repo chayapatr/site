@@ -37,6 +37,7 @@ export default {
             },
             p: {
               marginBottom: "1.5rem",
+              textAlign: "justify",
             },
             img: {
               margin: "1rem 0",
@@ -60,6 +61,9 @@ export default {
             },
             "pre > code": {
               fontFamily: "Recursive",
+            },
+            "blockquote > p": {
+              textAlign: "left",
             },
           },
         },
