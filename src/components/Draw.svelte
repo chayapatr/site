@@ -1,6 +1,6 @@
 <script>
   import { onMount } from "svelte";
-  import { isDrawable, erase } from "../state";
+  import { isLock, erase } from "../state";
 
   let clear = () => {};
   let init = () => {};
@@ -65,7 +65,7 @@
 
         flag = true;
         dot_flag = true;
-        if (dot_flag && ($isDrawable === "true" || $isDrawable === undefined)) {
+        if (dot_flag && !($isLock === "true")) {
           ctx.beginPath();
           ctx.fillStyle = x;
           ctx.fillRect(currX, currY, 2, 2);
@@ -88,7 +88,7 @@
     init();
   });
 
-  $: $erase || $isDrawable, clear();
+  $: $erase || $isLock, clear();
 
   // adapt from https://stackoverflow.com/questions/2368784/draw-on-html5-canvas-using-a-mouse
 </script>

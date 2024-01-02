@@ -1,5 +1,5 @@
 <script>
-  import { isDrawable, erase } from "../state";
+  import { isLock, erase } from "../state";
 </script>
 
 <div class="flex items-center h-[100svh]">
@@ -7,11 +7,8 @@
     <button
       on:click={() => {
         // erase();
-        isDrawable.set((!($isDrawable === "true")).toString());
-      }}
-      >{$isDrawable === "true" || $isDrawable === undefined
-        ? "🖌️"
-        : "👀"}</button
+        isLock.set((!($isLock === "true")).toString());
+      }}>{$isLock === "true" ? "👀" : "🖌️"}</button
     >
     <button
       on:click={() => {
