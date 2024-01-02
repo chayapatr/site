@@ -1,9 +1,29 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Content from "../content/main/main.md";
+// import { xml2json } from "xml-js";
+
+// const response = await fetch("https://medium.com/feed/@chayapatr").then(
+//   (response) => response.text(),
+// );
+
+// type Post = {
+//   title: string;
+//   pubDate: string;
+//   link: string;
+// };
+
+// const json = xml2json(response, { compact: true, spaces: 4 });
+// const posts = JSON.parse(json).rss.channel.item.map((post: any): Post => {
+//   return {
+//     title: post.title["_cdata"],
+//     pubDate: post.pubDate["_text"],
+//     link: post.link["_text"],
+//   };
+// });
 ---
 
-<BaseLayout p="Pub">
+<BaseLayout p="Pub" class="grid gap-8">
   <section class="prose prose-h1:text-balance prose-h2:text-balance">
     <Content />
   </section>
