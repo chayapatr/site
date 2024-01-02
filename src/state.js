@@ -1,4 +1,4 @@
 import { persistentAtom } from "@nanostores/persistent";
 
-export const isDrawable = persistentAtom(true);
-export const erase = persistentAtom(0);
+export const isDrawable = persistentAtom("isDrawable", true);
+export const erase = persistentAtom("erase", 0);
