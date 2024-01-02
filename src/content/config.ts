@@ -20,6 +20,8 @@ const g = defineCollection({
 		title: z.string(),
 		main: z.boolean().default(false),
 		pubDate: z.coerce.date().optional(),
+		// index: z.boolean().default(false),
+		freestyle: z.boolean().default(false),
 	}),
 });
 

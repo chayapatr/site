@@ -1,22 +1,27 @@
 ---
 import { getCollection } from "astro:content";
-// import FormattedDate from "../../components/FormattedDate.astro";
+import FormattedDate from "../../components/FormattedDate.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Content from "../../content/main/garden.md";
 
-const posts = (await getCollection("g")).filter(
-  (post) => post.data.main === true,
-);
+const posts = (await getCollection("g"))
+  .filter((post) => post.data.main === true)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
 <BaseLayout p="Garden">
   <section class="prose">
     <Content />
-    <ul>
+    <ul class="list-disc">
       {
         posts.map((post) => (
-          <li>
-            <a href={`/g/${post.slug}/`}>{post.data.title}</a>
+          <li class="">
+            <a href={`/g/${post.slug}/`} class="flex m-0 p-0 justify-between">
+              <div>{post.data.title}</div>
+              <div class="text-neutral-700 hidden md:block">
+                <FormattedDate date={post.data.pubDate as Date} />
+              </div>
+            </a>
           </li>
         ))
       }

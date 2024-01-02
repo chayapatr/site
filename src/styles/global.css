@@ -39,3 +39,17 @@ body {
 .prose-content {
   @apply prose prose-ul:grid prose-ul:grid-cols-1 md:prose-ul:grid-cols-2 prose-li:m-1 prose-img:aspect-video prose-img:object-cover prose-ul:gap-x-4 prose-img:mt-1 prose-img:mb-3 hover:prose-img:scale-[1.008] prose-img:transition-all;
 }
+
+iframe {
+  /* Assign aspect ratio and scale width with screen width */
+  aspect-ratio: 16 / 9;
+  height: auto;
+  width: 100%;
+  /* Optional - Center the iframe horizontally */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.prose iframe {
+  @apply shadow-sm;
+}
