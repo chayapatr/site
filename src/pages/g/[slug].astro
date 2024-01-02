@@ -18,13 +18,13 @@ const { Content, headings } = await post.render();
 
 <BaseLayout p="Entry">
   <main
-    class="prose prose-img:border prose-img:border-neutral-200 prose-img:shadow-sm"
+    class="prose prose-img:border prose-img:border-neutral-200 prose-img:shadow-sm prose-p:text-justify"
     id="top"
   >
     <h1 class="mb-6 font-normal">
       <a href="g">🏕️</a> → {post.data.title}
     </h1>
-    <div class="text-justify z-50">
+    <div class="z-50">
       <Content />
     </div>
   </main>
