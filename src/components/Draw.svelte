@@ -65,7 +65,7 @@
 
         flag = true;
         dot_flag = true;
-        if (dot_flag && $isDrawable) {
+        if (dot_flag && $isDrawable === "true") {
           ctx.beginPath();
           ctx.fillStyle = x;
           ctx.fillRect(currX, currY, 2, 2);
