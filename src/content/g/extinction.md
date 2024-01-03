@@ -14,17 +14,15 @@ Our position on the brink of extinction is deliberately mentioned and discussed.
 ></iframe>
 
 
-But why? Regarding the effect of humans' perception of the future projected into present-day thoughts, I argue that the concept of optimal extinction for humanity and our choice to "design" it can shape how we interconnect with surrounding ecosystems.
-
-**Further thoughts**: [Who control the future control the past](/g/control)
+But why? Regarding the effect of humans' perception of the future projected into present-day thoughts, I argue that the concept of optimal extinction for humanity and our choice to "design" it can [shape how we interconnect with surrounding ecosystems](/g/control).
 
 From that, the focus should not be on how to avoid it, but rather to decide, or to be more precise, "design" the method to go towards the desirable scenarios. **Or, in other words, to perceive human extinction as a method (in a philosophical sense of method toward some goal) instead of an inert possible scenario.**
 
 ### Humanistic Design for Nature
 
-Daisy Ginsberg's ["Design for the Sixth Extinction"](https://www.daisyginsberg.com/work/designing-for-the-sixth-extinction) investigates the idea of disrupting the sixth extinction by human intervention through synthetic biology. The conceptual note mentions the convergences and divergence of two interests in biodiversity, from ecologists with conservationists and synthetic biologists. The battle in ideas between the two can be perceived as two designers arguing about the "better" design for extinctions and conservations, ultimately leading to our own extinction.
+Daisy Ginsberg's ["Design for the Sixth Extinction"](https://www.daisyginsberg.com/work/designing-for-the-sixth-extinction) investigates the idea of disrupting the sixth extinction by human intervention through synthetic biology. The conceptual note mentions the convergences and divergence of two interests in biodiversity, from ecologists with conservationists and synthetic biologists. The battle in ideas between the two can be perceived as two designers arguing about the ["better"](https://www.daisyginsberg.com/work/better) design for extinctions and conservations, ultimately leading to our own extinction.
 
-Lives intervene with nature, although they vary in scale: one animal consumes or endangers another, an alien species exists, and five mass extinctions happened before the emergence of humanity. As exhibited in Daisy Ginsberg's work, it is not to avoid the intervention but to design ["better"](https://www.daisyginsberg.com/work/better) interventions.
+Lives intervene with nature, although they vary in scale: one animal consumes or endangers another, an alien species exists, and five mass extinctions happened before the emergence of humanity. As exhibited in Daisy Ginsberg's work, it is not to avoid the intervention but to design "better" interventions.
 
 <iframe
   src="https://www.youtube.com/embed/x00LP0QfRTk?si=ZTVgbiilcrAVCcSC"
