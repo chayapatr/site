@@ -3,7 +3,7 @@ title: Who control the future control the past
 main: true
 pubDate: 3 Jan 24
 ---
-**Disclaimer:** This is a freestyle writing at 1 AM please don't expect anything much meaningful here (TODO: make a tag "freestyle" on this site)
+**Disclaimer:** This is a freestyle writing at 1 AM; please don't expect anything much meaningful here (TODO: make a tag "freestyle" on this site)
 
 ***Been thinking a lot lately about my next project. The main focus is on ecological systems and the overall concept of environmental issues. What can we develop from this?***
 
