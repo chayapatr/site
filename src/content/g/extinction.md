@@ -18,7 +18,7 @@ But why? Regarding the effect of humans' perception of the future projected into
 
 **Further thoughts**: [Who control the future control the past](/g/control)
 
-From that, the focus should not be on how to avoid it, but rather to decide, or to be more precise, "design" the method to go towards the desirable scenarios. **Or, in other words, to perceive human extinction as a method instead of a possible scenario.**
+From that, the focus should not be on how to avoid it, but rather to decide, or to be more precise, "design" the method to go towards the desirable scenarios. **Or, in other words, to perceive human extinction as a method (in a philosophical sense of method toward some goal) instead of an inert possible scenario.**
 
 ### Humanistic Design for Nature
 
@@ -37,4 +37,4 @@ Lives intervene with nature, although they vary in scale: one animal consumes or
 
 Why are we redesigning the extinction and not just "design?" Logistically, design always emerged, even unintentionally; even in the inaction, it can be perceived that this is the design we chose for the event.
 
-However, a "redesign" requires careful thought and retrospection on such a subject, such as a redesign of a brand or an campaign redesign. Even if minor, retrospectives come into account. That's a reason to emphasize "re" in "redesign" and ponder how we can redesign the human extinction.
+However, a "redesign" requires careful thought and retrospection on such a subject, such as a redesign of a brand or a campaign. Even if minor, retrospectives come into account. That's a reason to emphasize "re" in "redesign" and to ponder how we can redesign the human extinction.
