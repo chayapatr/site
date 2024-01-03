@@ -2,7 +2,9 @@
 title: "ก่อนกาลสูญพันธุ์: Redesign Human Extinction"
 pubDate: 3 Jan 24
 ---
-We have been talking about how we are on the brink of extinction.
+### Why Extinction? or Human Extinction as a Method
+
+Our position on the brink of extinction is deliberately mentioned and discussed. Nevertheless, when we zoom out to the bigger picture, human extinction is inevitable, whether it happens in the next century or just a moment before [the end of everything (astrologically speaking)](https://www.youtube.com/watch?v=vIHKUB0QmA4). It is definitely not to discourage the current narrative to prevent us from our own-made disaster but to explore the underlying ideas and structure of the event.
 
 <iframe
   src="https://www.youtube.com/embed/O-WXOaAnipM?si=w5tC6Jw3-lAqer2f"
@@ -11,9 +13,6 @@ We have been talking about how we are on the brink of extinction.
   title="Humanity on the Edge of Extinction | Anders Sandberg | TEDxVienna"
 ></iframe>
 
-### Why Extinction? or Human Extinction as a Method
-
-Nevertheless, when we zoom out to the bigger picture, human extinction is inevitable, whether it happens in the next century or just a moment before [the end of everything (astrologically speaking)](https://www.youtube.com/watch?v=vIHKUB0QmA4). It is definitely not to discourage the current narrative to prevent us from our own-made disaster but to explore the underlying ideas and structure of the event.
 
 But why? Regarding the effect of humans' perception of the future projected into present-day thoughts, I argue that the concept of optimal extinction for humanity and our choice to "design" it can shape how we interconnect with surrounding ecosystems.
 
@@ -26,6 +25,13 @@ From that, the focus should not be on how to avoid it, but rather to decide, or 
 Daisy Ginsberg's ["Design for the Sixth Extinction"](https://www.daisyginsberg.com/work/designing-for-the-sixth-extinction) investigates the idea of disrupting the sixth extinction by human intervention through synthetic biology. The conceptual note mentions the convergences and divergence of two interests in biodiversity, from ecologists with conservationists and synthetic biologists. The battle in ideas between the two can be perceived as two designers arguing about the "better" design for extinctions and conservations, ultimately leading to our own extinction.
 
 Lives intervene with nature, although they vary in scale: one animal consumes or endangers another, an alien species exists, and five mass extinctions happened before the emergence of humanity. As exhibited in Daisy Ginsberg's work, it is not to avoid the intervention but to design ["better"](https://www.daisyginsberg.com/work/better) interventions.
+
+<iframe
+  src="https://www.youtube.com/embed/x00LP0QfRTk?si=ZTVgbiilcrAVCcSC"
+  frameborder="0"
+  allow="fullscreen"
+  title="# The Sixth Extinction: An Unnatural History | Elizabeth Kolbert | Talks at Google"
+></iframe>
 
 ### The "Re" in "Redesign"?
 
