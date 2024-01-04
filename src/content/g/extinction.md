@@ -1,5 +1,5 @@
 ---
-title: "ก่อนกาลสูญพันธุ์: Redesign Human Extinction"
+title: "ก่อนกาลสูญพันธุ์: Redesigning Human Extinction"
 pubDate: 3 Jan 24
 ---
 ### Why Extinction? or Human Extinction as a Method
