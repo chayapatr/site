@@ -13,6 +13,7 @@ export const Frame = writable({
 });
 
 export const Blocks = writable<({
+    id: number
     title: string
     type?: BlockType
     x: number
@@ -20,6 +21,7 @@ export const Blocks = writable<({
     width: number
     height: number
     text?: string
+    parentIndex: number
 })[]>
 ([]);
 
@@ -28,7 +30,7 @@ export const Log = writable<string[]>([]);
 export const ActiveBlocks = derived([Blocks, Log], ([$Blocks, $Log]) => {
     return [...$Blocks.map((block, i) => {
         if(block.type === "log") {
-            block.text = $Log.map ((l) => `<div>> <a onclick={getBlock("${l.split(".")[0]}",${i})}> ${l}</a></div>`).join("")
+            block.text = $Log.map ((l) => `<div>> <a href="" onclick={getBlock("${l.split(".")[0]}",${i})}> ${l}</a></div>`).join("")
             return block
         }
         else return block

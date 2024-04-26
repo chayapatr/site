@@ -15,24 +15,26 @@ export const getContent = async (slug: string, parent: number) => {
     return styleParser(micromark(text));
 };
 
-export const generateBlock = async (name: string, type: BlockType, parentIndex: number, parent, length: number) => {
+export const generateBlock = async (name: string, type: BlockType, parentIndex: number, parent, index: number) => {
     let title: string = ""
     let text: string = ""
 
     if(type === "page") {
         title = `${name}.md`
-        text = await getContent(`/${name}.md`, length)
+        text = await getContent(`/${name}.md`, index)
     }
     else if (type === "log") {
         title = "log"
     }
     return {
+        id: index,
         title,
         type,
         x: parentIndex === -1 ? 10 : parent.x + 50,
         y: parentIndex === -1 ? 10 : parent.y + 50,
         width: 320,
         height: 250,
-        text
+        text,
+        parentIndex
     }
 }

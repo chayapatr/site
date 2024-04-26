@@ -11,10 +11,16 @@
 
 	onMount(async () => {
 		Object.assign(window, {
-			getBlock: async (slug: string, parent: number) => {
+			getBlock: async (slug: string, parentIndex: number) => {
 				$Blocks = [
 					...$Blocks,
-					await generateBlock(slug, 'page', parent, $Blocks[parent], $Blocks.length)
+					await generateBlock(
+						slug,
+						'page',
+						parentIndex,
+						$Blocks.filter((x) => x.id === parentIndex)[0],
+						$Blocks?.at(-1)?.id + 1 || 0
+					)
 				];
 				$Log = [...$Log, `${slug}.md`];
 			}
@@ -66,14 +72,21 @@
 			${$Frame.dark ? 'glass-dark' : 'glass'}
 		`}
 	>
-		<div class="ml-2 flex gap-2">
+		<div class="flex gap-1">
 			<!-- <div>{$Frame.cur}</div>
 			<div>{$Frame.resize}</div> -->
-			🔎
+			<button
+				title="Appearance"
+				class="aspect-square w-7 rounded-full border bg-white text-white dark:border-neutral-700 dark:bg-neutral-800"
+				on:click={() => {
+					$Frame.scale = 1;
+				}}>🔎</button
+			>
 			<div>{$Frame.scale.toFixed(2)}</div>
 		</div>
 		<div class="flex gap-1">
 			<button
+				title="Clear Frame"
 				class="aspect-square w-7 rounded-full border bg-white text-white dark:border-neutral-700 dark:bg-neutral-800"
 				on:click={() => {
 					$Blocks = [];
@@ -81,12 +94,17 @@
 				}}>✂️</button
 			>
 			<button
+				title="Add Log"
 				class="aspect-square w-7 rounded-full border bg-white text-white dark:border-neutral-700 dark:bg-neutral-800"
 				on:click={async () => {
-					$Blocks = [...$Blocks, await generateBlock('Log', 'log', -1, undefined, $Blocks.length)];
+					$Blocks = [
+						...$Blocks,
+						await generateBlock('Log', 'log', -1, undefined, $Blocks?.at(-1)?.id + 1 || 0)
+					];
 				}}>📖</button
 			>
 			<button
+				title="Appearance"
 				class="aspect-square w-7 rounded-full border bg-white text-white dark:border-neutral-700 dark:bg-neutral-800"
 				on:click={() => {
 					$Frame.dark = !$Frame.dark;
@@ -98,7 +116,7 @@
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-	class={`h-screen w-screen ${$Frame.drag ? 'mousedown' : ''}  ${$Frame.dark ? 'dark' : ''}`}
+	class={`h-[100svh] w-screen ${$Frame.drag ? 'mousedown' : ''}  ${$Frame.dark ? 'dark' : ''}`}
 	on:mousedown={() => {
 		$Frame.drag = true;
 	}}
