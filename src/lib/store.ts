@@ -8,7 +8,8 @@ export const Frame = writable({
 	y: 0,
 	scale: 1,
 	drag: false,
-	resize: false
+	resize: false,
+    dark: true
 });
 
 export const Blocks = writable<({

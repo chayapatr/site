@@ -55,11 +55,16 @@
 		$Frame.drag = false;
 		$Frame.cur = -1;
 	}}
+	class={`${$Frame.dark ? 'dark' : ''}`}
 />
 
-<div class="fixed bottom-0 left-0 z-50 m-3 flex w-screen justify-center">
+<div
+	class={`fixed bottom-0 left-0 z-50 m-3 flex w-screen justify-center ${$Frame.dark ? 'dark' : ''}`}
+>
 	<div
-		class="glass flex min-w-60 items-center justify-between gap-2 rounded-full border border-neutral-800 p-1 text-white shadow-md"
+		class={`flex min-w-60 items-center justify-between gap-2 rounded-full border p-1 text-neutral-600 shadow-md dark:border-neutral-800 dark:text-white
+			${$Frame.dark ? 'glass-dark' : 'glass'}
+		`}
 	>
 		<div class="ml-2 flex gap-2">
 			<!-- <div>{$Frame.cur}</div>
@@ -69,17 +74,23 @@
 		</div>
 		<div class="flex gap-1">
 			<button
-				class="aspect-square w-7 rounded-full bg-neutral-700 text-white"
-				on:click={async () => {
+				class="aspect-square w-7 rounded-full border bg-white text-white dark:border-neutral-700 dark:bg-neutral-800"
+				on:click={() => {
 					$Blocks = [];
 					($Frame.x = 0), ($Frame.y = 0), ($Frame.scale = 1);
 				}}>✂️</button
 			>
 			<button
-				class="aspect-square w-7 rounded-full bg-neutral-700 text-white"
+				class="aspect-square w-7 rounded-full border bg-white text-white dark:border-neutral-700 dark:bg-neutral-800"
 				on:click={async () => {
 					$Blocks = [...$Blocks, await generateBlock('Log', 'log', -1, undefined, $Blocks.length)];
-				}}>📒</button
+				}}>📖</button
+			>
+			<button
+				class="aspect-square w-7 rounded-full border bg-white text-white dark:border-neutral-700 dark:bg-neutral-800"
+				on:click={() => {
+					$Frame.dark = !$Frame.dark;
+				}}>{$Frame.dark ? '☀️' : '🌙'}</button
 			>
 		</div>
 	</div>
@@ -87,12 +98,12 @@
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-	class={`h-screen w-screen ${$Frame.drag ? 'mousedown' : ''}`}
+	class={`h-screen w-screen ${$Frame.drag ? 'mousedown' : ''}  ${$Frame.dark ? 'dark' : ''}`}
 	on:mousedown={() => {
 		$Frame.drag = true;
 	}}
 >
-	<div class={`h-full w-full overflow-hidden bg-neutral-950`}>
+	<div class={`h-full w-full overflow-hidden bg-neutral-200 dark:bg-neutral-950`}>
 		<div
 			class="relative min-h-full min-w-full"
 			style={`

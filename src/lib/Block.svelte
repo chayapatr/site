@@ -41,8 +41,9 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-	class={`noselect glass absolute aspect-square flex-col justify-between overflow-hidden rounded-sm border border-neutral-800 text-xs text-white shadow-sm transition-shadow hover:cursor-pointer hover:shadow-md active:cursor-grab
-        ${$Frame.cur === i ? 'border-3  border-white/30' : ''}`}
+	class={`noselect absolute aspect-square flex-col justify-between overflow-hidden rounded-sm border border-neutral-200 text-xs text-white shadow-sm hover:cursor-pointer active:cursor-grab dark:border-neutral-800
+        ${$Frame.cur === i ? 'border-3 border-neutral-400/60 dark:border-white/30' : ''}
+		${$Frame.dark ? 'glass-dark' : 'glass'}`}
 	on:click={() => {
 		$Frame.cur = i;
 	}}
@@ -62,13 +63,13 @@
     `}
 >
 	<div class="h-full overflow-x-hidden overflow-y-scroll">
-		<div class="prose prose-sm prose-invert px-3 pb-4 pt-10">
+		<div class="prose prose-sm px-3 pb-4 pt-10 dark:prose-invert">
 			{@html block.text}
 		</div>
 	</div>
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<div
-		class="fixed top-0 flex w-full justify-between border-b border-neutral-800 bg-neutral-950/80 p-2"
+		class="fixed top-0 flex w-full justify-between border-b border-neutral-200 bg-neutral-100/70 p-2 dark:border-neutral-800 dark:bg-neutral-950/80"
 		style="backdrop-filter: blur(2px);
         -webkit-backdrop-filter: blur(2px);"
 	>
@@ -91,7 +92,7 @@
 			$Frame.resize = true;
 			$Frame.cur = i;
 		}}
-		class="fixed bottom-0 right-0 aspect-square w-3 rounded-br-sm border-b-2 border-r-2 border-b-neutral-500 border-r-neutral-500 hover:cursor-se-resize"
+		class="fixed bottom-0 right-0 aspect-square w-3 rounded-br-sm border-b-2 border-r-2 border-b-neutral-300 border-r-neutral-300 hover:cursor-se-resize dark:border-b-neutral-500 dark:border-r-neutral-500"
 	></button>
 </div>
 
