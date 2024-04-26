@@ -1,16 +1,23 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { Frame, Els } from './store';
+	import { Frame, Blocks } from './store';
 	export let i: number;
-	export let el: any;
+	export let block: any;
 
-	let s = () => {};
+	let rescale = (_: MouseEvent) => {};
+	let move = (_: MouseEvent) => {};
 
 	onMount(() => {
-		s = (e: MouseEvent) => {
-			if ($Frame.resize && $Frame.cur === i) {
-				el.width += e.movementX;
-				el.height += e.movementY;
+		rescale = (e: MouseEvent) => {
+			if ($Frame.cur === i && $Frame.resize) {
+				block.width += e.movementX;
+				block.height += e.movementY;
+			}
+		};
+		move = (e: MouseEvent) => {
+			if ($Frame.cur === i && !$Frame.resize && $Frame.drag) {
+				block.x += e.movementX / $Frame.scale;
+				block.y += e.movementY / $Frame.scale;
 			}
 		};
 	});
@@ -20,7 +27,10 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 
 <svelte:window
-	on:mousemove={s}
+	on:mousemove={(e) => {
+		rescale(e);
+		move(e);
+	}}
 	on:mouseup={() => {
 		$Frame.resize = false;
 		$Frame.drag = false;
@@ -31,7 +41,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-	class={`noselect glass absolute aspect-square flex-col justify-between overflow-hidden rounded-sm border border-neutral-800 text-xs text-white shadow-sm transition-shadow hover:cursor-grab hover:shadow-md
+	class={`noselect glass absolute aspect-square flex-col justify-between overflow-hidden rounded-sm border border-neutral-800 text-xs text-white shadow-sm transition-shadow hover:cursor-pointer hover:shadow-md active:cursor-grab
         ${$Frame.cur === i ? 'border-3  border-white/30' : ''}`}
 	on:click={() => {
 		$Frame.cur = i;
@@ -46,14 +56,14 @@
         min-width: 250px;
         min-height: 200px;
         max-width: 80ch;
-        width: ${el.width}px;
-        height: ${el.height}px;
-        transform: matrix(1, 0, 0, 1, ${el.x}, ${el.y});
+        width: ${block.width}px;
+        height: ${block.height}px;
+        transform: matrix(1, 0, 0, 1, ${block.x}, ${block.y});
     `}
 >
 	<div class="h-full overflow-x-hidden overflow-y-scroll">
 		<div class="prose prose-sm prose-invert px-3 pb-4 pt-10">
-			{@html el.text}
+			{@html block.text}
 		</div>
 	</div>
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -63,14 +73,14 @@
         -webkit-backdrop-filter: blur(2px);"
 	>
 		<div class="text-neutral-500">
-			{el.title}
-			<!-- {el.x.toFixed(2)}
-			{el.y.toFixed(2)} -->
+			{block.title}
+			[{block.x.toFixed(2)},
+			{block.y.toFixed(2)}]
 		</div>
 		<button
 			class=" text-neutral-500"
 			on:click={() => {
-				$Els = $Els.filter((_, j) => i !== j);
+				$Blocks = $Blocks.filter((_, j) => i !== j);
 			}}
 		>
 			[x]

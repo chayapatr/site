@@ -1,43 +1,30 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { micromark } from 'micromark';
 
-	import { Frame, Els, Log } from '$lib/store';
+	import { getContent } from '$lib';
+	import { Frame, Blocks, ActiveBlocks, Log } from '$lib/store';
 	import Block from '$lib/Block.svelte';
 
-	let g: any = () => {};
-
-	const getContent = async (slug: string) => {
-		const text = await fetch(slug).then((res) => res.text());
-
-		const slugReplacer = (_: string, slug: string) => {
-			return `<a onclick={update("${slug}")} href="?${slug}"`;
-		};
-
-		const styleParser = (text: string) => {
-			return text.replace(/<a href="\/([A-Za-z1-9\s-]*)(?:\.md)?"/g, slugReplacer);
-		};
-
-		return styleParser(micromark(text));
-	};
+	let move = (_: MouseEvent) => {};
 
 	onMount(async () => {
-		window.update = async (slug: string) => {
-			$Els = [
-				...$Els,
-				{
-					title: `${slug}.md`,
-					x: $Els.length > 0 ? $Els[$Els.length - 1].x + 50 : 0,
-					y: $Els.length > 0 ? $Els[$Els.length - 1].y + 50 : 0,
-					width: 320,
-					height: 250,
-					text: await getContent(`/${slug}.md`)
-				}
-			];
-			$Log = [...$Log, `${slug}.md`];
-		};
-
-		window.update('!@$');
+		Object.assign(window, {
+			getPage: async (slug: string) => {
+				$Blocks = [
+					...$Blocks,
+					{
+						title: `${slug}.md`,
+						type: 'page',
+						x: $Blocks.length > 0 ? $Blocks[$Blocks.length - 1].x + 50 : 0,
+						y: $Blocks.length > 0 ? $Blocks[$Blocks.length - 1].y + 50 : 0,
+						width: 320,
+						height: 250,
+						text: await getContent(`/${slug}.md`)
+					}
+				];
+				$Log = [...$Log, `${slug}.md`];
+			}
+		});
 
 		window.addEventListener(
 			'wheel',
@@ -53,19 +40,24 @@
 			{ passive: false }
 		);
 
-		g = (e: MouseEvent) => {
-			if ($Frame.cur !== -1 && $Frame.drag && !$Frame.resize) {
-				$Els[$Frame.cur].x += e.movementX / $Frame.scale;
-				$Els[$Frame.cur].y += e.movementY / $Frame.scale;
-			} else if ($Frame.drag && !$Frame.resize) {
+		move = (e: MouseEvent) => {
+			if ($Frame.cur === -1 && $Frame.drag && !$Frame.resize) {
 				$Frame.x += 0.75 * e.movementX;
 				$Frame.y += 0.75 * e.movementY;
 			}
 		};
+
+		window.getPage('!@$');
 	});
 </script>
 
-<svelte:window on:mousemove={g} on:mouseup={() => (($Frame.drag = false), ($Frame.cur = -1))} />
+<svelte:window
+	on:mousemove={move}
+	on:mouseup={() => {
+		$Frame.drag = false;
+		$Frame.cur = -1;
+	}}
+/>
 
 <div class="fixed bottom-0 left-0 z-50 m-3 flex w-screen justify-center">
 	<div
@@ -86,8 +78,24 @@
 			<button
 				class="aspect-square w-7 rounded-full bg-neutral-700 text-white"
 				on:click={async () => {
-					window.update('!@$');
+					window.getPage('!@$');
 				}}>+</button
+			>
+			<button
+				class="aspect-square w-7 rounded-full bg-neutral-700 text-white"
+				on:click={async () => {
+					$Blocks = [
+						...$Blocks,
+						{
+							title: `Log`,
+							type: 'log',
+							x: $Blocks.length > 0 ? $Blocks[$Blocks.length - 1].x + 50 : 0,
+							y: $Blocks.length > 0 ? $Blocks[$Blocks.length - 1].y + 50 : 0,
+							width: 320,
+							height: 250
+						}
+					];
+				}}>😀</button
 			>
 		</div>
 	</div>
@@ -107,9 +115,15 @@
             transform: matrix(${$Frame.scale}, 0, 0, ${$Frame.scale}, ${$Frame.x}, ${$Frame.y});
         `}
 		>
-			{#each $Els as el, i}
-				<Block {el} {i} />
+			{#each $ActiveBlocks as block, i}
+				<Block {block} {i} />
 			{/each}
 		</div>
 	</div>
 </div>
+
+<style>
+	.mousedown {
+		cursor: grab;
+	}
+</style>
