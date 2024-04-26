@@ -91,7 +91,6 @@
 >
 	<div class="h-full overflow-x-hidden overflow-y-scroll">
 		<div class="prose prose-sm px-3 pb-4 pt-10 dark:prose-invert">
-			{block.id}
 			{@html block.text}
 		</div>
 	</div>
