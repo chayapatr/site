@@ -1,10 +1,11 @@
-// place files you want to import through the `$lib` alias in this folder.
 import { micromark } from 'micromark';
-export const getContent = async (slug: string) => {
+
+type BlockType = "page" | "log" | "graph"
+export const getContent = async (slug: string, parent: number) => {
     const text = await fetch(slug).then((res) => res.text());
 
     const slugReplacer = (_: string, slug: string) => {
-        return `<a onclick={getPage("${slug}")} href="?${slug}"`;
+        return `<a onclick={getBlock('${slug}',${parent})} href="?${slug}"`;
     };
 
     const styleParser = (text: string) => {
@@ -13,3 +14,25 @@ export const getContent = async (slug: string) => {
 
     return styleParser(micromark(text));
 };
+
+export const generateBlock = async (name: string, type: BlockType, parentIndex: number, parent, length: number) => {
+    let title: string = ""
+    let text: string = ""
+
+    if(type === "page") {
+        title = `${name}.md`
+        text = await getContent(`/${name}.md`, length)
+    }
+    else if (type === "log") {
+        title = "log"
+    }
+    return {
+        title,
+        type,
+        x: parentIndex === -1 ? 10 : parent.x + 50,
+        y: parentIndex === -1 ? 10 : parent.y + 50,
+        width: 320,
+        height: 250,
+        text
+    }
+}

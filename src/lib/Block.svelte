@@ -73,7 +73,7 @@
         -webkit-backdrop-filter: blur(2px);"
 	>
 		<div class="text-neutral-500">
-			{block.title}
+			{i} | {block.title}
 			[{block.x.toFixed(2)},
 			{block.y.toFixed(2)}]
 		</div>

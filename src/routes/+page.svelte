@@ -1,26 +1,20 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	import { getContent } from '$lib';
+	import { generateBlock } from '$lib';
 	import { Frame, Blocks, ActiveBlocks, Log } from '$lib/store';
 	import Block from '$lib/Block.svelte';
 
 	let move = (_: MouseEvent) => {};
 
+	let getInitialBlock = () => {};
+
 	onMount(async () => {
 		Object.assign(window, {
-			getPage: async (slug: string) => {
+			getBlock: async (slug: string, parent: number) => {
 				$Blocks = [
 					...$Blocks,
-					{
-						title: `${slug}.md`,
-						type: 'page',
-						x: $Blocks.length > 0 ? $Blocks[$Blocks.length - 1].x + 50 : 0,
-						y: $Blocks.length > 0 ? $Blocks[$Blocks.length - 1].y + 50 : 0,
-						width: 320,
-						height: 250,
-						text: await getContent(`/${slug}.md`)
-					}
+					await generateBlock(slug, 'page', parent, $Blocks[parent], $Blocks.length)
 				];
 				$Log = [...$Log, `${slug}.md`];
 			}
@@ -47,8 +41,12 @@
 			}
 		};
 
-		window.getPage('!@$');
+		getInitialBlock = () => {
+			window.getBlock('!@$', -1);
+		};
 	});
+
+	$: if ($Blocks.length === 0) getInitialBlock();
 </script>
 
 <svelte:window
@@ -63,39 +61,25 @@
 	<div
 		class="glass flex min-w-60 items-center justify-between gap-2 rounded-full border border-neutral-800 p-1 text-white shadow-md"
 	>
-		<div class="ml-2 flex gap-1">
-			<div>{$Frame.cur}</div>
-			<div>{$Frame.resize}</div>
+		<div class="ml-2 flex gap-2">
+			<!-- <div>{$Frame.cur}</div>
+			<div>{$Frame.resize}</div> -->
+			🔎
 			<div>{$Frame.scale.toFixed(2)}</div>
 		</div>
 		<div class="flex gap-1">
 			<button
 				class="aspect-square w-7 rounded-full bg-neutral-700 text-white"
 				on:click={async () => {
+					$Blocks = [];
 					($Frame.x = 0), ($Frame.y = 0), ($Frame.scale = 1);
-				}}>◻️</button
+				}}>✂️</button
 			>
 			<button
 				class="aspect-square w-7 rounded-full bg-neutral-700 text-white"
 				on:click={async () => {
-					window.getPage('!@$');
-				}}>+</button
-			>
-			<button
-				class="aspect-square w-7 rounded-full bg-neutral-700 text-white"
-				on:click={async () => {
-					$Blocks = [
-						...$Blocks,
-						{
-							title: `Log`,
-							type: 'log',
-							x: $Blocks.length > 0 ? $Blocks[$Blocks.length - 1].x + 50 : 0,
-							y: $Blocks.length > 0 ? $Blocks[$Blocks.length - 1].y + 50 : 0,
-							width: 320,
-							height: 250
-						}
-					];
-				}}>😀</button
+					$Blocks = [...$Blocks, await generateBlock('Log', 'log', -1, undefined, $Blocks.length)];
+				}}>📒</button
 			>
 		</div>
 	</div>

@@ -25,9 +25,9 @@ export const Blocks = writable<({
 export const Log = writable<string[]>([]);
 
 export const ActiveBlocks = derived([Blocks, Log], ([$Blocks, $Log]) => {
-    return [...$Blocks.map((block) => {
+    return [...$Blocks.map((block, i) => {
         if(block.type === "log") {
-            block.text = $Log.map ((l) => `<div>> <a onclick={getPage("${l.split(".")[0]}")}> ${l}</a></div>`).join("")
+            block.text = $Log.map ((l) => `<div>> <a onclick={getBlock("${l.split(".")[0]}",${i})}> ${l}</a></div>`).join("")
             return block
         }
         else return block
