@@ -16,6 +16,7 @@
 	let chSize: number;
 
 	$: parent = $Blocks.filter((x) => x.id === block.parentIndex)[0];
+	$: block = $Blocks.filter((x) => x.id === block.id)[0];
 
 	onMount(() => {
 		chToPixels = (ch: number, el: HTMLElement): number => {
@@ -35,15 +36,15 @@
 		rescale = (e: MouseEvent) => {
 			if (!chSize) chSize = chToPixels(80, el);
 			if ($Frame.cur === i && $Frame.resize) {
-				if ($Blocks[i].width + e.movementX >= 250 && $Blocks[i].width + e.movementX <= chSize)
-					$Blocks[i].width += e.movementX;
-				if ($Blocks[i].height + e.movementY >= 200) $Blocks[i].height += e.movementY;
+				if (block.width + e.movementX >= 250 && block.width + e.movementX <= chSize)
+					block.width += e.movementX;
+				if (block.height + e.movementY >= 200) block.height += e.movementY;
 			}
 		};
 		move = (e: MouseEvent) => {
 			if ($Frame.cur === i && !$Frame.resize && $Frame.drag) {
-				$Blocks[i].x += e.movementX / $Frame.scale;
-				$Blocks[i].y += e.movementY / $Frame.scale;
+				block.x += e.movementX / $Frame.scale;
+				block.y += e.movementY / $Frame.scale;
 			}
 		};
 	});
@@ -114,7 +115,7 @@
 				visited.add(block.id);
 				while (queue.length > 0) {
 					const el = queue.shift();
-					visited.add($Blocks[el].id);
+					visited.add(el);
 					queue = [
 						...queue,
 						...$Blocks.filter((i) => i.parentIndex === el && !visited.has(i.id)).map((x) => x.id)

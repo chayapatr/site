@@ -26,6 +26,9 @@ export const generateBlock = async (name: string, type: BlockType, parentIndex: 
     else if (type === "log") {
         title = "log"
     }
+
+    console.log(index, parentIndex)
+
     return {
         id: index,
         title,

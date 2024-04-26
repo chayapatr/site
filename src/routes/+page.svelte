@@ -12,6 +12,8 @@
 	onMount(async () => {
 		Object.assign(window, {
 			getBlock: async (slug: string, parentIndex: number) => {
+				const newId = $Frame.currentIndex + 1;
+				$Frame.currentIndex = newId;
 				$Blocks = [
 					...$Blocks,
 					await generateBlock(
@@ -19,7 +21,7 @@
 						'page',
 						parentIndex,
 						$Blocks.filter((x) => x.id === parentIndex)[0],
-						$Blocks?.at(-1)?.id + 1 || 0
+						newId || 0
 					)
 				];
 				$Log = [...$Log, `${slug}.md`];
@@ -97,9 +99,10 @@
 				title="Add Log"
 				class="aspect-square w-7 rounded-full border bg-white text-white dark:border-neutral-700 dark:bg-neutral-800"
 				on:click={async () => {
+					$Frame.currentIndex += 1;
 					$Blocks = [
 						...$Blocks,
-						await generateBlock('Log', 'log', -1, undefined, $Blocks?.at(-1)?.id + 1 || 0)
+						await generateBlock('Log', 'log', -1, undefined, $Frame.currentIndex || 0)
 					];
 				}}>📖</button
 			>
