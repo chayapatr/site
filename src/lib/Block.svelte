@@ -106,14 +106,26 @@
 			[{block.x.toFixed(2)},
 			{block.y.toFixed(2)}]
 		</div>
-		<!-- <button
+		<button
 			class=" text-neutral-500"
 			on:click={() => {
-				$Blocks = $Blocks.filter((i, _) => block.id !== i.id);
+				// get all children of block using bfs
+				let queue = [...$Blocks.filter((i) => i.parentIndex === block.id).map((x) => x.id)];
+				let visited = new Set();
+				visited.add(block.id);
+				while (queue.length > 0) {
+					const el = queue.shift();
+					visited.add($Blocks[el].id);
+					queue = [
+						...queue,
+						...$Blocks.filter((i) => i.parentIndex === el && !visited.has(i.id)).map((x) => x.id)
+					];
+				}
+				$Blocks = $Blocks.filter((i) => !visited.has(i.id));
 			}}
 		>
 			[x]
-		</button> -->
+		</button>
 	</div>
 	<button
 		on:mousedown={() => {
