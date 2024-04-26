@@ -41,7 +41,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-	class={`noselect absolute aspect-square flex-col justify-between overflow-hidden rounded-sm border border-neutral-200 text-xs text-white shadow-sm hover:cursor-pointer active:cursor-grab dark:border-neutral-800
+	class={`noselect absolute aspect-square flex-col justify-between overflow-hidden rounded-sm border border-neutral-200 text-xs text-white shadow-sm hover:cursor-grab dark:border-neutral-800
         ${$Frame.cur === i ? 'border-3 border-neutral-400/60 dark:border-white/30' : ''}
 		${$Frame.dark ? 'glass-dark' : 'glass'}`}
 	on:click={() => {

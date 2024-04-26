@@ -9,7 +9,7 @@ export const getContent = async (slug: string, parent: number) => {
     };
 
     const styleParser = (text: string) => {
-        return text.replace(/<a href="\/([A-Za-z1-9\s-]*)(?:\.md)?"/g, slugReplacer);
+        return text.replace(/<a href="\/([A-Za-z1-9\s-]*)(?:\.md)?"/g, slugReplacer)
     };
 
     return styleParser(micromark(text));
