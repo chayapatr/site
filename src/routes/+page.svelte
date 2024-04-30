@@ -46,19 +46,19 @@
 			}
 		});
 
-		window.addEventListener(
-			'wheel',
-			function (e) {
-				if ($Frame.cur === -1) {
-					e.preventDefault();
-					let d = $Frame.scale - 0.003 * e.deltaY;
-					const min = 0.5;
-					const max = 1.5;
-					$Frame.scale = d > min ? (d < max ? d : max) : min;
-				}
-			},
-			{ passive: false }
-		);
+		// window.addEventListener(
+		// 	'wheel',
+		// 	function (e) {
+		// 		if ($Frame.cur === -1) {
+		// 			e.preventDefault();
+		// 			let d = $Frame.scale - 0.003 * e.deltaY;
+		// 			const min = 0.5;
+		// 			const max = 1.5;
+		// 			$Frame.scale = d > min ? (d < max ? d : max) : min;
+		// 		}
+		// 	},
+		// 	{ passive: false }
+		// );
 
 		move = (e: MouseEvent) => {
 			if ($Frame.cur === -1 && $Frame.drag && !$Frame.resize) {
@@ -117,14 +117,24 @@
 			<!-- <div>{$Frame.cur}</div>
 			<div>{$Frame.resize}</div> -->
 			<!-- svelte-ignore a11y-click-events-have-key-events -->
-			<buttons
+			<!-- <buttons
 				title="Appearance"
 				class="flex aspect-square w-7 items-center justify-center rounded-full border bg-white text-white dark:border-neutral-700 dark:bg-neutral-800"
 				on:click={() => {
 					$Frame.scale = 1;
 				}}>🔎</buttons
+			> -->
+			<button
+				title="Appearance"
+				class="flex aspect-square w-7 items-center justify-center rounded-full border bg-white text-white dark:border-neutral-700 dark:bg-neutral-800"
+				on:click={() => {
+					$Frame.dark = !$Frame.dark;
+				}}>{$Frame.dark ? '☀️' : '🌙'}</button
 			>
-			<div>{$Frame.scale.toFixed(2)}</div>
+			<!-- <div>{$Frame.scale.toFixed(2)}</div> -->
+			<div class="text-xs text-neutral-600 md:text-sm dark:text-neutral-300">
+				[{$Frame.x.toFixed(0)}, {$Frame.y.toFixed(0)}]
+			</div>
 		</div>
 		<div class="flex gap-1">
 			<button
@@ -161,13 +171,6 @@
 					}
 				}}>📖</button
 			>
-			<button
-				title="Appearance"
-				class="flex aspect-square w-7 items-center justify-center rounded-full border bg-white text-white dark:border-neutral-700 dark:bg-neutral-800"
-				on:click={() => {
-					$Frame.dark = !$Frame.dark;
-				}}>{$Frame.dark ? '☀️' : '🌙'}</button
-			>
 		</div>
 	</div>
 </div>
@@ -181,17 +184,7 @@
 		if ($Frame.cur === -1) $Frame.drag = true;
 	}}
 >
-	<div
-		class={`h-full w-full overflow-hidden bg-neutral-200 dark:bg-neutral-950`}
-		use:pinch
-		on:pinch={(e) => {
-			$Frame.cur = -1;
-			$Frame.scale = prevScale * e.detail.scale;
-		}}
-		on:pinchup={(e) => {
-			prevScale = $Frame.scale;
-		}}
-	>
+	<div class={`h-full w-full overflow-hidden bg-neutral-200 dark:bg-neutral-950`}>
 		<div
 			class="relative min-h-full min-w-full"
 			style={`
@@ -204,6 +197,14 @@
 		</div>
 	</div>
 </div>
+
+<!-- use:pinch on:pinch={(e) => {
+	$Frame.cur = -1;
+	$Frame.scale = prevScale * e.detail.scale;
+}}
+on:pinchup={(e) => {
+	prevScale = $Frame.scale;
+}} -->
 
 <style>
 	.mousedown {
