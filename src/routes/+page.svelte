@@ -132,7 +132,7 @@
 				}}>{$Frame.dark ? '☀️' : '🌙'}</button
 			>
 			<!-- <div>{$Frame.scale.toFixed(2)}</div> -->
-			<div class="text-xs text-neutral-600 md:text-sm dark:text-neutral-300">
+			<div class="ml-[2px] text-xs text-neutral-500 md:text-[13px] dark:text-neutral-400">
 				[{$Frame.x.toFixed(0)}, {$Frame.y.toFixed(0)}]
 			</div>
 		</div>
@@ -141,7 +141,7 @@
 				title="Reset Position"
 				class="flex aspect-square w-7 items-center justify-center rounded-full border bg-white text-white dark:border-neutral-700 dark:bg-neutral-800"
 				on:click={() => {
-					// $Blocks = [];
+					// g$Blocks = [];
 					($Frame.x = 0), ($Frame.y = 0), ($Frame.scale = 1);
 				}}>🛸</button
 			>
