@@ -4,6 +4,7 @@
 	import { generateBlock } from '$lib';
 	import { Frame, Blocks, ActiveBlocks, Log } from '$lib/store';
 	import Block from '$lib/Block.svelte';
+	import Head from '$lib/head.svelte';
 
 	let move = (_: MouseEvent) => {};
 
@@ -56,6 +57,8 @@
 
 	$: if ($Blocks.length === 0) getInitialBlock();
 </script>
+
+<Head />
 
 <svelte:window
 	on:mousemove={move}

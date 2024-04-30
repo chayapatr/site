@@ -2,7 +2,10 @@ import { micromark } from 'micromark';
 
 type BlockType = "page" | "log" | "graph"
 export const getContent = async (slug: string, parent: number) => {
-    const text = await fetch(slug).then((res) => res.text());
+    const text = await fetch(`https://garden.from.pub/${slug}`).then((res) => {
+        console.log(res)
+        return res.text()
+    });
 
     const slugReplacer = (_: string, slug: string) => {
         return `<a onclick={getBlock('${slug}',${parent})} href="?${slug}"`;
@@ -21,13 +24,11 @@ export const generateBlock = async (name: string, type: BlockType, parentIndex: 
 
     if(type === "page") {
         title = `${name}.md`
-        text = await getContent(`/${name}.md`, index)
+        text = await getContent(`${name}.md`, index)
     }
     else if (type === "log") {
         title = "log"
     }
-
-    console.log(index, parentIndex)
 
     return {
         id: index,

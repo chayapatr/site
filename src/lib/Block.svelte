@@ -109,7 +109,6 @@
 		<button
 			class=" text-neutral-500"
 			on:click={() => {
-				// get all children of block using bfs
 				let queue = [...$Blocks.filter((i) => i.parentIndex === block.id).map((x) => x.id)];
 				let visited = new Set();
 				visited.add(block.id);
@@ -137,11 +136,11 @@
 	<!-- {Math.floor(((Math.atan2(y + 24 - cor[1], x + 24 - cor[0]) * 180) / Math.PI) * 1000) / 1000} -->
 </div>
 
-{#if block.parentIndex !== -1}
+{#if block.parentIndex !== -1 && !$Frame.drag}
 	<div
 		class="absolute -z-20"
 		style={`
-	background-color: ${$Frame.dark ? '#222' : '#bbb'};
+	background-color: ${$Frame.dark ? '#333' : '#bbb'};
 	opacity: 0.5;
 	height: 2px;
 	width: ${length(
