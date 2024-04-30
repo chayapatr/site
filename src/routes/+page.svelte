@@ -5,8 +5,14 @@
 	import { Frame, Blocks, ActiveBlocks, Log } from '$lib/store';
 	import Block from '$lib/Block.svelte';
 	import Head from '$lib/head.svelte';
+	import { pinch } from 'svelte-gestures';
 
 	let move = (_: MouseEvent) => {};
+	let touchMove = (_: TouchEvent) => {};
+
+	let prevScale = 1;
+	let changeX, changeY;
+	let previousTouch: Touch;
 
 	let getInitialBlock = () => {};
 
@@ -50,6 +56,19 @@
 			}
 		};
 
+		touchMove = (e: TouchEvent) => {
+			const touch = e.touches[0];
+			if (previousTouch) {
+				if ($Frame.cur === -1 && $Frame.drag && !$Frame.resize) {
+					changeX = touch.pageX - previousTouch.pageX;
+					changeY = touch.pageY - previousTouch.pageY;
+					$Frame.x += 0.75 * changeX;
+					$Frame.y += 0.75 * changeY;
+				}
+			}
+			previousTouch = touch;
+		};
+
 		getInitialBlock = () => {
 			window.getBlock('!@$', -1);
 		};
@@ -66,6 +85,11 @@
 		$Frame.drag = false;
 		$Frame.cur = -1;
 	}}
+	on:touchend={() => {
+		$Frame.drag = false;
+		previousTouch = undefined;
+	}}
+	on:touchmove={touchMove}
 	class={`${$Frame.dark ? 'dark' : ''}`}
 />
 
@@ -77,15 +101,17 @@
 			${$Frame.dark ? 'glass-dark' : 'glass'}
 		`}
 	>
+		<!-- svelte-ignore a11y-no-static-element-interactions -->
 		<div class="flex gap-1">
 			<!-- <div>{$Frame.cur}</div>
 			<div>{$Frame.resize}</div> -->
-			<button
+			<!-- svelte-ignore a11y-click-events-have-key-events -->
+			<buttons
 				title="Appearance"
 				class="aspect-square w-7 rounded-full border bg-white text-white dark:border-neutral-700 dark:bg-neutral-800"
 				on:click={() => {
 					$Frame.scale = 1;
-				}}>🔎</button
+				}}>🔎</buttons
 			>
 			<div>{$Frame.scale.toFixed(2)}</div>
 		</div>
@@ -126,8 +152,20 @@
 	on:mousedown={() => {
 		$Frame.drag = true;
 	}}
+	on:touchstart={() => {
+		if ($Frame.cur === -1) $Frame.drag = true;
+	}}
 >
-	<div class={`h-full w-full overflow-hidden bg-neutral-200 dark:bg-neutral-950`}>
+	<div
+		class={`h-full w-full overflow-hidden bg-neutral-200 dark:bg-neutral-950`}
+		use:pinch
+		on:pinch={(e) => {
+			$Frame.scale = prevScale * e.detail.scale;
+		}}
+		on:pinchup={(e) => {
+			prevScale = $Frame.scale;
+		}}
+	>
 		<div
 			class="relative min-h-full min-w-full"
 			style={`

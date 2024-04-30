@@ -1,12 +1,20 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { Frame, Blocks } from './store';
+
 	export let i: number;
 	export let block: any;
 
 	let rescale = (_: MouseEvent) => {};
 	let move = (_: MouseEvent) => {};
+	let touchMove = (_: TouchEvent) => {};
+	let touchRescale = (_: TouchEvent) => {};
 	let el: HTMLElement;
+
+	let previousTouch: Touch;
+
+	let changeX = 0,
+		changeY = 0;
 
 	const length = (x1: number, x2: number, y1: number, y2: number) => {
 		return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
@@ -47,6 +55,32 @@
 				block.y += e.movementY / $Frame.scale;
 			}
 		};
+		touchMove = (e: TouchEvent) => {
+			const touch = e.touches[0];
+			if (previousTouch) {
+				changeX = touch.pageX - previousTouch.pageX;
+				changeY = touch.pageY - previousTouch.pageY;
+
+				if ($Frame.cur === i && !$Frame.resize && $Frame.drag) {
+					block.x += changeX / $Frame.scale;
+					block.y += changeY / $Frame.scale;
+				}
+			}
+			previousTouch = touch;
+		};
+		touchRescale = (e: TouchEvent) => {
+			const touch = e.touches[0];
+			if (previousTouch) {
+				changeX = touch.pageX - previousTouch.pageX;
+				changeY = touch.pageY - previousTouch.pageY;
+
+				if ($Frame.cur === i && $Frame.resize) {
+					if (block.width + changeX >= 250 && block.width + changeX <= chSize)
+						block.width += changeX;
+					if (block.height + changeY >= 200) block.height += changeY;
+				}
+			}
+		};
 	});
 </script>
 
@@ -58,10 +92,20 @@
 		rescale(e);
 		move(e);
 	}}
+	on:touchmove={(e) => {
+		// rescale(e);
+		touchMove(e);
+	}}
 	on:mouseup={() => {
 		$Frame.resize = false;
 		$Frame.drag = false;
 		$Frame.cur = -1;
+	}}
+	on:touchend={() => {
+		$Frame.resize = false;
+		$Frame.drag = false;
+		// $Frame.cur = -1;
+		previousTouch = undefined;
 	}}
 />
 
@@ -90,7 +134,9 @@
         transform: matrix(1, 0, 0, 1, ${block.x}, ${block.y});
     `}
 >
-	<div class="h-full overflow-x-hidden overflow-y-scroll">
+	<div
+		class={`h-full overflow-x-hidden ${$Frame.cur === i ? 'overflow-y-scroll' : 'overflow-y-hidden'}`}
+	>
 		<div class="prose prose-sm px-3 pb-4 pt-10 dark:prose-invert">
 			{@html block.text}
 		</div>
@@ -127,6 +173,11 @@
 		</button>
 	</div>
 	<button
+		on:touchstart={() => {
+			if (!$Frame.resize && $Frame.cur === i) {
+				$Frame.drag = true;
+			}
+		}}
 		on:mousedown={() => {
 			$Frame.resize = true;
 			$Frame.cur = i;
