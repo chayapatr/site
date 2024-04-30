@@ -138,12 +138,12 @@
 		</div>
 		<div class="flex gap-1">
 			<button
-				title="Clear Frame"
+				title="Reset Position"
 				class="flex aspect-square w-7 items-center justify-center rounded-full border bg-white text-white dark:border-neutral-700 dark:bg-neutral-800"
 				on:click={() => {
-					$Blocks = [];
+					// $Blocks = [];
 					($Frame.x = 0), ($Frame.y = 0), ($Frame.scale = 1);
-				}}>✂️</button
+				}}>🛸</button
 			>
 			<button
 				title="Add Graph"
