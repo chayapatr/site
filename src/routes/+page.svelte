@@ -108,7 +108,7 @@
 			<!-- svelte-ignore a11y-click-events-have-key-events -->
 			<buttons
 				title="Appearance"
-				class="aspect-square w-7 rounded-full border bg-white text-white dark:border-neutral-700 dark:bg-neutral-800"
+				class="flex aspect-square w-7 items-center justify-center rounded-full border bg-white text-white dark:border-neutral-700 dark:bg-neutral-800"
 				on:click={() => {
 					$Frame.scale = 1;
 				}}>🔎</buttons
@@ -118,7 +118,7 @@
 		<div class="flex gap-1">
 			<button
 				title="Clear Frame"
-				class="aspect-square w-7 rounded-full border bg-white text-white dark:border-neutral-700 dark:bg-neutral-800"
+				class="flex aspect-square w-7 items-center justify-center rounded-full border bg-white text-white dark:border-neutral-700 dark:bg-neutral-800"
 				on:click={() => {
 					$Blocks = [];
 					($Frame.x = 0), ($Frame.y = 0), ($Frame.scale = 1);
@@ -126,7 +126,7 @@
 			>
 			<button
 				title="Add Log"
-				class="aspect-square w-7 rounded-full border bg-white text-white dark:border-neutral-700 dark:bg-neutral-800"
+				class="flex aspect-square w-7 items-center justify-center rounded-full border bg-white text-white dark:border-neutral-700 dark:bg-neutral-800"
 				on:click={async () => {
 					$Frame.currentIndex += 1;
 					$Blocks = [
@@ -137,7 +137,7 @@
 			>
 			<button
 				title="Appearance"
-				class="aspect-square w-7 rounded-full border bg-white text-white dark:border-neutral-700 dark:bg-neutral-800"
+				class="flex aspect-square w-7 items-center justify-center rounded-full border bg-white text-white dark:border-neutral-700 dark:bg-neutral-800"
 				on:click={() => {
 					$Frame.dark = !$Frame.dark;
 				}}>{$Frame.dark ? '☀️' : '🌙'}</button
@@ -160,6 +160,7 @@
 		class={`h-full w-full overflow-hidden bg-neutral-200 dark:bg-neutral-950`}
 		use:pinch
 		on:pinch={(e) => {
+			$Frame.cur = -1;
 			$Frame.scale = prevScale * e.detail.scale;
 		}}
 		on:pinchup={(e) => {

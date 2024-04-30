@@ -75,8 +75,7 @@
 				changeY = touch.pageY - previousTouch.pageY;
 
 				if ($Frame.cur === i && $Frame.resize) {
-					if (block.width + changeX >= 250 && block.width + changeX <= chSize)
-						block.width += changeX;
+					if (block.width + changeX >= 250 && block.width + changeX <= 720) block.width += changeX;
 					if (block.height + changeY >= 200) block.height += changeY;
 				}
 			}
@@ -93,7 +92,7 @@
 		move(e);
 	}}
 	on:touchmove={(e) => {
-		// rescale(e);
+		touchRescale(e);
 		touchMove(e);
 	}}
 	on:mouseup={() => {
@@ -146,6 +145,11 @@
 		class="fixed top-0 flex w-full justify-between border-b border-neutral-200 bg-neutral-100/70 p-2 dark:border-neutral-800 dark:bg-neutral-950/80"
 		style="backdrop-filter: blur(2px);
         -webkit-backdrop-filter: blur(2px);"
+		on:touchstart={() => {
+			if (!$Frame.resize && $Frame.cur === i) {
+				$Frame.drag = true;
+			}
+		}}
 	>
 		<div class="text-neutral-500">
 			{block.id || 0} | {block.title}
@@ -172,13 +176,13 @@
 			[x]
 		</button>
 	</div>
+
 	<button
-		on:touchstart={() => {
-			if (!$Frame.resize && $Frame.cur === i) {
-				$Frame.drag = true;
-			}
-		}}
 		on:mousedown={() => {
+			$Frame.resize = true;
+			$Frame.cur = i;
+		}}
+		on:touchstart={() => {
 			$Frame.resize = true;
 			$Frame.cur = i;
 		}}
