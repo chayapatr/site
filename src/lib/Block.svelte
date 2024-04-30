@@ -136,7 +136,7 @@
 				<Graph height={block.height} width={block.width} blockId={block.id} />
 			</div>
 		{:else}
-			<div class="prose prose-sm px-3 pb-4 pt-10 dark:prose-invert">
+			<div class="prose px-3 pb-4 pt-10 md:prose-sm dark:prose-invert">
 				{@html block.text}
 			</div>
 		{/if}
@@ -195,7 +195,7 @@
 			$Frame.resize = true;
 			$Frame.cur = i;
 		}}
-		class="fixed bottom-0 right-0 aspect-square w-3 rounded-br-sm border-b-2 border-r-2 border-b-neutral-300 border-r-neutral-300 hover:cursor-se-resize dark:border-b-neutral-500 dark:border-r-neutral-500"
+		class="fixed bottom-0 right-0 aspect-square w-3 rounded-br-sm border-b-4 border-r-4 border-b-neutral-300 border-r-neutral-300 hover:cursor-se-resize md:border-b-2 md:border-r-2 dark:border-b-neutral-500 dark:border-r-neutral-500"
 	></button>
 	<!-- {Math.floor(((Math.atan2(y + 24 - cor[1], x + 24 - cor[0]) * 180) / Math.PI) * 1000) / 1000} -->
 </div>

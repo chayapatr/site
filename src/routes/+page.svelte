@@ -108,46 +108,35 @@
 	class={`fixed bottom-0 left-0 z-50 m-3 flex w-screen justify-center ${$Frame.dark ? 'dark' : ''}`}
 >
 	<div
-		class={`flex min-w-60 items-center justify-between gap-2 rounded-full border p-1 text-xs text-neutral-600 shadow-sm md:text-sm md:shadow-md lg:text-base dark:border-neutral-800 dark:text-white
+		class={`flex min-w-60 items-center justify-between gap-8 rounded-full border p-1 text-base text-neutral-600 shadow-sm md:min-w-72 md:text-sm md:shadow-md lg:text-base dark:border-neutral-800 dark:text-white
 			${$Frame.dark ? 'glass-dark' : 'glass'}
 		`}
 	>
 		<!-- svelte-ignore a11y-no-static-element-interactions -->
-		<div class="flex items-center gap-1">
-			<!-- <div>{$Frame.cur}</div>
-			<div>{$Frame.resize}</div> -->
-			<!-- svelte-ignore a11y-click-events-have-key-events -->
-			<!-- <buttons
-				title="Appearance"
-				class="flex aspect-square w-7 items-center justify-center rounded-full border bg-white text-white dark:border-neutral-700 dark:bg-neutral-800"
-				on:click={() => {
-					$Frame.scale = 1;
-				}}>🔎</buttons
-			> -->
+		<div class="flex items-center gap-2">
 			<button
 				title="Appearance"
-				class="flex aspect-square w-7 items-center justify-center rounded-full border bg-white text-white dark:border-neutral-700 dark:bg-neutral-800"
+				class="dot"
 				on:click={() => {
 					$Frame.dark = !$Frame.dark;
 				}}>{$Frame.dark ? '☀️' : '🌙'}</button
 			>
 			<!-- <div>{$Frame.scale.toFixed(2)}</div> -->
-			<div class="ml-[2px] text-xs text-neutral-500 md:text-[13px] dark:text-neutral-400">
+			<div class="text-sm text-neutral-500 md:text-[13px] dark:text-neutral-400">
 				[{$Frame.x.toFixed(0)}, {$Frame.y.toFixed(0)}]
 			</div>
 		</div>
-		<div class="flex gap-1">
+		<div class="flex gap-2">
 			<button
 				title="Reset Position"
-				class="flex aspect-square w-7 items-center justify-center rounded-full border bg-white text-white dark:border-neutral-700 dark:bg-neutral-800"
+				class="dot"
 				on:click={() => {
-					// g$Blocks = [];
 					($Frame.x = 0), ($Frame.y = 0), ($Frame.scale = 1);
 				}}>🛸</button
 			>
 			<button
 				title="Add Graph"
-				class="flex aspect-square w-7 items-center justify-center rounded-full border bg-white text-white dark:border-neutral-700 dark:bg-neutral-800"
+				class="dot"
 				on:click={async () => {
 					if (!$Blocks.find((x) => x.type === 'graph')) {
 						$Frame.currentIndex += 1;
@@ -160,7 +149,7 @@
 			>
 			<button
 				title="Add Log"
-				class="flex aspect-square w-7 items-center justify-center rounded-full border bg-white text-white dark:border-neutral-700 dark:bg-neutral-800"
+				class="dot"
 				on:click={async () => {
 					if (!$Blocks.find((x) => x.type === 'log')) {
 						$Frame.currentIndex += 1;
@@ -209,5 +198,8 @@ on:pinchup={(e) => {
 <style>
 	.mousedown {
 		cursor: grab;
+	}
+	.dot {
+		@apply flex aspect-square w-8 items-center justify-center rounded-full border bg-white text-white md:w-7 dark:border-neutral-700 dark:bg-neutral-800;
 	}
 </style>
