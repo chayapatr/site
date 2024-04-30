@@ -97,12 +97,12 @@
 	class={`fixed bottom-0 left-0 z-50 m-3 flex w-screen justify-center ${$Frame.dark ? 'dark' : ''}`}
 >
 	<div
-		class={`flex min-w-60 items-center justify-between gap-2 rounded-full border p-1 text-neutral-600 shadow-md dark:border-neutral-800 dark:text-white
+		class={`flex min-w-60 items-center justify-between gap-2 rounded-full border p-1 text-neutral-600 shadow-sm md:shadow-md dark:border-neutral-800 dark:text-white
 			${$Frame.dark ? 'glass-dark' : 'glass'}
 		`}
 	>
 		<!-- svelte-ignore a11y-no-static-element-interactions -->
-		<div class="flex gap-1">
+		<div class="flex items-center gap-1">
 			<!-- <div>{$Frame.cur}</div>
 			<div>{$Frame.resize}</div> -->
 			<!-- svelte-ignore a11y-click-events-have-key-events -->
