@@ -40,8 +40,5 @@
 		"@sveltejs/adapter-cloudflare": "^4.4.0",
 		"@sveltejs/adapter-static": "^3.0.1",
 		"micromark": "^4.0.0"
-	},
-	"engines": {
-		"node": ">=18.18.0"
 	}
 }
