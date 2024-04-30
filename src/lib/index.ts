@@ -3,7 +3,6 @@ import { micromark } from 'micromark';
 type BlockType = "page" | "log" | "graph"
 export const getContent = async (slug: string, parent: number) => {
     const text = await fetch(`https://garden.from.pub/${slug}`).then((res) => {
-        console.log(res)
         return res.text()
     });
 
@@ -28,6 +27,9 @@ export const generateBlock = async (name: string, type: BlockType, parentIndex: 
     }
     else if (type === "log") {
         title = "log"
+    }
+    else if(type === "graph") {
+        type = "graph"
     }
 
     return {

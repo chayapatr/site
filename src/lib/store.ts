@@ -10,7 +10,7 @@ export const Frame = writable({
 	drag: false,
 	resize: false,
     dark: true,
-    currentIndex: -1
+    currentIndex: -1,
 });
 
 export const Blocks = writable<({
@@ -26,6 +26,14 @@ export const Blocks = writable<({
 })[]>
 ([]);
 
+export const Path = writable<{
+    nodes: { id: string, open?: boolean }[],
+    links: { source: string, target: string}[]
+}>({
+    nodes: [],
+    links: []
+});
+
 export const Log = writable<string[]>([]);
 
 export const ActiveBlocks = derived([Blocks, Log], ([$Blocks, $Log]) => {
@@ -37,4 +45,8 @@ export const ActiveBlocks = derived([Blocks, Log], ([$Blocks, $Log]) => {
         }
         else return block
     })]
+})
+
+export const OpenBlocks = derived([Blocks, Path], ([$Blocks, $Path]) => {
+    return new Set([...$Path.nodes.filter((x) => $Blocks.find((b) => b.title === `${x.id}.md`)).map((x) => x.id)])
 })

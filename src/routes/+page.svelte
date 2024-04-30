@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 
 	import { generateBlock } from '$lib';
-	import { Frame, Blocks, ActiveBlocks, Log } from '$lib/store';
+	import { Frame, Blocks, ActiveBlocks, Log, Path } from '$lib/store';
 	import Block from '$lib/Block.svelte';
 	import Head from '$lib/head.svelte';
 	import { pinch } from 'svelte-gestures';
@@ -19,8 +19,8 @@
 	onMount(async () => {
 		Object.assign(window, {
 			getBlock: async (slug: string, parentIndex: number) => {
-				const newId = $Frame.currentIndex + 1;
-				$Frame.currentIndex = newId;
+				const newIndex = $Frame.currentIndex + 1;
+				$Frame.currentIndex = newIndex;
 				$Blocks = [
 					...$Blocks,
 					await generateBlock(
@@ -28,9 +28,20 @@
 						'page',
 						parentIndex,
 						$Blocks.filter((x) => x.id === parentIndex)[0],
-						newId || 0
+						newIndex || 0
 					)
 				];
+				if (!$Path.nodes.find((x) => x.id === `${slug}`))
+					$Path.nodes = [...$Path.nodes, { id: `${slug}` }];
+				if (parentIndex !== -1) {
+					$Path.links = [
+						...$Path.links,
+						{
+							source: $Blocks.filter((x) => x.id === parentIndex)[0].title.split('.')[0],
+							target: `${slug}`
+						}
+					];
+				}
 				$Log = [...$Log, `${slug}.md`];
 			}
 		});
@@ -97,7 +108,7 @@
 	class={`fixed bottom-0 left-0 z-50 m-3 flex w-screen justify-center ${$Frame.dark ? 'dark' : ''}`}
 >
 	<div
-		class={`flex min-w-60 items-center justify-between gap-2 rounded-full border p-1 text-neutral-600 shadow-sm md:shadow-md dark:border-neutral-800 dark:text-white
+		class={`flex min-w-60 items-center justify-between gap-2 rounded-full border p-1 text-xs text-neutral-600 shadow-sm md:text-sm md:shadow-md lg:text-base dark:border-neutral-800 dark:text-white
 			${$Frame.dark ? 'glass-dark' : 'glass'}
 		`}
 	>
@@ -125,14 +136,29 @@
 				}}>✂️</button
 			>
 			<button
+				title="Add Graph"
+				class="flex aspect-square w-7 items-center justify-center rounded-full border bg-white text-white dark:border-neutral-700 dark:bg-neutral-800"
+				on:click={async () => {
+					if (!$Blocks.find((x) => x.type === 'graph')) {
+						$Frame.currentIndex += 1;
+						$Blocks = [
+							...$Blocks,
+							await generateBlock('Garden', 'graph', -1, undefined, $Frame.currentIndex || 0)
+						];
+					}
+				}}>🏕️</button
+			>
+			<button
 				title="Add Log"
 				class="flex aspect-square w-7 items-center justify-center rounded-full border bg-white text-white dark:border-neutral-700 dark:bg-neutral-800"
 				on:click={async () => {
-					$Frame.currentIndex += 1;
-					$Blocks = [
-						...$Blocks,
-						await generateBlock('Log', 'log', -1, undefined, $Frame.currentIndex || 0)
-					];
+					if (!$Blocks.find((x) => x.type === 'log')) {
+						$Frame.currentIndex += 1;
+						$Blocks = [
+							...$Blocks,
+							await generateBlock('Log', 'log', -1, undefined, $Frame.currentIndex || 0)
+						];
+					}
 				}}>📖</button
 			>
 			<button
@@ -145,12 +171,11 @@
 		</div>
 	</div>
 </div>
-
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
 	class={`h-[100svh] w-screen ${$Frame.drag ? 'mousedown' : ''}  ${$Frame.dark ? 'dark' : ''}`}
 	on:mousedown={() => {
-		$Frame.drag = true;
+		if ($Frame.cur === -1) $Frame.drag = true;
 	}}
 	on:touchstart={() => {
 		if ($Frame.cur === -1) $Frame.drag = true;

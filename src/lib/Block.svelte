@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { Frame, Blocks } from './store';
+	import Graph from './Graph.svelte';
 
 	export let i: number;
 	export let block: any;
@@ -112,17 +113,11 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
 	bind:this={el}
-	class={`noselect absolute aspect-square flex-col justify-between overflow-hidden rounded-sm border border-neutral-200 text-xs text-white shadow-sm active:cursor-grab dark:border-neutral-800
+	class={`${$Frame.drag && $Frame.cur === i ? 'noselect' : ''} absolute aspect-square flex-col justify-between overflow-hidden rounded-sm border border-neutral-200 text-xs text-white shadow-sm dark:border-neutral-800
         ${$Frame.cur === i ? 'border-3 border-neutral-400/60 dark:border-white/30' : ''}
 		${$Frame.dark ? 'glass-dark' : 'glass'}`}
 	on:click={() => {
 		$Frame.cur = i;
-	}}
-	on:mousedown={() => {
-		if (!$Frame.resize) {
-			$Frame.cur = i;
-			$Frame.drag = true;
-		}
 	}}
 	style={`
         min-width: 250px;
@@ -136,13 +131,19 @@
 	<div
 		class={`h-full overflow-x-hidden ${$Frame.cur === i ? 'overflow-y-scroll' : 'overflow-y-hidden'}`}
 	>
-		<div class="prose prose-sm px-3 pb-4 pt-10 dark:prose-invert">
-			{@html block.text}
-		</div>
+		{#if block.type === 'graph'}
+			<div class="noselect">
+				<Graph height={block.height} width={block.width} blockId={block.id} />
+			</div>
+		{:else}
+			<div class="prose prose-sm px-3 pb-4 pt-10 dark:prose-invert">
+				{@html block.text}
+			</div>
+		{/if}
 	</div>
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<div
-		class="fixed top-0 flex w-full justify-between border-b border-neutral-200 bg-neutral-100/70 p-2 dark:border-neutral-800 dark:bg-neutral-950/80"
+		class="noselect fixed top-0 flex w-full justify-between border-b border-neutral-200 bg-neutral-100/70 p-2 dark:border-neutral-800 dark:bg-neutral-950/80"
 		style="backdrop-filter: blur(2px);
         -webkit-backdrop-filter: blur(2px);"
 		on:touchstart={() => {
@@ -150,31 +151,39 @@
 				$Frame.drag = true;
 			}
 		}}
+		on:mousedown={() => {
+			if (!$Frame.resize) {
+				$Frame.cur = i;
+				$Frame.drag = true;
+			}
+		}}
 	>
 		<div class="text-neutral-500">
 			{block.id || 0} | {block.title}
-			[{block.x.toFixed(2)},
-			{block.y.toFixed(2)}]
+			[{block.x.toFixed(0)},
+			{block.y.toFixed(0)}]
 		</div>
-		<button
-			class=" text-neutral-500"
-			on:click={() => {
-				let queue = [...$Blocks.filter((i) => i.parentIndex === block.id).map((x) => x.id)];
-				let visited = new Set();
-				visited.add(block.id);
-				while (queue.length > 0) {
-					const el = queue.shift();
-					visited.add(el);
-					queue = [
-						...queue,
-						...$Blocks.filter((i) => i.parentIndex === el && !visited.has(i.id)).map((x) => x.id)
-					];
-				}
-				$Blocks = $Blocks.filter((i) => !visited.has(i.id));
-			}}
-		>
-			[x]
-		</button>
+		<div class="flex gap-2">
+			<button
+				class=" text-neutral-500"
+				on:click={() => {
+					let queue = [...$Blocks.filter((i) => i.parentIndex === block.id).map((x) => x.id)];
+					let visited = new Set();
+					visited.add(block.id);
+					while (queue.length > 0) {
+						const el = queue.shift();
+						visited.add(el);
+						queue = [
+							...queue,
+							...$Blocks.filter((i) => i.parentIndex === el && !visited.has(i.id)).map((x) => x.id)
+						];
+					}
+					$Blocks = $Blocks.filter((i) => !visited.has(i.id));
+				}}
+			>
+				[x]
+			</button>
+		</div>
 	</div>
 
 	<button
