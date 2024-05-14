@@ -105,6 +105,9 @@
 		getInitialBlock = () => {
 			window.getBlock(slug, -1);
 		};
+
+		// if (localStorage.getItem('blocks')) $Blocks = JSON.parse(localStorage.getItem('blocks') || '');
+		// if (localStorage.getItem('frame')) $Frame = JSON.parse(localStorage.getItem('frame') || '');
 	});
 
 	$: if ($Blocks.length === 0) getInitialBlock();
@@ -225,6 +228,14 @@
 					}
 				}}>📖</button
 			>
+			<!-- <button
+				title="SAVE"
+				class="dot"
+				on:click={() => {
+					localStorage.setItem('blocks', JSON.stringify($Blocks));
+					localStorage.setItem('frame', JSON.stringify($Frame));
+				}}>S</button
+			> -->
 		</div>
 	</div>
 </div>

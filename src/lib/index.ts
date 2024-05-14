@@ -38,14 +38,34 @@ export const generateBlock = async (name: string, type: BlockType, parentIndex: 
 
     const frame = get(Frame)
 
+    const maybeMobile = (width: number, height: number) => {
+        return (width < 600 && height < 1000)
+    }
+
+    const screenType = (width: number, height: number) => {
+        if(maybeMobile(width, height)) return 'small'
+        if(width < 1000) return 'medium'
+        return 'large'
+    }
+
+    const h = maybeMobile(frame.width, frame.height) ? (Math.min(frame.height / 2, 400)) : 250
+
+    const scales = {
+        small: 1,
+        medium: 1.2,
+        large: 1.5
+    }
+
+    const scale = scales[screenType(frame.width, frame.height)]
+
     return {
         id: index,
         title,
         type,
-        x: parentIndex === -1 ? -frame.x + 10 : parent.x + 50,
-        y: parentIndex === -1 ? -frame.y + 10 : parent.y + 50,
-        width: 320,
-        height: 250,
+        x: parentIndex === -1 ? frame.width / 2 - 160 * scale : parent.x + 50,
+        y: parentIndex === -1 ? frame.height / 2 - (h * scale / 2 ) - 50: parent.y + 50,
+        width: 320 * scale,
+        height: h * scale,
         text,
         parentIndex
     }
