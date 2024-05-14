@@ -119,6 +119,9 @@
 	$: if ($Blocks.length === 0) {
 		load = false;
 		setTimeout(() => {
+			$Frame.x = 0;
+			$Frame.y = 0;
+			$Frame.scale = 1;
 			getInitialBlock();
 		}, 800);
 	}
@@ -285,24 +288,22 @@
 			{#each $ActiveBlocks as block, i}
 				<Block {block} {i} />
 			{/each}
-			{#if $ActiveBlocks.length === 0}
-				<div
-					class="flex h-[100svh] w-full items-center justify-center text-lg dark:text-neutral-100"
-				>
-					<div class="flex items-end justify-between gap-3">
-						<img src="/imgs/pub.svg" alt="" class="h-6 w-full" />
-						<div
-							class="animate-pulse
-						leading-none"
-						>
-							FROM.PUB
-						</div>
-					</div>
-				</div>
-			{/if}
 		</div>
 	</div>
 </div>
+
+{#if $ActiveBlocks.length === 0}
+	<div class="absolute left-0 top-0 flex h-[100svh] w-full items-center justify-center text-lg">
+		<div class="flex items-end justify-between gap-3">
+			<img src="/imgs/pub.svg" alt="" class="h-6 w-full" />
+			<div
+				class={`animate-pulse leading-none ${$Frame.dark ? 'text-neutral-100' : 'text-neutral-900'}`}
+			>
+				FROM.PUB
+			</div>
+		</div>
+	</div>
+{/if}
 
 <style>
 	.mousedown {
