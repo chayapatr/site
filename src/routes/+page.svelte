@@ -53,13 +53,16 @@
 				}
 				$Log = [...$Log, `${new Date().toLocaleTimeString()}~${slug}.md`];
 			},
-			jump: (x: string, y: string, width: string, height: string) => {
+			jump: (x: string, y: string, width: string, height: string, id: string) => {
 				$Frame = {
 					...$Frame,
 					x: -Number(x) + $Frame.width / 2 - Number(width) / 2,
 					y: -Number(y) + $Frame.height / 2 - Number(height) / 2,
 					scale: 1
 				};
+				requestAnimationFrame(() => {
+					$Frame.cur = Number(id);
+				});
 			}
 		});
 
@@ -175,6 +178,9 @@
 							...$Blocks,
 							await generateBlock('Garden', 'graph', -1, undefined, $Frame.currentIndex || 0)
 						];
+						requestAnimationFrame(() => {
+							$Frame.cur = $Frame.currentIndex;
+						});
 					} else {
 						const { x, y, height, width } = $Blocks.find((x) => x.type === 'graph');
 						$Frame = {
@@ -183,6 +189,7 @@
 							y: -Number(y) + $Frame.height / 2 - height / 2,
 							scale: 1
 						};
+						$Frame.cur = $Frame.currentIndex;
 					}
 				}}>🏕️</button
 			>
@@ -196,6 +203,9 @@
 							...$Blocks,
 							await generateBlock('Log', 'log', -1, undefined, $Frame.currentIndex || 0)
 						];
+						requestAnimationFrame(() => {
+							$Frame.cur = $Frame.currentIndex;
+						});
 					} else {
 						const { x, y, height, width } = $Blocks.find((x) => x.type === 'log');
 						$Frame = {
@@ -204,6 +214,7 @@
 							y: -Number(y) + $Frame.height / 2 - height / 2,
 							scale: 1
 						};
+						$Frame.cur = $Frame.currentIndex;
 					}
 				}}>⏳</button
 			>
@@ -217,6 +228,9 @@
 							...$Blocks,
 							await generateBlock('Current', 'current', -1, undefined, $Frame.currentIndex || 0)
 						];
+						requestAnimationFrame(() => {
+							$Frame.cur = $Frame.currentIndex;
+						});
 					} else {
 						const { x, y, height, width } = $Blocks.find((x) => x.type === 'current');
 						$Frame = {
@@ -225,6 +239,7 @@
 							y: -Number(y) + $Frame.height / 2 - height / 2,
 							scale: 1
 						};
+						$Frame.cur = $Frame.currentIndex;
 					}
 				}}>📖</button
 			>
@@ -244,13 +259,14 @@
 	class={`h-[100svh] w-screen ${$Frame.drag ? 'mousedown' : ''}  ${$Frame.dark ? 'dark' : ''}`}
 	on:mousedown={() => {
 		if ($Frame.cur === -1) $Frame.drag = true;
+		// else $Frame.cur = -1;
 	}}
 	on:touchstart={() => {
 		if ($Frame.cur === -1) $Frame.drag = true;
 	}}
 >
 	<div
-		class={`h-full w-full overflow-hidden ${$Frame.cur === -1 ? 'bg-neutral-100 dark:bg-neutral-950' : 'bg-neutral-200 dark:bg-neutral-900'} `}
+		class={`h-full w-full overflow-hidden ${$Frame.cur === -1 ? 'bg-neutral-100 dark:bg-neutral-900' : 'bg-neutral-200 dark:bg-neutral-900/70'} `}
 	>
 		<div
 			class="relative min-h-full min-w-full"

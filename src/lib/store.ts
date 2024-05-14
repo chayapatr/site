@@ -3,7 +3,7 @@ import { writable, derived } from 'svelte/store';
 type BlockType = "page" | "log" | "graph" | "current"
 
 export const Frame = writable({
-	cur: -1,
+	cur: 0,
 	x: 0,
 	y: 0,
 	scale: 1,
@@ -51,7 +51,7 @@ export const ActiveBlocks = derived([Blocks, Log], ([$Blocks, $Log]) => {
                 return `<div>${date} | <a href="" onclick={getBlock("${slug.split(".")[0]}",${block.id})}> ${slug}</a></div>`}).join("")
         }
         if(block.type === "current") {
-            block.text = $Blocks.map(x => `<div>[${x.id}] <a href="" onclick={jump(${x.x},${x.y},${x.width},${x.height})}> ${x.title}</a></div>`).join("")
+            block.text = $Blocks.map(x => `<div>[${x.id}] <a href="" onclick={jump(${x.x},${x.y},${x.width},${x.height},${x.id})}> ${x.title}</a></div>`).join("")
         }
         return block
     })]

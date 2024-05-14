@@ -105,7 +105,7 @@
 	on:mouseup={() => {
 		$Frame.resize = false;
 		$Frame.drag = false;
-		$Frame.cur = -1;
+		// $Frame.cur = -1;
 		requestAnimationFrame(() => {
 			touch = false;
 		});
@@ -122,15 +122,22 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
 	bind:this={el}
-	class={`${$Frame.drag && $Frame.cur === i ? 'noselect' : ''} absolute aspect-square flex-col justify-between overflow-hidden rounded-md border-[1.5px] border-neutral-200 text-xs text-white shadow-sm dark:border-neutral-800
-        ${$Frame.cur === i ? 'border-3 border-neutral-400/60 dark:border-neutral-300/30' : ''}
-		${$Frame.dark ? 'glass-dark' : 'glass'}`}
+	class={`${($Frame.drag || $Frame.resize) && $Frame.cur === i ? 'noselect border-blue-300 dark:border-amber-700' : ''}
+			${!$Frame.drag && !$Frame.resize && $Frame.cur === i ? 'border-3 border-blue-600 dark:border-amber-400' : ''}
+			${$Frame.dark ? 'glass-dark' : 'glass'}
+			absolute aspect-square flex-col justify-between overflow-hidden rounded-md border-[1.5px] border-neutral-200 text-xs text-white shadow-sm dark:border-neutral-800
+	`}
 	on:click={() => {
 		if (!touch) {
 			$Frame.cur = i;
 			if ($Blocks[blockId].type === 'graph') {
 				$Frame.scale = 1;
 			}
+		}
+	}}
+	on:touchstart={() => {
+		if (!$Frame.resize && $Frame.cur === i) {
+			$Frame.drag = true;
 		}
 	}}
 	style={`
@@ -154,7 +161,9 @@
 				/>
 			</div>
 		{:else}
-			<div class="prose px-3 pb-4 pt-10 md:prose-sm dark:prose-invert">
+			<div
+				class={`prose px-3 pb-4 pt-10 md:prose-sm dark:prose-invert ${$Frame.cur === i ? '' : 'opacity-50'}`}
+			>
 				{@html $Blocks[blockId].text}
 			</div>
 		{/if}
@@ -165,11 +174,6 @@
 		noselect fixed top-0 flex w-full justify-between border-b  border-neutral-200 bg-neutral-100/70 p-2 dark:border-neutral-800 dark:bg-neutral-950/80`}
 		style="backdrop-filter: blur(2px);
         -webkit-backdrop-filter: blur(2px);"
-		on:touchstart={() => {
-			if (!$Frame.resize && $Frame.cur === i) {
-				$Frame.drag = true;
-			}
-		}}
 		on:mousedown={() => {
 			touch = true;
 			if (!$Frame.resize) {
