@@ -18,6 +18,9 @@ const config = {
 						},
 						h4: {
 							fontWeight: 400
+						},
+						strong: {
+							fontWeight: 500
 						}
 					}
 				}
