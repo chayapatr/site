@@ -250,7 +250,7 @@
 	}}
 >
 	<div
-		class={`h-full w-full overflow-hidden ${$Frame.cur === -1 ? 'bg-neutral-200 dark:bg-neutral-950' : 'bg-neutral-300 dark:bg-neutral-900/70'} `}
+		class={`h-full w-full overflow-hidden ${$Frame.cur === -1 ? 'bg-neutral-100 dark:bg-neutral-950' : 'bg-neutral-200 dark:bg-neutral-900'} `}
 	>
 		<div
 			class="relative min-h-full min-w-full"

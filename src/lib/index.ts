@@ -8,12 +8,18 @@ export const getContent = async (slug: string, parent: number) => {
         return res.text()
     });
 
-    const slugReplacer = (_: string, slug: string) => {
-        return `<a onclick={getBlock('${slug}',${parent})} href="?page=${slug}"`;
+    const internalLinks = (_: string, slug: string) => {
+        return `<a onclick={getBlock('${slug}',${parent})} href="?page=${slug}" class="internal-link"`;
     };
+    
+    const externalLinks = (_: string, url: string) => {
+        return `<a href="${url}" target="_blank" class="external-link"`;
+    }
 
     const styleParser = (text: string) => {
-        return text.replace(/<a href="\/([A-Za-z1-9\s-]*)(?:\.md)?"/g, slugReplacer)
+        return text
+        .replace(/<a href="\/([A-Za-z1-9\s-]*)(?:\.md)?"/g, internalLinks)
+        .replace(/<a href="((?:http||https):\/\/.[^"]*)"/g, externalLinks)
     };
 
     return styleParser(micromark(text));

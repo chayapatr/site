@@ -49,3 +49,20 @@ html {
 	backdrop-filter: blur(2px);
 	-webkit-backdrop-filter: blur(2px);
 }
+
+.external-link {
+	@apply text-blue-600 dark:text-amber-400;
+	&:hover {
+		transform: scale(1.1);
+	}
+}
+
+.internal-link {
+	@apply text-neutral-700 no-underline hover:text-neutral-600 dark:text-neutral-200 dark:hover:text-neutral-400;
+	&::before {
+		content: '[';
+	}
+	&::after {
+		content: ']';
+	}
+}
