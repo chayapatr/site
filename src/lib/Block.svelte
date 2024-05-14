@@ -10,6 +10,8 @@
 	let move = (_: MouseEvent) => {};
 	let touchMove = (_: TouchEvent) => {};
 	let touchRescale = (_: TouchEvent) => {};
+	let touch = false;
+
 	let el: HTMLElement;
 
 	let previousTouch: Touch;
@@ -24,8 +26,8 @@
 	let chToPixels = () => {};
 	let chSize: number;
 
-	$: parent = $Blocks.filter((x) => x.id === block.parentIndex)[0];
-	$: block = $Blocks.filter((x) => x.id === block.id)[0];
+	$: parentId = $Blocks.findIndex((x) => x.id === block.parentIndex);
+	$: blockId = $Blocks.findIndex((x) => x.id === block.id);
 
 	onMount(() => {
 		chToPixels = (ch: number, el: HTMLElement): number => {
@@ -45,15 +47,18 @@
 		rescale = (e: MouseEvent) => {
 			if (!chSize) chSize = chToPixels(80, el);
 			if ($Frame.cur === i && $Frame.resize) {
-				if (block.width + e.movementX >= 250 && block.width + e.movementX <= chSize)
-					block.width += e.movementX;
-				if (block.height + e.movementY >= 200) block.height += e.movementY;
+				if (
+					$Blocks[blockId].width + e.movementX >= 250 &&
+					$Blocks[blockId].width + e.movementX <= chSize
+				)
+					$Blocks[blockId].width += e.movementX;
+				if ($Blocks[blockId].height + e.movementY >= 200) $Blocks[blockId].height += e.movementY;
 			}
 		};
 		move = (e: MouseEvent) => {
 			if ($Frame.cur === i && !$Frame.resize && $Frame.drag) {
-				block.x += e.movementX / $Frame.scale;
-				block.y += e.movementY / $Frame.scale;
+				$Blocks[blockId].x += e.movementX / $Frame.scale;
+				$Blocks[blockId].y += e.movementY / $Frame.scale;
 			}
 		};
 		touchMove = (e: TouchEvent) => {
@@ -63,8 +68,8 @@
 				changeY = touch.pageY - previousTouch.pageY;
 
 				if ($Frame.cur === i && !$Frame.resize && $Frame.drag) {
-					block.x += changeX / $Frame.scale;
-					block.y += changeY / $Frame.scale;
+					$Blocks[blockId].x += changeX / $Frame.scale;
+					$Blocks[blockId].y += changeY / $Frame.scale;
 				}
 			}
 			previousTouch = touch;
@@ -76,8 +81,9 @@
 				changeY = touch.pageY - previousTouch.pageY;
 
 				if ($Frame.cur === i && $Frame.resize) {
-					if (block.width + changeX >= 250 && block.width + changeX <= 720) block.width += changeX;
-					if (block.height + changeY >= 200) block.height += changeY;
+					if ($Blocks[blockId].width + changeX >= 250 && $Blocks[blockId].width + changeX <= 720)
+						$Blocks[blockId].width += changeX;
+					if ($Blocks[blockId].height + changeY >= 200) $Blocks[blockId].height += changeY;
 				}
 			}
 		};
@@ -100,6 +106,9 @@
 		$Frame.resize = false;
 		$Frame.drag = false;
 		$Frame.cur = -1;
+		requestAnimationFrame(() => {
+			touch = false;
+		});
 	}}
 	on:touchend={() => {
 		$Frame.resize = false;
@@ -113,37 +122,47 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
 	bind:this={el}
-	class={`${$Frame.drag && $Frame.cur === i ? 'noselect' : ''} absolute aspect-square flex-col justify-between overflow-hidden rounded-sm border border-neutral-200 text-xs text-white shadow-sm dark:border-neutral-800
-        ${$Frame.cur === i ? 'border-3 border-neutral-400/60 dark:border-white/30' : ''}
+	class={`${$Frame.drag && $Frame.cur === i ? 'noselect' : ''} absolute aspect-square flex-col justify-between overflow-hidden rounded-md border-[1.5px] border-neutral-200 text-xs text-white shadow-sm dark:border-neutral-800
+        ${$Frame.cur === i ? 'border-3 border-neutral-400/60 dark:border-neutral-300/30' : ''}
 		${$Frame.dark ? 'glass-dark' : 'glass'}`}
 	on:click={() => {
-		$Frame.cur = i;
+		if (!touch) {
+			$Frame.cur = i;
+			if ($Blocks[blockId].type === 'graph') {
+				$Frame.scale = 1;
+			}
+		}
 	}}
 	style={`
         min-width: 250px;
         min-height: 200px;
         max-width: 80ch;
-        width: ${block.width}px;
-        height: ${block.height}px;
-        transform: matrix(1, 0, 0, 1, ${block.x}, ${block.y});
+        width: ${$Blocks[blockId].width}px;
+        height: ${$Blocks[blockId].height}px;
+        transform: matrix(1, 0, 0, 1, ${$Blocks[blockId].x}, ${$Blocks[blockId].y});
     `}
 >
 	<div
-		class={`h-full overflow-x-hidden ${$Frame.cur === i ? 'overflow-y-scroll' : 'overflow-y-hidden'}`}
+		class={`h-full overflow-x-hidden ${$Frame.cur === i ? 'overflow-y-scroll' : 'noselect overflow-y-hidden'}`}
 	>
-		{#if block.type === 'graph'}
+		{#if $Blocks[blockId].type === 'graph'}
 			<div class="noselect">
-				<Graph height={block.height} width={block.width} blockId={block.id} />
+				<Graph
+					height={$Blocks[blockId].height}
+					width={$Blocks[blockId].width}
+					blockId={$Blocks[blockId].id}
+				/>
 			</div>
 		{:else}
 			<div class="prose px-3 pb-4 pt-10 md:prose-sm dark:prose-invert">
-				{@html block.text}
+				{@html $Blocks[blockId].text}
 			</div>
 		{/if}
 	</div>
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<div
-		class="noselect fixed top-0 flex w-full justify-between border-b border-neutral-200 bg-neutral-100/70 p-2 dark:border-neutral-800 dark:bg-neutral-950/80"
+		class={`
+		noselect fixed top-0 flex w-full justify-between border-b  border-neutral-200 bg-neutral-100/70 p-2 dark:border-neutral-800 dark:bg-neutral-950/80`}
 		style="backdrop-filter: blur(2px);
         -webkit-backdrop-filter: blur(2px);"
 		on:touchstart={() => {
@@ -152,6 +171,7 @@
 			}
 		}}
 		on:mousedown={() => {
+			touch = true;
 			if (!$Frame.resize) {
 				$Frame.cur = i;
 				$Frame.drag = true;
@@ -159,17 +179,19 @@
 		}}
 	>
 		<div class="text-neutral-500">
-			{block.id || 0} | {block.title}
-			[{block.x.toFixed(0)},
-			{block.y.toFixed(0)}]
+			{$Blocks[blockId].id || 0} | {$Blocks[blockId].title}
+			[{$Blocks[blockId].x.toFixed(0)},
+			{$Blocks[blockId].y.toFixed(0)}]
 		</div>
 		<div class="flex gap-2">
 			<button
 				class=" text-neutral-500"
 				on:click={() => {
-					let queue = [...$Blocks.filter((i) => i.parentIndex === block.id).map((x) => x.id)];
+					let queue = [
+						...$Blocks.filter((i) => i.parentIndex === $Blocks[blockId].id).map((x) => x.id)
+					];
 					let visited = new Set();
-					visited.add(block.id);
+					visited.add($Blocks[blockId].id);
 					while (queue.length > 0) {
 						const el = queue.shift();
 						visited.add(el);
@@ -188,6 +210,7 @@
 
 	<button
 		on:mousedown={() => {
+			touch = true;
 			$Frame.resize = true;
 			$Frame.cur = i;
 		}}
@@ -195,32 +218,38 @@
 			$Frame.resize = true;
 			$Frame.cur = i;
 		}}
-		class="fixed bottom-0 right-0 aspect-square w-3 rounded-br-sm border-b-4 border-r-4 border-b-neutral-300 border-r-neutral-300 hover:cursor-se-resize md:border-b-2 md:border-r-2 dark:border-b-neutral-500 dark:border-r-neutral-500"
+		class="fixed bottom-0 right-0 aspect-square w-3 rounded-br-md border-b-4 border-r-4 border-b-neutral-300 border-r-neutral-300 hover:cursor-se-resize md:border-b-2 md:border-r-2 dark:border-b-neutral-500 dark:border-r-neutral-500"
 	></button>
 	<!-- {Math.floor(((Math.atan2(y + 24 - cor[1], x + 24 - cor[0]) * 180) / Math.PI) * 1000) / 1000} -->
 </div>
 
-{#if block.parentIndex !== -1 && !$Frame.drag}
+{#if block.parentIndex !== -1}
 	<div
 		class="absolute -z-20"
 		style={`
-	background-color: ${$Frame.dark ? '#333' : '#bbb'};
+	background-color: ${$Frame.dark ? '#444' : '#bbb'};
 	opacity: 0.5;
 	height: 2px;
 	width: ${length(
-		block.x + block.width / 2,
-		parent.x + parent.width / 2,
-		block.y + block.height / 2,
-		parent.y + parent.height / 2
+		$Blocks[blockId].x + $Blocks[blockId].width / 2,
+		$Blocks[parentId].x + $Blocks[parentId].width / 2,
+		$Blocks[blockId].y + $Blocks[blockId].height / 2,
+		$Blocks[parentId].y + $Blocks[parentId].height / 2
 	)}px;
-	left: ${block.x + block.width / 2}px;
-	top: ${block.y + block.height / 2}px;
+	left: ${$Blocks[blockId].x + $Blocks[blockId].width / 2}px;
+	top: ${$Blocks[blockId].y + $Blocks[blockId].height / 2}px;
 	transform-origin: left;
 	transform: rotate(
 		${
 			(Math.atan2(
-				parent.y + parent.height / 2 - block.y - block.height / 2,
-				parent.x + parent.width / 2 - block.x - block.width / 2
+				$Blocks[parentId].y +
+					$Blocks[parentId].height / 2 -
+					$Blocks[blockId].y -
+					$Blocks[blockId].height / 2,
+				$Blocks[parentId].x +
+					$Blocks[parentId].width / 2 -
+					$Blocks[blockId].x -
+					$Blocks[blockId].width / 2
 			) *
 				180) /
 			Math.PI

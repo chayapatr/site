@@ -6,6 +6,7 @@
 	import Block from '$lib/Block.svelte';
 	import Head from '$lib/head.svelte';
 	import { pinch } from 'svelte-gestures';
+	import { page } from '$app/stores';
 
 	let move = (_: MouseEvent) => {};
 	let touchMove = (_: TouchEvent) => {};
@@ -15,8 +16,16 @@
 	let previousTouch: Touch;
 
 	let getInitialBlock = () => {};
+	let load = false;
+
+	const url = $page.url;
 
 	onMount(async () => {
+		let slug = url.searchParams.get('page') || '!@$';
+
+		$Frame.height = window.innerHeight;
+		$Frame.width = window.innerWidth;
+
 		Object.assign(window, {
 			getBlock: async (slug: string, parentIndex: number) => {
 				const newIndex = $Frame.currentIndex + 1;
@@ -42,23 +51,36 @@
 						}
 					];
 				}
-				$Log = [...$Log, `${slug}.md`];
+				$Log = [...$Log, `${new Date().toLocaleTimeString()}~${slug}.md`];
+			},
+			jump: (x: string, y: string, width: string, height: string) => {
+				$Frame = {
+					...$Frame,
+					x: -Number(x) + $Frame.width / 2 - Number(width) / 2,
+					y: -Number(y) + $Frame.height / 2 - Number(height) / 2,
+					scale: 1
+				};
 			}
 		});
 
-		// window.addEventListener(
-		// 	'wheel',
-		// 	function (e) {
-		// 		if ($Frame.cur === -1) {
-		// 			e.preventDefault();
-		// 			let d = $Frame.scale - 0.003 * e.deltaY;
-		// 			const min = 0.5;
-		// 			const max = 1.5;
-		// 			$Frame.scale = d > min ? (d < max ? d : max) : min;
-		// 		}
-		// 	},
-		// 	{ passive: false }
-		// );
+		window.addEventListener(
+			'wheel',
+			function (e) {
+				if ($Frame.cur === -1) {
+					e.preventDefault();
+					let d = $Frame.scale - 0.0015 * e.deltaY;
+					const min = 0.5;
+					const max = 1.5;
+					$Frame.scale = d > min ? (d < max ? d : max) : min;
+
+					// const { clientX, clientY } = e;
+					// change origin
+					// $Frame.originX = clientX - $Frame.x * $Frame.scale;
+					// $Frame.originY = clientY - $Frame.y * $Frame.scale;
+				}
+			},
+			{ passive: false }
+		);
 
 		move = (e: MouseEvent) => {
 			if ($Frame.cur === -1 && $Frame.drag && !$Frame.resize) {
@@ -81,11 +103,12 @@
 		};
 
 		getInitialBlock = () => {
-			window.getBlock('!@$', -1);
+			window.getBlock(slug, -1);
 		};
 	});
 
 	$: if ($Blocks.length === 0) getInitialBlock();
+	load = true;
 </script>
 
 <Head />
@@ -102,8 +125,13 @@
 	}}
 	on:touchmove={touchMove}
 	class={`${$Frame.dark ? 'dark' : ''}`}
+	on:resize={() => {
+		$Frame.height = window.innerHeight;
+		$Frame.width = window.innerWidth;
+	}}
 />
 
+<!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
 	class={`fixed bottom-0 left-0 z-50 m-3 flex w-screen justify-center ${$Frame.dark ? 'dark' : ''}`}
 >
@@ -113,7 +141,7 @@
 		`}
 	>
 		<!-- svelte-ignore a11y-no-static-element-interactions -->
-		<div class="flex items-center gap-2">
+		<div class="flex items-center gap-1">
 			<button
 				title="Appearance"
 				class="dot"
@@ -122,18 +150,18 @@
 				}}>{$Frame.dark ? '☀️' : '🌙'}</button
 			>
 			<!-- <div>{$Frame.scale.toFixed(2)}</div> -->
-			<div class="text-sm text-neutral-500 md:text-[13px] dark:text-neutral-400">
-				[{$Frame.x.toFixed(0)}, {$Frame.y.toFixed(0)}]
-			</div>
+			<button
+				class="rounded-sm px-1 py-[0.15rem] text-sm text-neutral-500 hover:bg-neutral-200/80 md:text-[13px] dark:text-neutral-400 dark:hover:bg-neutral-800/50"
+				on:click={() => {
+					$Frame.x = 0;
+					$Frame.y = 0;
+					$Frame.scale = 1;
+				}}
+			>
+				[{-$Frame.x.toFixed(0)}, {-$Frame.y.toFixed(0)}]
+			</button>
 		</div>
 		<div class="flex gap-2">
-			<button
-				title="Reset Position"
-				class="dot"
-				on:click={() => {
-					($Frame.x = 0), ($Frame.y = 0), ($Frame.scale = 1);
-				}}>🛸</button
-			>
 			<button
 				title="Add Graph"
 				class="dot"
@@ -144,6 +172,14 @@
 							...$Blocks,
 							await generateBlock('Garden', 'graph', -1, undefined, $Frame.currentIndex || 0)
 						];
+					} else {
+						const { x, y, height, width } = $Blocks.find((x) => x.type === 'graph');
+						$Frame = {
+							...$Frame,
+							x: -Number(x) + $Frame.width / 2 - width / 2,
+							y: -Number(y) + $Frame.height / 2 - height / 2,
+							scale: 1
+						};
 					}
 				}}>🏕️</button
 			>
@@ -157,6 +193,35 @@
 							...$Blocks,
 							await generateBlock('Log', 'log', -1, undefined, $Frame.currentIndex || 0)
 						];
+					} else {
+						const { x, y, height, width } = $Blocks.find((x) => x.type === 'log');
+						$Frame = {
+							...$Frame,
+							x: -Number(x) + $Frame.width / 2 - width / 2,
+							y: -Number(y) + $Frame.height / 2 - height / 2,
+							scale: 1
+						};
+					}
+				}}>⏳</button
+			>
+			<button
+				title="Add Current"
+				class="dot"
+				on:click={async () => {
+					if (!$Blocks.find((x) => x.type === 'current')) {
+						$Frame.currentIndex += 1;
+						$Blocks = [
+							...$Blocks,
+							await generateBlock('Current', 'current', -1, undefined, $Frame.currentIndex || 0)
+						];
+					} else {
+						const { x, y, height, width } = $Blocks.find((x) => x.type === 'current');
+						$Frame = {
+							...$Frame,
+							x: -Number(x) + $Frame.width / 2 - width / 2,
+							y: -Number(y) + $Frame.height / 2 - height / 2,
+							scale: 1
+						};
 					}
 				}}>📖</button
 			>
@@ -173,7 +238,9 @@
 		if ($Frame.cur === -1) $Frame.drag = true;
 	}}
 >
-	<div class={`h-full w-full overflow-hidden bg-neutral-200 dark:bg-neutral-950`}>
+	<div
+		class={`h-full w-full overflow-hidden ${$Frame.cur === -1 ? 'bg-neutral-200 dark:bg-neutral-950' : 'bg-neutral-300 dark:bg-neutral-900/70'} `}
+	>
 		<div
 			class="relative min-h-full min-w-full"
 			style={`
@@ -183,6 +250,13 @@
 			{#each $ActiveBlocks as block, i}
 				<Block {block} {i} />
 			{/each}
+			{#if $ActiveBlocks.length === 0 && !load}
+				<div
+					class="flex h-[100svh] w-full animate-pulse items-center justify-center text-lg text-white"
+				>
+					FROM.PUB
+				</div>
+			{/if}
 		</div>
 	</div>
 </div>

@@ -55,11 +55,19 @@
 							node.id,
 							'page',
 							blockId,
-							$Blocks.filter((x) => x.id === blockId)[0],
+							$Blocks.find((x) => x.id === blockId),
 							newIndex || 0
 						)
 					];
-					$Log = [...$Log, `${node.id}.md`];
+					$Log = [...$Log, `${new Date().toLocaleTimeString()}~{node.id}.md`];
+				} else {
+					const block = $Blocks.find((x) => x.title === `${node.id}.md`);
+					$Frame = {
+						...$Frame,
+						x: -block.x + $Frame.width / 2 - block.width / 2,
+						y: -block.y + $Frame.height / 2 - block.height / 2,
+						scale: 1
+					};
 				}
 			});
 		// .linkAutoColorBy((d) => gData.nodes[d.source].group);
