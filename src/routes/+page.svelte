@@ -107,9 +107,14 @@
 			previousTouch = touch;
 		};
 
-		getInitialBlock = () => {
-			window.getBlock(slug, -1);
-			load = true;
+		getInitialBlock = async () => {
+			setTimeout(async () => {
+				const id = await window.getBlock(slug, -1);
+				requestAnimationFrame(() => {
+					$Frame.cur = $Blocks.findIndex((x) => x.id === id);
+				});
+				load = false;
+			}, 800);
 		};
 
 		// if (localStorage.getItem('blocks')) $Blocks = JSON.parse(localStorage.getItem('blocks') || '');
@@ -117,13 +122,8 @@
 	});
 
 	$: if ($Blocks.length === 0) {
-		load = false;
-		setTimeout(() => {
-			$Frame.x = 0;
-			$Frame.y = 0;
-			$Frame.scale = 1;
-			getInitialBlock();
-		}, 800);
+		getInitialBlock();
+		load = true;
 	}
 </script>
 
@@ -149,109 +149,104 @@
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-	class={`fixed bottom-0 left-0 z-50 m-3 flex w-screen justify-center gap-2 ${$Frame.dark ? 'dark' : ''}`}
+	class={`fixed bottom-0 left-0 z-50 m-3 flex w-screen flex-col items-center justify-center gap-2 ${$Frame.dark ? 'dark' : ''}`}
 >
-	<div
-		class={`flex min-w-60 items-center justify-between gap-8 rounded-full border p-1 text-base text-neutral-600 shadow-sm md:min-w-72 md:text-sm md:shadow-md lg:text-base dark:border-neutral-800 dark:text-white
+	<div class="flex w-min min-w-72 flex-col items-end gap-1 lg:gap-2">
+		{#if menu}
+			<div
+				class={`flex w-min items-center justify-between gap-2 rounded-full border p-1 text-base text-neutral-600 shadow-sm md:text-sm lg:text-base dark:border-neutral-800 dark:text-white
+				${$Frame.dark ? 'glass-dark' : 'glass'}
+			`}
+			>
+				{#each [{ title: 'Add Graph', type: 'graph', header: 'Garden', icon: '🏕️' }, { title: 'Add Log', type: 'log', header: 'Log', icon: '⏳' }, { title: 'Add Current', type: 'current', header: 'Current', icon: '📖' }] as btn, i}
+					<button
+						title="Add Graph"
+						class="dot"
+						on:click={async () => {
+							if (!$Blocks.find((x) => x.type === btn.type)) {
+								$Frame.currentIndex += 1;
+								$Blocks = [
+									...$Blocks,
+									await generateBlock(btn.title, btn.type, -1, undefined, $Frame.currentIndex || 0)
+								];
+								requestAnimationFrame(() => {
+									$Frame.cur = $Frame.currentIndex;
+								});
+							} else {
+								const { x, y, height, width } = $Blocks.find((x) => x.type === btn.type);
+								$Frame = {
+									...$Frame,
+									x: -Number(x) + $Frame.width / 2 - width / 2,
+									y: -Number(y) + $Frame.height / 2 - height / 2,
+									scale: 1
+								};
+								$Frame.cur = $Frame.currentIndex;
+							}
+						}}>{btn.icon}</button
+					>
+				{/each}
+			</div>
+			<!-- <button
+		title="SAVE"
+		class="dot"
+		on:click={() => {
+			localStorage.setItem('blocks', JSON.stringify($Blocks));
+			localStorage.setItem('frame', JSON.stringify($Frame));
+		}}>S</button
+		> -->
+		{/if}
+		<div
+			class={`flex w-full items-center justify-between gap-8 rounded-full border p-1 text-base text-neutral-600 shadow-sm md:text-sm md:shadow-md lg:text-base dark:border-neutral-800 dark:text-white
 			${$Frame.dark ? 'glass-dark' : 'glass'}
 		`}
-	>
-		<!-- svelte-ignore a11y-no-static-element-interactions -->
-		<div class="flex items-center gap-1">
-			<button
-				title="Appearance"
-				class="dot"
-				on:click={() => {
-					$Frame.dark = !$Frame.dark;
-				}}>{$Frame.dark ? '☀️' : '🌙'}</button
-			>
-			<!-- <div>{$Frame.scale.toFixed(2)}</div> -->
-			<button
-				class="rounded-sm px-1 py-[0.15rem] text-sm text-neutral-500 hover:bg-neutral-200/80 md:text-[13px] dark:text-neutral-400 dark:hover:bg-neutral-800/50"
-				on:click={() => {
-					$Frame.x = 0;
-					$Frame.y = 0;
-					$Frame.scale = 1;
-				}}
-			>
-				[{-$Frame.x.toFixed(0)}, {-$Frame.y.toFixed(0)}]
-			</button>
-		</div>
-		<div class="flex gap-2">
-			<button
-				title="Add Root Node"
-				class="dot"
-				on:click={async () => {
-					const id = await window.getBlock('!@$', -1);
-					requestAnimationFrame(() => {
-						$Frame.cur = $Blocks.findIndex((x) => x.id === id) || -1;
-					});
-				}}>🌱</button
-			>
-			<button
-				title="Open Discovery Menu"
-				class="dot"
-				on:click={() => {
-					menu = !menu;
-				}}>🔎</button
-			>
-			<button
-				title="Open Setting"
-				class="dot"
-				on:click={() => {
-					menu = false;
-				}}>⚙️</button
-			>
-			{#if menu}
-				<div
-					class={`fixed flex w-min items-center justify-between gap-2 rounded-full border p-1 text-base text-neutral-600 shadow-sm md:text-sm md:shadow-md lg:text-base dark:border-neutral-800 dark:text-white
-								${$Frame.dark ? 'glass-dark' : 'glass'}
-							`}
-					style="top: -125%; right: 0px;"
+		>
+			<!-- svelte-ignore a11y-no-static-element-interactions -->
+			<div class="flex items-center gap-1">
+				<button
+					title="Appearance"
+					class="dot"
+					on:click={() => {
+						$Frame.dark = !$Frame.dark;
+					}}>{$Frame.dark ? '☀️' : '🌙'}</button
 				>
-					{#each [{ title: 'Add Graph', type: 'graph', header: 'Garden', icon: '🏕️' }, { title: 'Add Log', type: 'log', header: 'Log', icon: '⏳' }, { title: 'Add Current', type: 'current', header: 'Current', icon: '📖' }] as btn, i}
-						<button
-							title="Add Graph"
-							class="dot"
-							on:click={async () => {
-								if (!$Blocks.find((x) => x.type === btn.type)) {
-									$Frame.currentIndex += 1;
-									$Blocks = [
-										...$Blocks,
-										await generateBlock(
-											btn.title,
-											btn.type,
-											-1,
-											undefined,
-											$Frame.currentIndex || 0
-										)
-									];
-									requestAnimationFrame(() => {
-										$Frame.cur = $Frame.currentIndex;
-									});
-								} else {
-									const { x, y, height, width } = $Blocks.find((x) => x.type === btn.type);
-									$Frame = {
-										...$Frame,
-										x: -Number(x) + $Frame.width / 2 - width / 2,
-										y: -Number(y) + $Frame.height / 2 - height / 2,
-										scale: 1
-									};
-									$Frame.cur = $Frame.currentIndex;
-								}
-							}}>{btn.icon}</button
-						>
-					{/each}
-				</div>
-				<!-- <button
-				title="SAVE"
-				class="dot"
-				on:click={() => {
-					localStorage.setItem('blocks', JSON.stringify($Blocks));
-					localStorage.setItem('frame', JSON.stringify($Frame));
-				}}>S</button
-			> -->
-			{/if}
+				<!-- <div>{$Frame.scale.toFixed(2)}</div> -->
+				<button
+					class="rounded-sm px-1 py-[0.15rem] text-sm text-neutral-500 hover:bg-neutral-200/80 md:text-[13px] dark:text-neutral-400 dark:hover:bg-neutral-800/50"
+					on:click={() => {
+						$Frame.x = 0;
+						$Frame.y = 0;
+						$Frame.scale = 1;
+					}}
+				>
+					[{-$Frame.x.toFixed(0)}, {-$Frame.y.toFixed(0)}]
+				</button>
+			</div>
+			<div class="flex gap-2">
+				<button
+					title="Add Root Node"
+					class="dot"
+					on:click={async () => {
+						const id = await window.getBlock('!@$', -1);
+						requestAnimationFrame(() => {
+							$Frame.cur = $Blocks.findIndex((x) => x.id === id);
+						});
+					}}>🌱</button
+				>
+				<button
+					title="Open Discovery Menu"
+					class="dot"
+					on:click={() => {
+						menu = !menu;
+					}}>🔎</button
+				>
+				<button
+					title="Open Setting"
+					class="dot"
+					on:click={() => {
+						menu = false;
+					}}>⚙️</button
+				>
+			</div>
 		</div>
 	</div>
 </div>
