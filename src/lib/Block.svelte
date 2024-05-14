@@ -122,10 +122,15 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
 	bind:this={el}
-	class={`${($Frame.drag || $Frame.resize) && $Frame.cur === i ? 'noselect border-blue-300 dark:border-amber-700' : ''}
-			${!$Frame.drag && !$Frame.resize && $Frame.cur === i ? 'border-3 border-blue-600 dark:border-amber-400' : ''}
+	class={`${
+		$Frame.cur === i
+			? $Frame.drag || $Frame.resize
+				? 'noselect border-blue-300 dark:border-amber-700'
+				: ' border-blue-600 dark:border-amber-400'
+			: 'border-neutral-200 dark:border-neutral-800'
+	}
 			${$Frame.dark ? 'glass-dark' : 'glass'}
-			absolute aspect-square flex-col justify-between overflow-hidden rounded-md border-[1.5px] border-neutral-200 text-xs text-white shadow-sm dark:border-neutral-800
+			absolute aspect-square flex-col justify-between overflow-hidden rounded-md border-[1.5px] text-xs text-white shadow-sm
 	`}
 	on:click={() => {
 		if (!touch) {
@@ -133,11 +138,6 @@
 			if ($Blocks[blockId].type === 'graph') {
 				$Frame.scale = 1;
 			}
-		}
-	}}
-	on:touchstart={() => {
-		if (!$Frame.resize && $Frame.cur === i) {
-			$Frame.drag = true;
 		}
 	}}
 	style={`
@@ -150,7 +150,7 @@
     `}
 >
 	<div
-		class={`h-full overflow-x-hidden ${$Frame.cur === i ? 'overflow-y-scroll' : 'noselect overflow-y-hidden'}`}
+		class={`h-full overflow-x-hidden ${$Frame.cur === i && !$Frame.drag && !$Frame.resize ? 'overflow-y-scroll' : 'noselect overflow-y-hidden'}`}
 	>
 		{#if $Blocks[blockId].type === 'graph'}
 			<div class="noselect">
@@ -162,7 +162,7 @@
 			</div>
 		{:else}
 			<div
-				class={`prose px-3 pb-4 pt-10 md:prose-sm dark:prose-invert ${$Frame.cur === i ? '' : 'opacity-50'}`}
+				class={`prose prose-sm px-3 pb-4 pt-10 dark:prose-invert ${$Frame.cur === i ? '' : 'opacity-50'}`}
 			>
 				{@html $Blocks[blockId].text}
 			</div>
@@ -180,6 +180,14 @@
 				$Frame.cur = i;
 				$Frame.drag = true;
 			}
+		}}
+		on:touchstart={() => {
+			if (!$Frame.resize && $Frame.cur === i) {
+				$Frame.drag = true;
+			}
+		}}
+		on:click={() => {
+			if ($Frame.cur !== i) $Frame.cur = i;
 		}}
 	>
 		<div class="text-neutral-500">
@@ -222,7 +230,7 @@
 			$Frame.resize = true;
 			$Frame.cur = i;
 		}}
-		class="fixed bottom-0 right-0 aspect-square w-3 rounded-br-md border-b-4 border-r-4 border-b-neutral-300 border-r-neutral-300 hover:cursor-se-resize md:border-b-2 md:border-r-2 dark:border-b-neutral-500 dark:border-r-neutral-500"
+		class="fixed bottom-0 right-0 aspect-square w-[14px] rounded-br-md border-b-[3px] border-r-[3px] border-b-neutral-400 border-r-neutral-400 hover:cursor-se-resize md:w-3 md:border-b-2 md:border-r-2 dark:border-b-neutral-500 dark:border-r-neutral-500"
 	></button>
 	<!-- {Math.floor(((Math.atan2(y + 24 - cor[1], x + 24 - cor[0]) * 180) / Math.PI) * 1000) / 1000} -->
 </div>

@@ -254,6 +254,16 @@
 		</div>
 	</div>
 </div>
+
+<!-- use:pinch
+	on:pinch={(e) => {
+		$Frame.cur = -1;
+		$Frame.scale = prevScale * e.detail.scale;
+	}}
+	on:pinchup={(e) => {
+		prevScale = $Frame.scale;
+	}} -->
+
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
 	class={`h-[100svh] w-screen ${$Frame.drag ? 'mousedown' : ''}  ${$Frame.dark ? 'dark' : ''}`}
@@ -266,7 +276,7 @@
 	}}
 >
 	<div
-		class={`h-full w-full overflow-hidden ${$Frame.cur === -1 ? 'bg-neutral-100 dark:bg-neutral-900' : 'bg-neutral-200 dark:bg-neutral-900/70'} `}
+		class={`h-full w-full overflow-hidden ${$Frame.cur === -1 ? 'bg-neutral-100 dark:bg-neutral-800/80 md:dark:bg-neutral-900' : 'bg-neutral-200/95 md:bg-neutral-200 dark:bg-neutral-900/70'} `}
 	>
 		<div
 			class="relative min-h-full min-w-full"
@@ -287,14 +297,6 @@
 		</div>
 	</div>
 </div>
-
-<!-- use:pinch on:pinch={(e) => {
-	$Frame.cur = -1;
-	$Frame.scale = prevScale * e.detail.scale;
-}}
-on:pinchup={(e) => {
-	prevScale = $Frame.scale;
-}} -->
 
 <style>
 	.mousedown {
