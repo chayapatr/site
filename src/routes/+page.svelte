@@ -294,14 +294,7 @@
 
 {#if $ActiveBlocks.length === 0}
 	<div class="absolute left-0 top-0 flex h-[100svh] w-full items-center justify-center text-lg">
-		<div class="flex items-end justify-between gap-3">
-			<img src="/imgs/pub.svg" alt="" class="h-6 w-full" />
-			<div
-				class={`animate-pulse leading-none ${$Frame.dark ? 'text-neutral-100' : 'text-neutral-900'}`}
-			>
-				FROM.PUB
-			</div>
-		</div>
+		<img src="/imgs/pub.svg" alt="" class="h-12 w-full animate-pulse" />
 	</div>
 {/if}
 
