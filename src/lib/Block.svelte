@@ -153,7 +153,7 @@
 		class={`h-full overflow-x-hidden ${$Frame.cur === i && !$Frame.drag && !$Frame.resize ? 'overflow-y-scroll' : 'noselect overflow-y-hidden'}`}
 	>
 		{#if $Blocks[blockId].type === 'graph'}
-			<div class="noselect">
+			<div class={`noselect ${$Frame.cur === i ? '' : 'opacity-50'}`}>
 				<Graph
 					height={$Blocks[blockId].height}
 					width={$Blocks[blockId].width}

@@ -17,6 +17,7 @@
 
 	let getInitialBlock = () => {};
 	let load = false;
+	let menu = false;
 
 	const url = $page.url;
 
@@ -52,6 +53,7 @@
 					];
 				}
 				$Log = [...$Log, `${new Date().toLocaleTimeString()}~${slug}.md`];
+				return newIndex;
 			},
 			jump: (x: string, y: string, width: string, height: string, id: string) => {
 				$Frame = {
@@ -61,7 +63,7 @@
 					scale: 1
 				};
 				requestAnimationFrame(() => {
-					$Frame.cur = Number(id);
+					$Frame.cur = $Blocks.findIndex((x) => x.id === Number(id)); // Number();
 				});
 			}
 		});
@@ -107,14 +109,19 @@
 
 		getInitialBlock = () => {
 			window.getBlock(slug, -1);
+			load = true;
 		};
 
 		// if (localStorage.getItem('blocks')) $Blocks = JSON.parse(localStorage.getItem('blocks') || '');
 		// if (localStorage.getItem('frame')) $Frame = JSON.parse(localStorage.getItem('frame') || '');
 	});
 
-	$: if ($Blocks.length === 0) getInitialBlock();
-	load = true;
+	$: if ($Blocks.length === 0) {
+		load = false;
+		setTimeout(() => {
+			getInitialBlock();
+		}, 800);
+	}
 </script>
 
 <Head />
@@ -139,7 +146,7 @@
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-	class={`fixed bottom-0 left-0 z-50 m-3 flex w-screen justify-center ${$Frame.dark ? 'dark' : ''}`}
+	class={`fixed bottom-0 left-0 z-50 m-3 flex w-screen justify-center gap-2 ${$Frame.dark ? 'dark' : ''}`}
 >
 	<div
 		class={`flex min-w-60 items-center justify-between gap-8 rounded-full border p-1 text-base text-neutral-600 shadow-sm md:min-w-72 md:text-sm md:shadow-md lg:text-base dark:border-neutral-800 dark:text-white
@@ -169,81 +176,71 @@
 		</div>
 		<div class="flex gap-2">
 			<button
-				title="Add Graph"
+				title="Add Root Node"
 				class="dot"
 				on:click={async () => {
-					if (!$Blocks.find((x) => x.type === 'graph')) {
-						$Frame.currentIndex += 1;
-						$Blocks = [
-							...$Blocks,
-							await generateBlock('Garden', 'graph', -1, undefined, $Frame.currentIndex || 0)
-						];
-						requestAnimationFrame(() => {
-							$Frame.cur = $Frame.currentIndex;
-						});
-					} else {
-						const { x, y, height, width } = $Blocks.find((x) => x.type === 'graph');
-						$Frame = {
-							...$Frame,
-							x: -Number(x) + $Frame.width / 2 - width / 2,
-							y: -Number(y) + $Frame.height / 2 - height / 2,
-							scale: 1
-						};
-						$Frame.cur = $Frame.currentIndex;
-					}
-				}}>🏕️</button
+					const id = await window.getBlock('!@$', -1);
+					requestAnimationFrame(() => {
+						$Frame.cur = $Blocks.findIndex((x) => x.id === id) || -1;
+					});
+				}}>🌱</button
 			>
 			<button
-				title="Add Log"
+				title="Open Discovery Menu"
 				class="dot"
-				on:click={async () => {
-					if (!$Blocks.find((x) => x.type === 'log')) {
-						$Frame.currentIndex += 1;
-						$Blocks = [
-							...$Blocks,
-							await generateBlock('Log', 'log', -1, undefined, $Frame.currentIndex || 0)
-						];
-						requestAnimationFrame(() => {
-							$Frame.cur = $Frame.currentIndex;
-						});
-					} else {
-						const { x, y, height, width } = $Blocks.find((x) => x.type === 'log');
-						$Frame = {
-							...$Frame,
-							x: -Number(x) + $Frame.width / 2 - width / 2,
-							y: -Number(y) + $Frame.height / 2 - height / 2,
-							scale: 1
-						};
-						$Frame.cur = $Frame.currentIndex;
-					}
-				}}>⏳</button
+				on:click={() => {
+					menu = !menu;
+				}}>🔎</button
 			>
 			<button
-				title="Add Current"
+				title="Open Setting"
 				class="dot"
-				on:click={async () => {
-					if (!$Blocks.find((x) => x.type === 'current')) {
-						$Frame.currentIndex += 1;
-						$Blocks = [
-							...$Blocks,
-							await generateBlock('Current', 'current', -1, undefined, $Frame.currentIndex || 0)
-						];
-						requestAnimationFrame(() => {
-							$Frame.cur = $Frame.currentIndex;
-						});
-					} else {
-						const { x, y, height, width } = $Blocks.find((x) => x.type === 'current');
-						$Frame = {
-							...$Frame,
-							x: -Number(x) + $Frame.width / 2 - width / 2,
-							y: -Number(y) + $Frame.height / 2 - height / 2,
-							scale: 1
-						};
-						$Frame.cur = $Frame.currentIndex;
-					}
-				}}>📖</button
+				on:click={() => {
+					menu = false;
+				}}>⚙️</button
 			>
-			<!-- <button
+			{#if menu}
+				<div
+					class={`fixed flex w-min items-center justify-between gap-2 rounded-full border p-1 text-base text-neutral-600 shadow-sm md:text-sm md:shadow-md lg:text-base dark:border-neutral-800 dark:text-white
+								${$Frame.dark ? 'glass-dark' : 'glass'}
+							`}
+					style="top: -125%; right: 0px;"
+				>
+					{#each [{ title: 'Add Graph', type: 'graph', header: 'Garden', icon: '🏕️' }, { title: 'Add Log', type: 'log', header: 'Log', icon: '⏳' }, { title: 'Add Current', type: 'current', header: 'Current', icon: '📖' }] as btn, i}
+						<button
+							title="Add Graph"
+							class="dot"
+							on:click={async () => {
+								if (!$Blocks.find((x) => x.type === btn.type)) {
+									$Frame.currentIndex += 1;
+									$Blocks = [
+										...$Blocks,
+										await generateBlock(
+											btn.title,
+											btn.type,
+											-1,
+											undefined,
+											$Frame.currentIndex || 0
+										)
+									];
+									requestAnimationFrame(() => {
+										$Frame.cur = $Frame.currentIndex;
+									});
+								} else {
+									const { x, y, height, width } = $Blocks.find((x) => x.type === btn.type);
+									$Frame = {
+										...$Frame,
+										x: -Number(x) + $Frame.width / 2 - width / 2,
+										y: -Number(y) + $Frame.height / 2 - height / 2,
+										scale: 1
+									};
+									$Frame.cur = $Frame.currentIndex;
+								}
+							}}>{btn.icon}</button
+						>
+					{/each}
+				</div>
+				<!-- <button
 				title="SAVE"
 				class="dot"
 				on:click={() => {
@@ -251,6 +248,7 @@
 					localStorage.setItem('frame', JSON.stringify($Frame));
 				}}>S</button
 			> -->
+			{/if}
 		</div>
 	</div>
 </div>
@@ -287,11 +285,19 @@
 			{#each $ActiveBlocks as block, i}
 				<Block {block} {i} />
 			{/each}
-			{#if $ActiveBlocks.length === 0 && !load}
+			{#if $ActiveBlocks.length === 0}
 				<div
-					class="flex h-[100svh] w-full animate-pulse items-center justify-center text-lg text-white"
+					class="flex h-[100svh] w-full items-center justify-center text-lg dark:text-neutral-100"
 				>
-					FROM.PUB
+					<div class="flex items-end justify-between gap-3">
+						<img src="/imgs/pub.svg" alt="" class="h-6 w-full" />
+						<div
+							class="animate-pulse
+						leading-none"
+						>
+							FROM.PUB
+						</div>
+					</div>
 				</div>
 			{/if}
 		</div>
