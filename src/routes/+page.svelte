@@ -17,7 +17,8 @@
 
 	let getInitialBlock = () => {};
 	let load = false;
-	let menu = false;
+	let menu = '';
+	let success = -1;
 
 	const url = $page.url;
 
@@ -158,42 +159,84 @@
 				${$Frame.dark ? 'glass-dark' : 'glass'}
 			`}
 			>
-				{#each [{ title: 'Add Graph', type: 'graph', header: 'Garden', icon: '🏕️' }, { title: 'Add Log', type: 'log', header: 'Log', icon: '⏳' }, { title: 'Add Current', type: 'current', header: 'Current', icon: '📖' }] as btn, i}
-					<button
-						title="Add Graph"
-						class="dot"
-						on:click={async () => {
-							if (!$Blocks.find((x) => x.type === btn.type)) {
-								$Frame.currentIndex += 1;
-								$Blocks = [
-									...$Blocks,
-									await generateBlock(btn.title, btn.type, -1, undefined, $Frame.currentIndex || 0)
-								];
-								requestAnimationFrame(() => {
+				{#if menu === 'discovery'}
+					{#each [{ title: 'Add Graph', type: 'graph', header: 'Garden', icon: '🏕️' }, { title: 'Add Log', type: 'log', header: 'Log', icon: '⏳' }, { title: 'Add Current', type: 'current', header: 'Current', icon: '📖' }] as btn, i}
+						<button
+							title={btn.title}
+							class="dot"
+							on:click={async () => {
+								if (!$Blocks.find((x) => x.type === btn.type)) {
+									$Frame.currentIndex += 1;
+									$Blocks = [
+										...$Blocks,
+										await generateBlock(
+											btn.title,
+											btn.type,
+											-1,
+											undefined,
+											$Frame.currentIndex || 0
+										)
+									];
+									requestAnimationFrame(() => {
+										$Frame.cur = $Frame.currentIndex;
+									});
+								} else {
+									const { x, y, height, width } = $Blocks.find((x) => x.type === btn.type);
+									$Frame = {
+										...$Frame,
+										x: -Number(x) + $Frame.width / 2 - width / 2,
+										y: -Number(y) + $Frame.height / 2 - height / 2,
+										scale: 1
+									};
 									$Frame.cur = $Frame.currentIndex;
-								});
-							} else {
-								const { x, y, height, width } = $Blocks.find((x) => x.type === btn.type);
-								$Frame = {
-									...$Frame,
-									x: -Number(x) + $Frame.width / 2 - width / 2,
-									y: -Number(y) + $Frame.height / 2 - height / 2,
-									scale: 1
+								}
+							}}>{btn.icon}</button
+						>
+					{/each}
+				{:else if menu === 'save'}
+					<button
+						title="Save"
+						class={success === 0 ? 'dot-success' : 'dot'}
+						on:click={async () => {
+							const formatPath = (path) => {
+								const { nodes, links } = $Path;
+								return {
+									nodes: nodes.map((x) => ({ id: x.id, open: x.open ?? false })),
+									links: links.map((x) => ({
+										source: x.source.id,
+										target: x.target.id
+									}))
 								};
-								$Frame.cur = $Frame.currentIndex;
-							}
-						}}>{btn.icon}</button
+							};
+							localStorage.setItem('blocks', JSON.stringify($Blocks));
+							localStorage.setItem('frame', JSON.stringify($Frame));
+							localStorage.setItem('path', JSON.stringify(formatPath($Path)));
+							if (
+								localStorage.hasOwnProperty('blocks') &&
+								localStorage.hasOwnProperty('frame') &&
+								localStorage.hasOwnProperty('path')
+							)
+								success = 0;
+							setTimeout(() => {
+								success = -1;
+							}, 500);
+						}}>{success === 0 ? '🖖' : '🧠'}</button
 					>
-				{/each}
+					<button
+						title="Load"
+						class={success === 1 ? 'dot-success' : 'dot'}
+						on:click={async () => {
+							$Blocks = JSON.parse(localStorage.getItem('blocks') || '');
+							$Frame = JSON.parse(localStorage.getItem('frame') || '');
+							$Path = JSON.parse(localStorage.getItem('path') || '');
+							success = 1;
+							setTimeout(() => {
+								success = -1;
+							}, 500);
+						}}>{success === 1 ? '✌️' : '🤔'}</button
+					>
+				{/if}
 			</div>
-			<!-- <button
-		title="SAVE"
-		class="dot"
-		on:click={() => {
-			localStorage.setItem('blocks', JSON.stringify($Blocks));
-			localStorage.setItem('frame', JSON.stringify($Frame));
-		}}>S</button
-		> -->
 		{/if}
 		<div
 			class={`flex w-full items-center justify-between gap-8 rounded-full border p-1 text-base text-neutral-600 shadow-sm md:text-sm md:shadow-md lg:text-base dark:border-neutral-800 dark:text-white
@@ -236,14 +279,16 @@
 					title="Open Discovery Menu"
 					class="dot"
 					on:click={() => {
-						menu = !menu;
+						if (menu === 'discovery') menu = '';
+						else menu = 'discovery';
 					}}>🔎</button
 				>
 				<button
 					title="Open Setting"
 					class="dot"
 					on:click={() => {
-						menu = false;
+						if (menu === 'save') menu = '';
+						else menu = 'save';
 					}}>⚙️</button
 				>
 			</div>
@@ -299,5 +344,8 @@
 	}
 	.dot {
 		@apply flex aspect-square w-8 items-center justify-center rounded-full border bg-white text-white md:w-7 dark:border-neutral-700 dark:bg-neutral-800;
+	}
+	.dot-success {
+		@apply flex aspect-square w-8 items-center justify-center rounded-full border  bg-emerald-400/50 text-white md:w-7 dark:border-neutral-700;
 	}
 </style>

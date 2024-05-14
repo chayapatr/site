@@ -60,6 +60,9 @@
 						)
 					];
 					$Log = [...$Log, `${new Date().toLocaleTimeString()}~{node.id}.md`];
+					requestAnimationFrame(() => {
+						$Frame.cur = $Blocks.findIndex((x) => x.title === `${node.id}.md`);
+					});
 				} else {
 					const block = $Blocks.find((x) => x.title === `${node.id}.md`);
 					$Frame = {
@@ -68,6 +71,7 @@
 						y: -block.y + $Frame.height / 2 - block.height / 2,
 						scale: 1
 					};
+					$Frame.cur = $Blocks.findIndex((x) => x.title === `${node.id}.md`);
 				}
 			});
 		// .linkAutoColorBy((d) => gData.nodes[d.source].group);
