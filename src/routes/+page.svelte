@@ -8,12 +8,14 @@
 	import { pinch } from 'svelte-gestures';
 	import { page } from '$app/stores';
 
+	import type { BlockType } from '$lib';
+
 	let move = (_: MouseEvent) => {};
 	let touchMove = (_: TouchEvent) => {};
 
-	let prevScale = 1;
+	// let prevScale = 1;
 	let changeX, changeY;
-	let previousTouch: Touch;
+	let previousTouch: Touch | undefined;
 
 	let getInitialBlock = () => {};
 	let load = false;
@@ -126,6 +128,18 @@
 		getInitialBlock();
 		load = true;
 	}
+
+	const strToBlock = (str: string): BlockType => str as BlockType;
+	const formatPath = (path: { nodes: any; links: any }) => {
+		const { nodes, links } = path;
+		return {
+			nodes: nodes.map((x: { id: any; open: any }) => ({ id: x.id, open: x.open ?? false })),
+			links: links.map((x: { source: { id: any }; target: { id: any } }) => ({
+				source: x.source.id,
+				target: x.target.id
+			}))
+		};
+	};
 </script>
 
 <Head />
@@ -171,7 +185,7 @@
 										...$Blocks,
 										await generateBlock(
 											btn.title,
-											btn.type,
+											strToBlock(btn.type),
 											-1,
 											undefined,
 											$Frame.currentIndex || 0
@@ -181,7 +195,12 @@
 										$Frame.cur = $Frame.currentIndex;
 									});
 								} else {
-									const { x, y, height, width } = $Blocks.find((x) => x.type === btn.type);
+									const { x, y, height, width } = $Blocks.find((x) => x.type === btn.type) ?? {
+										x: 0,
+										y: 0,
+										height: 0,
+										width: 0
+									};
 									$Frame = {
 										...$Frame,
 										x: -Number(x) + $Frame.width / 2 - width / 2,
@@ -198,16 +217,6 @@
 						title="Save"
 						class={success === 0 ? 'dot-success' : 'dot'}
 						on:click={async () => {
-							const formatPath = (path) => {
-								const { nodes, links } = $Path;
-								return {
-									nodes: nodes.map((x) => ({ id: x.id, open: x.open ?? false })),
-									links: links.map((x) => ({
-										source: x.source.id,
-										target: x.target.id
-									}))
-								};
-							};
 							localStorage.setItem('blocks', JSON.stringify($Blocks));
 							localStorage.setItem('frame', JSON.stringify($Frame));
 							localStorage.setItem('path', JSON.stringify(formatPath($Path)));

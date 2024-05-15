@@ -1,6 +1,5 @@
 import { writable, derived } from 'svelte/store';
-
-type BlockType = "page" | "log" | "graph" | "current"
+import type { BlockType } from '$lib';
 
 export const Frame = writable({
 	cur: 0,

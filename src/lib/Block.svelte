@@ -14,7 +14,7 @@
 
 	let el: HTMLElement;
 
-	let previousTouch: Touch;
+	let previousTouch: Touch | undefined;
 
 	let changeX = 0,
 		changeY = 0;
@@ -23,7 +23,7 @@
 		return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
 	};
 
-	let chToPixels = () => {};
+	let chToPixels = (ch: number, el: HTMLElement): number => 0;
 	let chSize: number;
 
 	$: parentId = $Blocks.findIndex((x) => x.id === block.parentIndex);
