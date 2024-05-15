@@ -7,7 +7,6 @@
 
 	const formatPath = (path: { nodes: any; links: any }) => {
 		const { nodes, links } = path;
-		console.log(nodes, links);
 		return {
 			nodes: nodes.map((x: { id: any; open: any }) => ({ id: x.id, open: x.open ?? false })),
 			links: links.map((x: { source: { id: any }; target: { id: any } }) => {
@@ -26,9 +25,7 @@
 	};
 
 	onMount(() => {
-		if (localStorage.hasOwnProperty('blocks')) {
-			boards = JSON.parse(localStorage.getItem('boards') || '[]');
-		}
+		boards = JSON.parse(localStorage.getItem('boards') || '[]');
 	});
 
 	let boards: any[] = [];
