@@ -3,7 +3,7 @@
 	import { Frame, Blocks } from './store';
 	import Graph from './Graph.svelte';
 	import Setting from './Setting.svelte';
-	import { pinch, scroll, swipe } from 'svelte-gestures';
+	import { pinch, swipe } from 'svelte-gestures';
 
 	export let i: number;
 	export let block: any;
@@ -152,9 +152,6 @@
     `}
 >
 	<div
-		use:pinch
-		on:pinch={() => {}}
-		use:swipe={{ timeframe: 300, minSwipeDistance: 100, touchAction: 'pan-y' }}
 		class={`h-full overflow-hidden ${$Frame.cur === i && !$Frame.drag && !$Frame.resize ? '' : 'noselect'}`}
 	>
 		{#if $Blocks[blockId].type === 'graph'}
@@ -174,6 +171,13 @@
 			</div>
 		{:else}
 			<div
+				use:pinch
+				use:swipe={{
+					timeframe: 300,
+					minSwipeDistance: 100,
+					touchAction: 'pan-y'
+				}}
+				on:pinch={() => {}}
 				class={`prose prose-sm h-full overflow-y-scroll px-3 pb-4 pt-10 dark:prose-invert ${$Frame.cur === i ? 'overflow-y-scroll' : 'opacity-50'}`}
 			>
 				{@html $Blocks[blockId].text}

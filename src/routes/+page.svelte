@@ -73,8 +73,12 @@
 		window.addEventListener(
 			'wheel',
 			function (e) {
-				if ($Frame.cur === -1) {
+				const { ctrlKey } = e;
+				if (ctrlKey && $Frame.cur !== -1) {
 					e.preventDefault();
+					return;
+				}
+				if ($Frame.cur === -1) {
 					let d = $Frame.scale - 0.0015 * e.deltaY;
 					const min = 0.5;
 					const max = 1.5;
