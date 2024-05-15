@@ -46,7 +46,7 @@
 				}}>Clear</button
 			>
 		</div>
-		<div class="grid w-full grid-cols-2 gap-2">
+		<div class="grid w-full gap-2 md:grid-cols-2">
 			{#each boards as board, i}
 				<button
 					on:click={async () => {
@@ -61,10 +61,10 @@
 					><div
 						class="glass w-full rounded-md border border-neutral-300 bg-neutral-100 px-2 py-[0.15rem] text-left hover:bg-neutral-200/50 dark:border-neutral-700 dark:bg-neutral-800/80 dark:hover:bg-neutral-800/40"
 					>
-						<div class="flex w-full justify-between">
+						<div class="flex w-full justify-between gap-2">
 							<!-- svelte-ignore a11y-no-static-element-interactions -->
 							<!-- svelte-ignore a11y-click-events-have-key-events -->
-							<div class="text-sm">{board?.name}</div>
+							<div class="overflow-hidden pr-2 text-sm">{board?.name}</div>
 							<button
 								class="text-xs hover:text-red-600 dark:hover:text-red-500"
 								on:click={() => {
