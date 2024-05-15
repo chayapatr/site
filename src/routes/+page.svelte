@@ -251,6 +251,14 @@
 	on:touchstart={() => {
 		if ($Frame.cur === -1) $Frame.drag = true;
 	}}
+	use:pinch
+	on:pinch={(e) => {
+		$Frame.cur = -1;
+		$Frame.scale = prevScale * e.detail.scale;
+	}}
+	on:pinchup={(e) => {
+		prevScale = $Frame.scale;
+	}}
 >
 	<div
 		class={`h-full w-full overflow-hidden ${$Frame.cur === -1 ? 'bg-neutral-100 dark:bg-neutral-800/80 md:dark:bg-neutral-900' : 'bg-neutral-200/95 md:bg-neutral-200 dark:bg-neutral-900/70'} `}
