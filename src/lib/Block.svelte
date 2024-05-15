@@ -3,7 +3,8 @@
 	import { Frame, Blocks } from './store';
 	import Graph from './Graph.svelte';
 	import Setting from './Setting.svelte';
-	import { pinch } from 'svelte-gestures';
+	import { pinch, scroll, composedGesture } from 'svelte-gestures';
+	import type { GestureCallback, RegisterGestureType } from 'svelte-gestures';
 
 	export let i: number;
 	export let block: any;
@@ -174,6 +175,7 @@
 				class={`prose prose-sm px-3 pb-4 pt-10 dark:prose-invert ${$Frame.cur === i ? '' : 'opacity-50'}`}
 				use:pinch
 				on:pinch={() => {}}
+				use:scroll
 			>
 				{@html $Blocks[blockId].text}
 			</div>
