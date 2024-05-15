@@ -13,7 +13,7 @@
 	let move = (_: MouseEvent) => {};
 	let touchMove = (_: TouchEvent) => {};
 
-	// let prevScale = 1;
+	let prevScale = 1;
 	let changeX, changeY;
 	let previousTouch: Touch | undefined;
 
