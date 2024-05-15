@@ -177,6 +177,9 @@
 				class={`prose prose-sm h-full overflow-y-scroll px-3 pb-4 pt-10 dark:prose-invert ${$Frame.cur === i ? 'overflow-y-scroll' : 'opacity-50'}`}
 			>
 				{@html $Blocks[blockId].text}
+				{#if $Frame.cur !== i}
+					<div class="fixed left-0 top-0 h-full w-full"></div>
+				{/if}
 			</div>
 		{/if}
 	</div>
