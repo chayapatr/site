@@ -38,7 +38,7 @@
 				y: -Number(y) + $Frame.height / 2 - height / 2,
 				scale: 1
 			};
-			$Frame.cur = $Frame.currentIndex;
+			$Frame.cur = $Blocks.findIndex((x) => x.type === btn.type);
 		}
 	}}>{btn.icon}</button
 >
