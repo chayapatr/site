@@ -1,4 +1,5 @@
 import { micromark } from 'micromark';
+import { gfmTable, gfmTableHtml } from 'micromark-extension-gfm-table';
 import { get } from 'svelte/store';
 import { Frame } from './store';
 
@@ -16,13 +17,32 @@ export const getContent = async (slug: string, parent: number) => {
         return `<a href="${url}" target="_blank" class="external-link"`;
     }
 
+    const imgs = () => {
+        return `<img class="img"`
+    }
+
+    const iframes = () => {
+        return `<iframe class="iframe"`
+    }
+
+    const tags = (_: string, text: string) => {
+        return `<p class="tag">#${text}</p>`
+    }
+
     const styleParser = (text: string) => {
         return text
-        .replace(/<a href="\/([A-Za-z1-9\s-]*)(?:\.md)?"/g, internalLinks)
+        .replace(/<a href="\/?([A-Za-z1-9\s-]*)(?:\.md)?"/g, internalLinks)
         .replace(/<a href="((?:http||https):\/\/.[^"]*)"/g, externalLinks)
+        .replace(/<p>#([^"]*)<\/p>/g, tags)
+        .replace(/<img/g, imgs)
+        .replace(/<iframe/g, iframes)
     };
 
-    return styleParser(micromark(text));
+    return styleParser(micromark(text, {
+        allowDangerousHtml: true,
+        extensions: [gfmTable()],
+        htmlExtensions: [gfmTableHtml()]
+    }));
 };
 
 const maybeMobile = (width: number, height: number) => {

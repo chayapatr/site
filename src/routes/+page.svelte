@@ -174,7 +174,7 @@
 			`}
 			>
 				{#if menu === 'discovery'}
-					{#each [{ title: 'Add Graph', type: 'graph', header: 'Garden', icon: '🏕️' }, { title: 'Add Log', type: 'log', header: 'Log', icon: '⏳' }, { title: 'Add Current', type: 'current', header: 'Current', icon: '📖' }] as btn, i}
+					{#each [{ title: 'Add Graph', type: 'graph', header: 'Garden', icon: '🧭' }, { title: 'Add Log', type: 'log', header: 'Log', icon: '📖' }, { title: 'Add Current', type: 'current', header: 'Current', icon: '👀' }] as btn, i}
 						<button
 							title={btn.title}
 							class="dot"
