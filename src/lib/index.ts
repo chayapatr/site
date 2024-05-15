@@ -3,7 +3,7 @@ import { gfmTable, gfmTableHtml } from 'micromark-extension-gfm-table';
 import { get } from 'svelte/store';
 import { Frame } from './store';
 
-export type BlockType = "page" | "log" | "graph" | "current"
+export type BlockType = "page" | "log" | "graph" | "current" | "setting"
 export const getContent = async (slug: string, parent: number) => {
     const text = await fetch(`https://garden.from.pub/${slug}`).then((res) => {
         return res.text()
@@ -61,7 +61,7 @@ const scales = {
     large: 1.5
 }
 
-export const generateBlock = async (name: string, type: BlockType, parentIndex: number, parent: { id: number; title: string; type?: ("page" | "log" | "graph" | "current") | undefined; x: number; y: number; width: number; height: number; text?: string | undefined; parentIndex: number; } | undefined, index: number) => {
+export const generateBlock = async (name: string, type: BlockType, parentIndex: number, parent: { id: number; title: string; type?: BlockType; x: number; y: number; width: number; height: number; text?: string | undefined; parentIndex: number; } | undefined, index: number) => {
     let title: string = ""
     let text: string = ""
 
@@ -76,6 +76,8 @@ export const generateBlock = async (name: string, type: BlockType, parentIndex: 
             type = "graph"; break;
         case "current":
             title = "current"; break;
+        case "setting":
+            title = "setting"; break;
     }
 
     const frame = get(Frame)

@@ -8,7 +8,7 @@
 	import { pinch } from 'svelte-gestures';
 	import { page } from '$app/stores';
 
-	import type { BlockType } from '$lib';
+	import AddWindow from '$lib/AddWindow.svelte';
 
 	let move = (_: MouseEvent) => {};
 	let touchMove = (_: TouchEvent) => {};
@@ -20,7 +20,6 @@
 	let getInitialBlock = () => {};
 	let load = false;
 	let menu = '';
-	let success = -1;
 
 	const url = $page.url;
 
@@ -40,7 +39,7 @@
 						slug,
 						'page',
 						parentIndex,
-						$Blocks.filter((x) => x.id === parentIndex)[0],
+						$Blocks.find((x) => x.id === parentIndex),
 						newIndex || 0
 					)
 				];
@@ -128,18 +127,6 @@
 		getInitialBlock();
 		load = true;
 	}
-
-	const strToBlock = (str: string): BlockType => str as BlockType;
-	const formatPath = (path: { nodes: any; links: any }) => {
-		const { nodes, links } = path;
-		return {
-			nodes: nodes.map((x: { id: any; open: any }) => ({ id: x.id, open: x.open ?? false })),
-			links: links.map((x: { source: { id: any }; target: { id: any } }) => ({
-				source: x.source.id,
-				target: x.target.id
-			}))
-		};
-	};
 </script>
 
 <Head />
@@ -175,75 +162,8 @@
 			>
 				{#if menu === 'discovery'}
 					{#each [{ title: 'Add Graph', type: 'graph', header: 'Garden', icon: '🧭' }, { title: 'Add Log', type: 'log', header: 'Log', icon: '📖' }, { title: 'Add Current', type: 'current', header: 'Current', icon: '👀' }] as btn, i}
-						<button
-							title={btn.title}
-							class="dot"
-							on:click={async () => {
-								if (!$Blocks.find((x) => x.type === btn.type)) {
-									$Frame.currentIndex += 1;
-									$Blocks = [
-										...$Blocks,
-										await generateBlock(
-											btn.title,
-											strToBlock(btn.type),
-											-1,
-											undefined,
-											$Frame.currentIndex || 0
-										)
-									];
-									requestAnimationFrame(() => {
-										$Frame.cur = $Frame.currentIndex;
-									});
-								} else {
-									const { x, y, height, width } = $Blocks.find((x) => x.type === btn.type) ?? {
-										x: 0,
-										y: 0,
-										height: 0,
-										width: 0
-									};
-									$Frame = {
-										...$Frame,
-										x: -Number(x) + $Frame.width / 2 - width / 2,
-										y: -Number(y) + $Frame.height / 2 - height / 2,
-										scale: 1
-									};
-									$Frame.cur = $Frame.currentIndex;
-								}
-							}}>{btn.icon}</button
-						>
+						<AddWindow {btn} />
 					{/each}
-				{:else if menu === 'save'}
-					<button
-						title="Save"
-						class={success === 0 ? 'dot-success' : 'dot'}
-						on:click={async () => {
-							localStorage.setItem('blocks', JSON.stringify($Blocks));
-							localStorage.setItem('frame', JSON.stringify($Frame));
-							localStorage.setItem('path', JSON.stringify(formatPath($Path)));
-							if (
-								localStorage.hasOwnProperty('blocks') &&
-								localStorage.hasOwnProperty('frame') &&
-								localStorage.hasOwnProperty('path')
-							)
-								success = 0;
-							setTimeout(() => {
-								success = -1;
-							}, 500);
-						}}>{success === 0 ? '🖖' : '🧠'}</button
-					>
-					<button
-						title="Load"
-						class={success === 1 ? 'dot-success' : 'dot'}
-						on:click={async () => {
-							$Blocks = JSON.parse(localStorage.getItem('blocks') || '');
-							$Frame = JSON.parse(localStorage.getItem('frame') || '');
-							$Path = JSON.parse(localStorage.getItem('path') || '');
-							success = 1;
-							setTimeout(() => {
-								success = -1;
-							}, 500);
-						}}>{success === 1 ? '✌️' : '🤔'}</button
-					>
 				{/if}
 			</div>
 		{/if}
@@ -292,14 +212,21 @@
 						else menu = 'discovery';
 					}}>🔎</button
 				>
-				<button
+				<!-- <button
 					title="Open Setting"
 					class="dot"
 					on:click={() => {
 						if (menu === 'save') menu = '';
 						else menu = 'save';
 					}}>⚙️</button
-				>
+				> -->
+				<AddWindow
+					btn={{
+						title: 'Open Setting',
+						type: 'setting',
+						icon: '⚙️'
+					}}
+				/>
 			</div>
 		</div>
 	</div>
@@ -350,11 +277,5 @@
 <style>
 	.mousedown {
 		cursor: grab;
-	}
-	.dot {
-		@apply flex aspect-square w-8 items-center justify-center rounded-full border bg-white text-white md:w-7 dark:border-neutral-700 dark:bg-neutral-800;
-	}
-	.dot-success {
-		@apply flex aspect-square w-8 items-center justify-center rounded-full border  bg-emerald-400/50 text-white md:w-7 dark:border-neutral-700;
 	}
 </style>

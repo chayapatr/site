@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { Frame, Blocks } from './store';
 	import Graph from './Graph.svelte';
+	import Setting from './Setting.svelte';
 
 	export let i: number;
 	export let block: any;
@@ -159,6 +160,13 @@
 					width={$Blocks[blockId].width}
 					blockId={$Blocks[blockId].id}
 				/>
+			</div>
+		{:else if $Blocks[blockId].type === 'setting'}
+			<div class={`noselect relative ${$Frame.cur === i ? '' : 'opacity-50'}`}>
+				<Setting />
+				{#if $Frame.cur !== i}
+					<div class="fixed left-0 top-0 h-full w-full"></div>
+				{/if}
 			</div>
 		{:else}
 			<div
