@@ -79,6 +79,7 @@
 					return;
 				}
 				if ($Frame.cur === -1) {
+					e.preventDefault();
 					let d = $Frame.scale - 0.0015 * e.deltaY;
 					const min = 0.5;
 					const max = 1.5;
