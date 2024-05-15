@@ -33,7 +33,7 @@ export const getContent = async (slug: string, parent: number) => {
         return text
         .replace(/<a href="\/?([A-Za-z1-9\s-]*)(?:\.md)?"/g, internalLinks)
         .replace(/<a href="((?:http||https):\/\/.[^"]*)"/g, externalLinks)
-        .replace(/<p>#([^"]*)<\/p>/g, tags)
+        .replace(/<p>#([A-Za-z][^"]*)<\/p>/g, tags)
         .replace(/<img/g, imgs)
         .replace(/<iframe/g, iframes)
     };
