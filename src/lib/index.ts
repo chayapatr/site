@@ -80,7 +80,14 @@ export const generateBlock = async (name: string, type: BlockType, parentIndex: 
             title = "setting"; break;
     }
 
+    Frame.update((f) => {
+        return {
+            ...f,
+            z: f.z + 1
+        }
+    })
     const frame = get(Frame)
+
     const h = maybeMobile(frame.width, frame.height) ? (Math.min(frame.height / 2, 400)) : 250
     const scale = scales[screenType(frame.width, frame.height)]
 
@@ -90,6 +97,7 @@ export const generateBlock = async (name: string, type: BlockType, parentIndex: 
         type,
         x: parentIndex === -1 ? -frame.x + frame.width / 2 - 160 * scale : (parent?.x || 0) + 50,
         y: parentIndex === -1 ? -frame.y + frame.height / 2 - (h * scale / 2 ) - 50: (parent?.y || 0) + 50,
+        z: frame.z,
         width: 320 * scale,
         height: h * scale,
         text,

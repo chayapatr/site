@@ -5,6 +5,7 @@ export const Frame = writable({
 	cur: 0,
 	x: 0,
 	y: 0,
+    z: 0,
 	scale: 1,
 	drag: false,
 	resize: false,
@@ -20,6 +21,7 @@ export const Blocks = writable<({
     type?: BlockType
     x: number
     y: number
+    z: number
     width: number
     height: number
     text?: string

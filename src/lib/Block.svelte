@@ -149,6 +149,7 @@
         width: ${$Blocks[blockId].width}px;
         height: ${$Blocks[blockId].height}px;
         transform: matrix(1, 0, 0, 1, ${$Blocks[blockId].x}, ${$Blocks[blockId].y});
+		z-index: ${$Blocks[blockId].z}
     `}
 >
 	<div
@@ -215,6 +216,17 @@
 			{$Blocks[blockId].y.toFixed(0)}]
 		</div>
 		<div class="flex gap-2">
+			<button
+				class=" text-neutral-500"
+				on:click={() => {
+					if ($Blocks[blockId].z < $Frame.z) {
+						$Frame.z = $Frame.z + 1;
+						$Blocks[blockId].z = $Frame.z;
+					}
+				}}
+			>
+				[↑]
+			</button>
 			<button
 				class=" text-neutral-500"
 				on:click={() => {
