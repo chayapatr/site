@@ -119,12 +119,13 @@
 
 		getInitialBlock = async () => {
 			setTimeout(async () => {
-				const id = await window.getBlock(slug, -1);
+				let id = await window.getBlock('!@$', -1);
+				if (slug !== '!@$') id = await window.getBlock(slug, id);
 				requestAnimationFrame(() => {
 					$Frame.cur = $Blocks.findIndex((x) => x.id === id);
 				});
 				load = false;
-			}, 800);
+			}, 300);
 		};
 
 		// if (localStorage.getItem('blocks')) $Blocks = JSON.parse(localStorage.getItem('blocks') || '');
