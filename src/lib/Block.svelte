@@ -5,18 +5,22 @@
 	import Setting from './Setting.svelte';
 	import { pinch, swipe } from 'svelte-gestures';
 
-	export let i: number;
-	export let block: any;
+	interface Props {
+		i: number;
+		block: any;
+	}
 
-	let rescale = (_: MouseEvent) => {};
-	let move = (_: MouseEvent) => {};
-	let touchMove = (_: TouchEvent) => {};
-	let touchRescale = (_: TouchEvent) => {};
-	let touch = false;
+	let { i, block }: Props = $props();
 
-	let el: HTMLElement;
+	let rescale = $state((_: MouseEvent) => {});
+	let move = $state((_: MouseEvent) => {});
+	let touchMove = $state((_: TouchEvent) => {});
+	let touchRescale = $state((_: TouchEvent) => {});
+	let touch = $state(false);
 
-	let previousTouch: Touch | undefined;
+	let el: HTMLElement = $state();
+
+	let previousTouch: Touch | undefined = $state();
 
 	let changeX = 0,
 		changeY = 0;
@@ -28,8 +32,8 @@
 	let chToPixels = (ch: number, el: HTMLElement): number => 0;
 	let chSize: number;
 
-	$: parentId = $Blocks.findIndex((x) => x.id === block.parentIndex);
-	$: blockId = $Blocks.findIndex((x) => x.id === block.id);
+	let parentId = $derived($Blocks.findIndex((x) => x.id === block.parentIndex));
+	let blockId = $derived($Blocks.findIndex((x) => x.id === block.id));
 
 	onMount(() => {
 		chToPixels = (ch: number, el: HTMLElement): number => {
@@ -92,19 +96,19 @@
 	});
 </script>
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
-<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<!-- svelte-ignore a11y_click_events_have_key_events -->
 
 <svelte:window
-	on:mousemove={(e) => {
+	onmousemove={(e) => {
 		rescale(e);
 		move(e);
 	}}
-	on:touchmove={(e) => {
+	ontouchmove={(e) => {
 		touchRescale(e);
 		touchMove(e);
 	}}
-	on:mouseup={() => {
+	onmouseup={() => {
 		$Frame.resize = false;
 		$Frame.drag = false;
 		// $Frame.cur = -1;
@@ -112,7 +116,7 @@
 			touch = false;
 		});
 	}}
-	on:touchend={() => {
+	ontouchend={() => {
 		$Frame.resize = false;
 		$Frame.drag = false;
 		// $Frame.cur = -1;
@@ -120,8 +124,8 @@
 	}}
 />
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<!-- svelte-ignore a11y-no-static-element-interactions -->
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
 	bind:this={el}
 	class={`${
@@ -134,7 +138,7 @@
 			${$Frame.dark ? 'glass-dark' : 'glass'}
 			absolute aspect-square flex-col justify-between overflow-hidden rounded-md border-[1.5px] text-xs text-white shadow-sm
 	`}
-	on:click={() => {
+	onclick={() => {
 		if (!touch) {
 			$Frame.cur = i;
 			if ($Blocks[blockId].type === 'graph') {
@@ -178,7 +182,7 @@
 					minSwipeDistance: 100,
 					touchAction: 'pan-y'
 				}}
-				on:pinch={() => {}}
+				onpinch={() => {}}
 				class={`prose prose-sm h-full overflow-y-scroll px-3 pb-4 pt-10 dark:prose-invert ${$Frame.cur === i ? 'overflow-y-scroll' : 'opacity-50'}`}
 			>
 				{@html $Blocks[blockId].text}
@@ -188,25 +192,25 @@
 			</div>
 		{/if}
 	</div>
-	<!-- svelte-ignore a11y-click-events-have-key-events -->
+	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<div
 		class={`
 		noselect fixed top-0 flex w-full justify-between border-b  border-neutral-200 bg-neutral-100/70 p-2 dark:border-neutral-800 dark:bg-neutral-950/80`}
 		style="backdrop-filter: blur(2px);
         -webkit-backdrop-filter: blur(2px);"
-		on:mousedown={() => {
+		onmousedown={() => {
 			touch = true;
 			if (!$Frame.resize) {
 				$Frame.cur = i;
 				$Frame.drag = true;
 			}
 		}}
-		on:touchstart={() => {
+		ontouchstart={() => {
 			if (!$Frame.resize && $Frame.cur === i) {
 				$Frame.drag = true;
 			}
 		}}
-		on:click={() => {
+		onclick={() => {
 			if ($Frame.cur !== i) $Frame.cur = i;
 		}}
 	>
@@ -218,7 +222,7 @@
 		<div class="flex gap-2">
 			<button
 				class=" text-neutral-500"
-				on:click={() => {
+				onclick={() => {
 					if ($Blocks[blockId].z < $Frame.z) {
 						$Frame.z = $Frame.z + 1;
 						$Blocks[blockId].z = $Frame.z;
@@ -229,7 +233,7 @@
 			</button>
 			<button
 				class=" text-neutral-500"
-				on:click={() => {
+				onclick={() => {
 					let queue = [
 						...$Blocks.filter((i) => i.parentIndex === $Blocks[blockId].id).map((x) => x.id)
 					];
@@ -252,12 +256,12 @@
 	</div>
 
 	<button
-		on:mousedown={() => {
+		onmousedown={() => {
 			touch = true;
 			$Frame.resize = true;
 			$Frame.cur = i;
 		}}
-		on:touchstart={() => {
+		ontouchstart={() => {
 			$Frame.resize = true;
 			$Frame.cur = i;
 		}}

@@ -3,13 +3,13 @@
 	import { Frame, Blocks } from './store';
 	import type { BlockType } from '$lib';
 	const strToBlock = (str: string): BlockType => str as BlockType;
-	export let btn;
+	let { btn } = $props();
 </script>
 
 <button
 	title={btn.title}
 	class="dot"
-	on:click={async () => {
+	onclick={async () => {
 		if (!$Blocks.find((x) => x.type === btn.type)) {
 			$Frame.currentIndex += 1;
 			$Blocks = [

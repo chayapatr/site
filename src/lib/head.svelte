@@ -1,7 +1,11 @@
 <script lang="ts">
-	export let title = "Pub's Site";
-	export let description = "Hi! it's Pub. Welcome to my site!";
-	export let url = 'https://from.pub';
+	interface Props {
+		title?: string;
+		description?: string;
+		url?: string;
+	}
+
+	let { title = "Pub's Site", description = "Hi! it's Pub. Welcome to my site!", url = 'https://from.pub' }: Props = $props();
 </script>
 
 <svelte:head>

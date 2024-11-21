@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { onMount } from 'svelte';
 
 	import { generateBlock } from '$lib';
@@ -10,16 +12,17 @@
 
 	import AddWindow from '$lib/AddWindow.svelte';
 
-	let move = (_: MouseEvent) => {};
+	let move = $state((_: MouseEvent) => {});
 	let touchMove = (_: TouchEvent) => {};
 
-	let prevScale = 1;
-	let changeX, changeY;
-	let previousTouch: Touch | undefined;
+	let prevScale = $state(1);
+	let changeX: number = $state(0),
+		changeY: number = $state(0);
+	let previousTouch: Touch | undefined = $state();
 
-	let getInitialBlock = () => {};
-	let load = false;
-	let menu = '';
+	let getInitialBlock = $state(() => {});
+	let load = $state(false);
+	let menu = $state('');
 
 	const url = $page.url;
 
@@ -107,8 +110,8 @@
 				if ($Frame.cur === -1 && $Frame.drag && !$Frame.resize) {
 					changeX = touch.pageX - previousTouch.pageX;
 					changeY = touch.pageY - previousTouch.pageY;
-					$Frame.x += 0.75 * changeX;
-					$Frame.y += 0.75 * changeY;
+					$Frame.x += 0.75 * (changeX as number);
+					$Frame.y += 0.75 * (changeY as number);
 				}
 			}
 			previousTouch = touch;
@@ -128,33 +131,47 @@
 		// if (localStorage.getItem('frame')) $Frame = JSON.parse(localStorage.getItem('frame') || '');
 	});
 
-	$: if ($Blocks.length === 0) {
-		getInitialBlock();
-		load = true;
-	}
+	run(() => {
+		if ($Blocks.length === 0) {
+			getInitialBlock();
+			load = true;
+		}
+	});
 </script>
 
 <Head />
 
 <svelte:window
-	on:mousemove={move}
-	on:mouseup={() => {
+	onmousemove={move}
+	onmouseup={() => {
 		$Frame.drag = false;
 		$Frame.cur = -1;
 	}}
-	on:touchend={() => {
+	ontouchend={() => {
 		$Frame.drag = false;
 		previousTouch = undefined;
 	}}
-	on:touchmove={touchMove}
+	ontouchmove={(e) => {
+		if (!$Frame) return;
+		const touch = e.touches[0];
+		if (previousTouch) {
+			if ($Frame.cur === -1 && $Frame.drag && !$Frame.resize) {
+				changeX = touch.pageX - previousTouch.pageX;
+				changeY = touch.pageY - previousTouch.pageY;
+				$Frame.x += 0.75 * (changeX as number);
+				$Frame.y += 0.75 * (changeY as number);
+			}
+		}
+		previousTouch = touch;
+	}}
 	class={`${$Frame.dark ? 'dark' : ''}`}
-	on:resize={() => {
+	onresize={() => {
 		$Frame.height = window.innerHeight;
 		$Frame.width = window.innerWidth;
 	}}
 />
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
 	class={`noselect fixed bottom-0 left-0 z-50 m-3 flex w-screen flex-col items-center justify-center gap-2 ${$Frame.dark ? 'dark' : ''}`}
 >
@@ -177,19 +194,19 @@
 			${$Frame.dark ? 'glass-dark' : 'glass'}
 		`}
 		>
-			<!-- svelte-ignore a11y-no-static-element-interactions -->
+			<!-- svelte-ignore a11y_no_static_element_interactions -->
 			<div class="flex items-center gap-1">
 				<button
 					title="Appearance"
 					class="dot"
-					on:click={() => {
+					onclick={() => {
 						$Frame.dark = !$Frame.dark;
 					}}>{$Frame.dark ? '☀️' : '🌙'}</button
 				>
 				<!-- <div>{$Frame.scale.toFixed(2)}</div> -->
 				<button
 					class="rounded-sm px-1 py-[0.15rem] text-sm text-neutral-500 hover:bg-neutral-200/80 md:text-[13px] dark:text-neutral-400 dark:hover:bg-neutral-800/50"
-					on:click={() => {
+					onclick={() => {
 						$Frame.x = 0;
 						$Frame.y = 0;
 						$Frame.scale = 1;
@@ -202,7 +219,7 @@
 				<button
 					title="Add Root Node"
 					class="dot"
-					on:click={async () => {
+					onclick={async () => {
 						const id = await window.getBlock('!@$', -1);
 						requestAnimationFrame(() => {
 							$Frame.cur = $Blocks.findIndex((x) => x.id === id);
@@ -212,7 +229,7 @@
 				<button
 					title="Open Discovery Menu"
 					class="dot"
-					on:click={() => {
+					onclick={() => {
 						if (menu === 'discovery') menu = '';
 						else menu = 'discovery';
 					}}>🔎</button
@@ -246,25 +263,25 @@
 		prevScale = $Frame.scale;
 	}} -->
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
 	class={`h-[100svh] w-screen ${$Frame.drag ? 'mousedown' : ''}  ${$Frame.dark ? 'dark' : ''}`}
-	on:mousedown={() => {
+	onmousedown={() => {
 		if ($Frame.cur === -1) $Frame.drag = true;
 		// else $Frame.cur = -1;
 	}}
-	on:touchstart={() => {
+	ontouchstart={() => {
 		if ($Frame.cur === -1) $Frame.drag = true;
 	}}
 	use:pinch
-	on:pinch={(e) => {
+	onpinch={(e) => {
 		$Frame.cur = -1;
 		let d = prevScale * e.detail.scale;
 		const min = 0.4;
 		const max = 1;
 		$Frame.scale = d > min ? (d < max ? d : max) : min;
 	}}
-	on:pinchup={(e) => {
+	onpinchup={(e) => {
 		prevScale = $Frame.scale;
 	}}
 >

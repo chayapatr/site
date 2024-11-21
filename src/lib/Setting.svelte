@@ -1,9 +1,10 @@
+<!-- @migration-task Error while migrating Svelte code: `<button>` is invalid inside `<button>` -->
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { Blocks, Frame, Path } from './store';
 
-	let success = -1;
-	let name = '';
+	let success = $state(-1);
+	let name = $state('');
 
 	const formatPath = (path: { nodes: any; links: any }) => {
 		const { nodes, links } = path;
@@ -28,7 +29,7 @@
 		boards = JSON.parse(localStorage.getItem('boards') || '[]');
 	});
 
-	let boards: any[] = [];
+	let boards: any[] = $state([]);
 </script>
 
 <div class="mt-8 flex w-full flex-col gap-4 p-2 text-base">
@@ -37,7 +38,7 @@
 			<h4 class="font-medium">Boards</h4>
 			<button
 				class="text-xs text-neutral-600 hover:text-red-600 dark:text-neutral-400 dark:hover:text-red-500"
-				on:click={() => {
+				onclick={() => {
 					localStorage.setItem('boards', JSON.stringify([]));
 					boards = [];
 				}}>Clear</button
@@ -45,36 +46,36 @@
 		</div>
 		<div class="grid w-full gap-2 md:grid-cols-2">
 			{#each boards as board, i}
-				<button
-					on:click={async () => {
-						$Blocks = board.blocks;
-						$Frame = board.frame;
-						$Path = board.path;
-						success = 1;
-						setTimeout(() => {
-							success = -1;
-						}, 500);
-					}}
-					><div
+				<div class="relative">
+					<button
+						onclick={async () => {
+							$Blocks = board.blocks;
+							$Frame = board.frame;
+							$Path = board.path;
+							success = 1;
+							setTimeout(() => {
+								success = -1;
+							}, 500);
+						}}
 						class="glass w-full rounded-md border border-neutral-300 bg-neutral-100 px-2 py-[0.15rem] text-left hover:bg-neutral-200/50 dark:border-neutral-700 dark:bg-neutral-800/80 dark:hover:bg-neutral-800/40"
 					>
 						<div class="flex w-full justify-between gap-2">
-							<!-- svelte-ignore a11y-no-static-element-interactions -->
-							<!-- svelte-ignore a11y-click-events-have-key-events -->
+							<!-- svelte-ignore a11y_no_static_element_interactions -->
+							<!-- svelte-ignore a11y_click_events_have_key_events -->
 							<div class="overflow-hidden pr-2 text-sm">{board?.name}</div>
-							<button
-								class="text-xs hover:text-red-600 dark:hover:text-red-500"
-								on:click={() => {
-									boards = boards.filter((x, j) => i !== j);
-									localStorage.setItem('boards', JSON.stringify(boards));
-								}}>[x]</button
-							>
 						</div>
 						<div class="flex w-full justify-between gap-2 text-xs text-neutral-500">
 							<div>{board?.time}</div>
 						</div>
-					</div></button
-				>
+					</button>
+					<button
+						class="absolute right-[0.45rem] top-1 text-xs hover:text-red-600 dark:hover:text-red-500"
+						onclick={() => {
+							boards = boards.filter((x, j) => i !== j);
+							localStorage.setItem('boards', JSON.stringify(boards));
+						}}>[x]</button
+					>
+				</div>
 			{/each}
 		</div>
 	</div>
@@ -108,7 +109,7 @@
 			title="Save current board"
 			class="btn"
 			disabled={!name}
-			on:click={async () => {
+			onclick={async () => {
 				// localStorage.setItem('blocks', JSON.stringify($Blocks));
 				// localStorage.setItem('frame', JSON.stringify($Frame));
 				// localStorage.setItem('path', JSON.stringify(formatPath($Path)));

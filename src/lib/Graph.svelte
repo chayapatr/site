@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	// @ts-nocheck
 
 	import ForceGraph3D from '3d-force-graph?client';
@@ -7,12 +9,16 @@
 	import { Frame, Path, Blocks, OpenBlocks, Log } from './store';
 	import { generateBlock } from '$lib';
 
-	export let width = 320;
-	export let height = 250;
-	export let blockId = -1;
+	interface Props {
+		width?: number;
+		height?: number;
+		blockId?: any;
+	}
 
-	let el: HTMLElement;
-	let Graph;
+	let { width = 320, height = 250, blockId = -1 }: Props = $props();
+
+	let el: HTMLElement = $state();
+	let Graph = $state();
 
 	const initGraph = () => {
 		Graph = ForceGraph3D()(el)
@@ -79,14 +85,14 @@
 
 	onMount(initGraph);
 
-	$: {
+	run(() => {
 		if (Graph) {
 			Graph.graphData($Path)
 				.width(width)
 				.height(height)
 				.backgroundColor($Frame.dark ? '#101010' : '#efefef');
 		}
-	}
+	});
 </script>
 
-<div bind:this={el} />
+<div bind:this={el}></div>
