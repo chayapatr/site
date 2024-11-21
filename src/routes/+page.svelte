@@ -73,29 +73,29 @@
 			}
 		});
 
-		window.addEventListener(
-			'wheel',
-			function (e) {
-				const { ctrlKey } = e;
-				if (ctrlKey && $Frame.cur !== -1) {
-					e.preventDefault();
-					return;
-				}
-				if ($Frame.cur === -1) {
-					e.preventDefault();
-					let d = $Frame.scale - 0.0015 * e.deltaY;
-					const min = 0.5;
-					const max = 1.5;
-					$Frame.scale = d > min ? (d < max ? d : max) : min;
+		// window.addEventListener(
+		// 	'wheel',
+		// 	function (e) {
+		// 		const { ctrlKey } = e;
+		// 		if (ctrlKey && $Frame.cur !== -1) {
+		// 			e.preventDefault();
+		// 			return;
+		// 		}
+		// 		if ($Frame.cur === -1) {
+		// 			e.preventDefault();
+		// 			let d = $Frame.scale - 0.0015 * e.deltaY;
+		// 			const min = 0.5;
+		// 			const max = 1.5;
+		// 			$Frame.scale = d > min ? (d < max ? d : max) : min;
 
-					// const { clientX, clientY } = e;
-					// change origin
-					// $Frame.originX = clientX - $Frame.x * $Frame.scale;
-					// $Frame.originY = clientY - $Frame.y * $Frame.scale;
-				}
-			},
-			{ passive: false }
-		);
+		// 			// const { clientX, clientY } = e;
+		// 			// change origin
+		// 			// $Frame.originX = clientX - $Frame.x * $Frame.scale;
+		// 			// $Frame.originY = clientY - $Frame.y * $Frame.scale;
+		// 		}
+		// 	},
+		// 	{ passive: false }
+		// );
 
 		move = (e: MouseEvent) => {
 			if ($Frame.cur === -1 && $Frame.drag && !$Frame.resize) {
