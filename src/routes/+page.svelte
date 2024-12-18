@@ -165,7 +165,6 @@
 		}
 		previousTouch = touch;
 	}}
-	class={`${$Frame.dark ? 'dark' : ''}`}
 	onresize={() => {
 		$Frame.height = window.innerHeight;
 		$Frame.width = window.innerWidth;
