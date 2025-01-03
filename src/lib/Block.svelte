@@ -184,6 +184,7 @@
 				}}
 				onpinch={() => {}}
 				class={`prose prose-sm h-full overflow-y-scroll px-3 pb-4 pt-10 lg:prose-base dark:prose-invert ${$Frame.cur === i ? 'overflow-y-scroll' : 'opacity-50'}`}
+				style="scroll-padding-top: 2.5rem;"
 			>
 				{@html $Blocks[blockId].text}
 				{#if $Frame.cur !== i}

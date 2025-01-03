@@ -1,5 +1,8 @@
 import { micromark } from 'micromark';
 import { gfmTable, gfmTableHtml } from 'micromark-extension-gfm-table';
+import { rehype } from 'rehype';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import rehypeSlug from 'rehype-slug';
 import { get } from 'svelte/store';
 import { Frame } from './store';
 
@@ -29,8 +32,14 @@ export const getContent = async (slug: string, parent: number) => {
 		return `<p class="tag">#${text}</p>`;
 	};
 
-	const styleParser = (text: string) => {
-		return text
+	const styleParser = async (text: string) => {
+		const parsed = await rehype()
+			.data('settings', { fragment: true })
+			.use(rehypeSlug)
+			.use(rehypeAutolinkHeadings)
+			.process(text);
+		console.log(parsed);
+		return parsed.value
 			.replace(/<a href="\/?([A-Za-z1-9\s-]*)(?:\.md)?"/g, internalLinks)
 			.replace(/<a href="((?:http||https):\/\/.[^"]*)"/g, externalLinks)
 			.replace(/<p>#([A-Za-z][^"]*)<\/p>/g, tags)
@@ -38,7 +47,7 @@ export const getContent = async (slug: string, parent: number) => {
 			.replace(/<iframe/g, iframes);
 	};
 
-	return styleParser(
+	return await styleParser(
 		micromark(text, {
 			allowDangerousHtml: true,
 			extensions: [gfmTable()],
