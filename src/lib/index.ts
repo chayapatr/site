@@ -38,7 +38,6 @@ export const getContent = async (slug: string, parent: number) => {
 			.use(rehypeSlug)
 			.use(rehypeAutolinkHeadings)
 			.process(text);
-		console.log(parsed);
 		return parsed.value
 			.replace(/<a href="\/?([A-Za-z1-9\s-]*)(?:\.md)?"/g, internalLinks)
 			.replace(/<a href="((?:http||https):\/\/.[^"]*)"/g, externalLinks)
