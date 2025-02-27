@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from 'svelte/legacy';
-
 	import { onMount } from 'svelte';
 
 	import { generateBlock } from '$lib';
@@ -132,7 +130,7 @@
 		// if (localStorage.getItem('frame')) $Frame = JSON.parse(localStorage.getItem('frame') || '');
 	});
 
-	run(() => {
+	$effect(() => {
 		if ($Blocks.length === 0) {
 			getInitialBlock();
 			load = true;

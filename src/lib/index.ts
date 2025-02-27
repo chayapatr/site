@@ -6,9 +6,22 @@ import rehypeSlug from 'rehype-slug';
 import { get } from 'svelte/store';
 import { Frame } from './store';
 
+export const fish = `       /\`-._
+     /_,.._\`:-
+ ,.-'  ,   \`-:..-')
+: o ):';      _  {
+ \`-._ \`'__,.-'\`-.)
+    \`\\\\  \\,.-'\``;
+
 export type BlockType = 'page' | 'log' | 'graph' | 'current' | 'setting';
 export const getContent = async (slug: string, parent: number) => {
 	const text = await fetch(`https://garden.from.pub/${slug}`).then((res) => {
+		if (res.status !== 200)
+			return (
+				"### 🤔 PAGE NOT FOUND -- OR SOME OTHER ERROR IDK ¯\\_(ツ)_/¯\n\n\nHERE'S A FISH:\n```\n" +
+				fish +
+				'\n```\n(WHAT A COOL FISH 🙂‍↕️)'
+			);
 		return res.text();
 	});
 
