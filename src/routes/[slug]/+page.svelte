@@ -7,5 +7,3 @@
 		window.location.href = `/?page=${slug}`;
 	});
 </script>
-
-<h1 class="text-white">{slug}</h1>
