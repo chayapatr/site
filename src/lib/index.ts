@@ -52,7 +52,7 @@ export const getContent = async (slug: string, parent: number) => {
 			.use(rehypeAutolinkHeadings)
 			.process(text);
 		return parsed.value
-			.replace(/<a href="\/?([A-Za-z1-9\s-]*)(?:\.md)?"/g, internalLinks)
+			.replace(/<a href="\/?([A-Za-z1-9\s_-]*)(?:\.md)?"/g, internalLinks)
 			.replace(/<a href="((?:http||https):\/\/.[^"]*)"/g, externalLinks)
 			.replace(/<p>#([A-Za-z][^"]*)<\/p>/g, tags)
 			.replace(/<img/g, imgs)
