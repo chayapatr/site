@@ -19,11 +19,42 @@
 		changeY: number = $state(0);
 	let previousTouch: Touch | undefined = $state();
 
+	// Mouse position tracking for zoom
+	let mouseX = $state(0);
+	let mouseY = $state(0);
+	let zoomContainer: HTMLDivElement;
+
 	let getInitialBlock = $state(() => {});
 	let load = $state(false);
 	let menu = $state('');
 
 	const url = $page.url;
+
+	// Function to apply zoom based on mouse position
+	function applyZoom(newScale: number, clientX: number, clientY: number) {
+		const oldScale = $Frame.scale;
+
+		// Ensure scale is within bounds
+		const min = 0.4;
+		const max = 2.5; // Increased max zoom
+		newScale = newScale > min ? (newScale < max ? newScale : max) : min;
+
+		if (newScale === oldScale) return;
+
+		// Get position relative to the viewport
+		const rect = zoomContainer.getBoundingClientRect();
+		const offsetX = clientX - rect.left;
+		const offsetY = clientY - rect.top;
+
+		// Calculate the world coordinates before zoom
+		const worldX = (offsetX - $Frame.x) / oldScale;
+		const worldY = (offsetY - $Frame.y) / oldScale;
+
+		// Calculate new position that keeps the point under cursor fixed
+		$Frame.x = offsetX - worldX * newScale;
+		$Frame.y = offsetY - worldY * newScale;
+		$Frame.scale = newScale;
+	}
 
 	onMount(async () => {
 		let slug = url.searchParams.get('page') || '!@$';
@@ -72,31 +103,11 @@
 			}
 		});
 
-		// window.addEventListener(
-		// 	'wheel',
-		// 	function (e) {
-		// 		const { ctrlKey } = e;
-		// 		if (ctrlKey && $Frame.cur !== -1) {
-		// 			e.preventDefault();
-		// 			return;
-		// 		}
-		// 		if ($Frame.cur === -1) {
-		// 			e.preventDefault();
-		// 			let d = $Frame.scale - 0.0015 * e.deltaY;
-		// 			const min = 0.5;
-		// 			const max = 1.5;
-		// 			$Frame.scale = d > min ? (d < max ? d : max) : min;
-
-		// 			// const { clientX, clientY } = e;
-		// 			// change origin
-		// 			// $Frame.originX = clientX - $Frame.x * $Frame.scale;
-		// 			// $Frame.originY = clientY - $Frame.y * $Frame.scale;
-		// 		}
-		// 	},
-		// 	{ passive: false }
-		// );
-
 		move = (e: MouseEvent) => {
+			// Track mouse position
+			mouseX = e.clientX;
+			mouseY = e.clientY;
+
 			if ($Frame.cur === -1 && $Frame.drag && !$Frame.resize) {
 				$Frame.x += 0.75 * e.movementX;
 				$Frame.y += 0.75 * e.movementY;
@@ -137,6 +148,42 @@
 			load = true;
 		}
 	});
+
+	// window.addEventListener(
+	// 	'wheel',
+	// 	function (e) {
+	// 		const { ctrlKey } = e;
+	// 		if (ctrlKey && $Frame.cur !== -1) {
+	// 			e.preventDefault();
+	// 			return;
+	// 		}
+	// 		if ($Frame.cur === -1) {
+	// 			e.preventDefault();
+	// 			let d = $Frame.scale - 0.0015 * e.deltaY;
+	// 			const min = 0.5;
+	// 			const max = 1.5;
+	// 			$Frame.scale = d > min ? (d < max ? d : max) : min;
+
+	// 			// const { clientX, clientY } = e;
+	// 			// change origin
+	// 			// $Frame.originX = clientX - $Frame.x * $Frame.scale;
+	// 			// $Frame.originY = clientY - $Frame.y * $Frame.scale;
+	// 		}
+	// 	},
+	// 	{ passive: false }
+	// );
+
+	// Handle mouse wheel zoom
+	function handleWheel(e: WheelEvent) {
+		if ($Frame.cur === -1) {
+			// Calculate new scale
+			const delta = e.deltaY * -0.001; // Adjust sensitivity here
+			const newScale = $Frame.scale * (1 + delta);
+
+			// Apply zoom centered on mouse position
+			applyZoom(newScale, e.clientX, e.clientY);
+		}
+	}
 </script>
 
 <Head />
@@ -174,7 +221,7 @@
 <div
 	class={`noselect fixed bottom-0 left-0 z-50 flex w-screen flex-col items-center justify-center gap-2 p-3 ${$Frame.dark ? 'dark' : ''}`}
 >
-	<div class="flex w-min min-w-72 flex-col items-end gap-1 lg:gap-2">
+	<div class="flex min-w-72 flex-col items-end gap-1 lg:gap-2">
 		{#if menu}
 			<div
 				class={`flex w-min items-center justify-between gap-2 rounded-full border p-1 text-base text-neutral-600 shadow-sm md:text-sm lg:text-base dark:border-neutral-800 dark:text-white
@@ -204,14 +251,18 @@
 				>
 				<!-- <div>{$Frame.scale.toFixed(2)}</div> -->
 				<button
-					class="rounded-sm px-1 py-[0.15rem] text-sm text-neutral-500 hover:bg-neutral-200/80 md:text-[13px] dark:text-neutral-400 dark:hover:bg-neutral-800/50"
+					class="group rounded-sm px-1 py-[0.15rem] text-sm text-neutral-500 hover:bg-neutral-200/80 md:text-[13px] dark:text-neutral-400 dark:hover:bg-neutral-800/50"
+					title="Reset Position"
 					onclick={() => {
 						$Frame.x = 0;
 						$Frame.y = 0;
 						$Frame.scale = 1;
 					}}
 				>
-					[{-$Frame.x.toFixed(0)}, {-$Frame.y.toFixed(0)}]
+					<div class="hidden group-hover:block">Reset Position</div>
+					<div class="group-hover:hidden">
+						[{-$Frame.x.toFixed(0)}, {-$Frame.y.toFixed(0)}, {$Frame.scale.toFixed(1)}]
+					</div>
 				</button>
 			</div>
 			<div class="flex gap-2">
@@ -253,32 +304,33 @@
 	</div>
 </div>
 
-<!-- use:pinch
-	on:pinch={(e) => {
-		$Frame.cur = -1;
-		$Frame.scale = prevScale * e.detail.scale;
-	}}
-	on:pinchup={(e) => {
-		prevScale = $Frame.scale;
-	}} -->
-
+<!-- Modified to use mouse position for zooming -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
+	bind:this={zoomContainer}
 	class={`h-[100svh] w-screen ${$Frame.drag ? 'mousedown' : ''}  ${$Frame.dark ? 'dark' : ''}`}
-	onmousedown={() => {
+	onmousedown={(e) => {
 		if ($Frame.cur === -1) $Frame.drag = true;
-		// else $Frame.cur = -1;
+		// Update mouse position on mousedown
+		mouseX = e.clientX;
+		mouseY = e.clientY;
 	}}
 	ontouchstart={() => {
 		if ($Frame.cur === -1) $Frame.drag = true;
 	}}
+	onwheel={handleWheel}
 	use:pinch
 	onpinch={(e) => {
 		$Frame.cur = -1;
-		let d = prevScale * e.detail.scale;
-		const min = 0.4;
-		const max = 1;
-		$Frame.scale = d > min ? (d < max ? d : max) : min;
+
+		// Calculate new scale
+		let newScale = prevScale * e.detail.scale;
+
+		// Get the touch center point
+		const touch = e.detail.center;
+
+		// Apply zoom centered on touch position
+		applyZoom(newScale, touch.x, touch.y);
 	}}
 	onpinchup={(e) => {
 		prevScale = $Frame.scale;
@@ -295,7 +347,7 @@
 			class="relative z-10 min-h-full min-w-full"
 			style={`
             transform: matrix(${$Frame.scale}, 0, 0, ${$Frame.scale}, ${$Frame.x}, ${$Frame.y});
-			transform-origin: center;
+			transform-origin: 0 0;
         `}
 		>
 			{#each $ActiveBlocks as block, i}

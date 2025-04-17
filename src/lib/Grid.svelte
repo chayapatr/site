@@ -3,94 +3,181 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { Frame } from '$lib/store.ts';
 
-	// Canvas reference for DOM manipulation
-	let canvas;
-	let containerRef;
-
-	// Grid properties
-	const baseGridSpacing = 40;
-	const dotRadius = 1.1;
-
-	// Scale thresholds for dot density adjustment
-	const scaleThresholds = {
-		low: 0.6, // Below this, show very sparse dots
-		medium: 0.85, // Below this, show fewer dots
-		high: 1.0 // Normal density
-	};
-
-	// Used to keep track of animation
+	// DOM references and animation tracking
+	let canvas, containerRef;
 	let animationFrameId = null;
 	let resizeObserver = null;
+	let lastRender = { x: 0, y: 0, scale: 0, width: 0, height: 0, dark: false };
 
-	// Draw the grid based on current position and scale
+	// Grid properties
+	const baseSpacing = 40;
+	const dotRadius = 1.1;
+
+	// Draw grid with specified configuration
 	function drawGrid() {
 		if (!canvas) return;
 
 		const ctx = canvas.getContext('2d');
 		const rect = canvas.getBoundingClientRect();
-		const width = rect.width;
-		const height = rect.height;
+		const { width, height } = rect;
+		if (width === 0 || height === 0) return;
 
-		// Clear canvas - use display dimensions
-		ctx.clearRect(0, 0, width, height);
+		// Current state
+		const { x, y, scale, dark } = $Frame;
 
-		// Set dot style based on the theme from Frame store
-		ctx.fillStyle = $Frame.dark ? '#333333' : '#cccccc';
-
-		// Get current position and scale from the store
-		const currentPos = $Frame;
-		const scale = currentPos.scale;
-
-		// Determine which dots to show based on scale
-		let skipFactor = 1; // Default: show every dot
-		if (scale < scaleThresholds.low) {
-			skipFactor = 4; // Show every 4th dot when scale is very small
-		} else if (scale < scaleThresholds.medium) {
-			skipFactor = 2; // Show every 2nd dot when scale is medium
+		// Skip if no significant changes
+		if (
+			Math.abs(lastRender.x - x) <= 5 &&
+			Math.abs(lastRender.y - y) <= 5 &&
+			Math.abs(lastRender.scale - scale) <= 0.01 &&
+			lastRender.width === width &&
+			lastRender.height === height &&
+			lastRender.dark === dark
+		) {
+			return;
 		}
 
-		// Adjust grid spacing based on scale
-		const scaledSpacing = baseGridSpacing * scale * skipFactor;
+		// Update last render state
+		Object.assign(lastRender, { x, y, scale, width, height, dark });
 
-		// Calculate center offset for transform-origin
-		const centerOffsetX = (width / 2) * (1 - scale);
-		const centerOffsetY = (height / 2) * (1 - scale);
+		// Clear canvas
+		ctx.clearRect(0, 0, width, height);
 
-		const adjustedX = currentPos.x + centerOffsetX;
-		const adjustedY = currentPos.y + centerOffsetY;
+		// Prepare grid config based on scale
+		let config = {};
+		if (scale < 0.6) {
+			// Very zoomed out
+			config = {
+				primary: { spacing: baseSpacing * scale * 4, opacity: 0.8, size: dotRadius * 1.2 },
+				secondary: {
+					spacing: baseSpacing * scale,
+					opacity: 0.3,
+					size: dotRadius * 0.9,
+					show: true
+				}
+			};
+		} else if (scale < 0.85) {
+			// Zoomed out
+			config = {
+				primary: { spacing: baseSpacing * scale * 2, opacity: 0.9, size: dotRadius * 1.1 },
+				secondary: { spacing: baseSpacing * scale, opacity: 0.5, size: dotRadius * 0.9, show: true }
+			};
+		} else if (scale < 1.5) {
+			// Slightly zoomed in
+			config = {
+				primary: { spacing: baseSpacing * scale, opacity: 0.9, size: dotRadius },
+				secondary: {
+					spacing: baseSpacing * scale * 0.5,
+					opacity: 0.2,
+					size: dotRadius,
+					show: true
+				}
+			};
+		} else if (scale < 2.0) {
+			// Zoomed in
+			config = {
+				primary: { spacing: baseSpacing * scale, opacity: 1.0, size: dotRadius },
+				secondary: {
+					spacing: baseSpacing * scale * 0.5,
+					opacity: 0.5,
+					size: dotRadius * 1.2,
+					show: true
+				}
+			};
+		} else {
+			// Very zoomed in
+			config = {
+				primary: { spacing: baseSpacing * scale, opacity: 1.0, size: dotRadius },
+				secondary: {
+					spacing: baseSpacing * scale * 0.5,
+					opacity: 0.6,
+					size: dotRadius * 1.2,
+					show: true
+				},
+				fine: {
+					spacing: baseSpacing * scale * 0.25,
+					opacity: 0.35,
+					size: dotRadius * 0.8,
+					show: true
+				}
+			};
+		}
 
-		// Calculate starting positions for the grid
-		// We use modulo to create the repeating pattern
-		const startX = ((adjustedX % scaledSpacing) + scaledSpacing) % scaledSpacing;
-		const startY = ((adjustedY % scaledSpacing) + scaledSpacing) % scaledSpacing;
+		// Set base color
+		const baseColor = dark ? '61, 61, 61' : '194, 194, 194';
 
-		// Maintain consistent dot size regardless of scale
-		// But with a slight adjustment for very low scales for better visibility
-		const sizeFactor =
-			scale < scaleThresholds.low ? 1.2 : scale < scaleThresholds.medium ? 1.1 : 1.0;
-		const displayDotRadius = dotRadius * sizeFactor;
+		// Draw primary dots positions (for skipping)
+		const primaryX = [];
+		const startPrimaryX =
+			((x % config.primary.spacing) + config.primary.spacing) % config.primary.spacing;
+		for (let dotX = startPrimaryX; dotX < width; dotX += config.primary.spacing) {
+			primaryX.push(dotX);
+		}
 
-		// Draw dots
-		for (let x = startX; x < width; x += scaledSpacing) {
-			for (let y = startY; y < height; y += scaledSpacing) {
-				// Draw precise dots with crisp edges
+		// Draw the grid levels from fine to primary (back to front)
+
+		// Fine grid (smallest dots)
+		if (config.fine?.show) {
+			ctx.fillStyle = `rgba(${baseColor}, ${config.fine.opacity})`;
+			const startX = ((x % config.fine.spacing) + config.fine.spacing) % config.fine.spacing;
+			const startY = ((y % config.fine.spacing) + config.fine.spacing) % config.fine.spacing;
+
+			for (let dotX = startX; dotX < width; dotX += config.fine.spacing) {
+				// Skip if this is a secondary dot position
+				if (config.secondary?.show && dotX % config.secondary.spacing < 1) continue;
+				// Skip if this is a primary dot position
+				if (primaryX.some((px) => Math.abs(dotX - px) < 1)) continue;
+
+				for (let dotY = startY; dotY < height; dotY += config.fine.spacing) {
+					if (config.secondary?.show && dotY % config.secondary.spacing < 1) continue;
+					ctx.beginPath();
+					ctx.arc(Math.round(dotX), Math.round(dotY), config.fine.size, 0, 2 * Math.PI);
+					ctx.fill();
+				}
+			}
+		}
+
+		// Secondary grid (medium dots)
+		if (config.secondary?.show) {
+			ctx.fillStyle = `rgba(${baseColor}, ${config.secondary.opacity})`;
+			const startX =
+				((x % config.secondary.spacing) + config.secondary.spacing) % config.secondary.spacing;
+			const startY =
+				((y % config.secondary.spacing) + config.secondary.spacing) % config.secondary.spacing;
+
+			for (let dotX = startX; dotX < width; dotX += config.secondary.spacing) {
+				// Skip if this is a primary dot position
+				if (primaryX.some((px) => Math.abs(dotX - px) < 1)) continue;
+
+				for (let dotY = startY; dotY < height; dotY += config.secondary.spacing) {
+					ctx.beginPath();
+					ctx.arc(Math.round(dotX), Math.round(dotY), config.secondary.size, 0, 2 * Math.PI);
+					ctx.fill();
+				}
+			}
+		}
+
+		// Primary grid (largest dots)
+		ctx.fillStyle = `rgba(${baseColor}, ${config.primary.opacity})`;
+		const startY = ((y % config.primary.spacing) + config.primary.spacing) % config.primary.spacing;
+
+		for (let dotX of primaryX) {
+			for (let dotY = startY; dotY < height; dotY += config.primary.spacing) {
 				ctx.beginPath();
-				ctx.arc(Math.round(x), Math.round(y), displayDotRadius, 0, 2 * Math.PI);
+				ctx.arc(Math.round(dotX), Math.round(dotY), config.primary.size, 0, 2 * Math.PI);
 				ctx.fill();
 			}
 		}
 	}
 
-	// Set up high-DPI canvas on mount
+	// Set up high-DPI canvas
 	function setupCanvas() {
 		if (!canvas) return;
 
 		const dpr = window.devicePixelRatio || 1;
 		const rect = canvas.getBoundingClientRect();
 
-		// Only update if dimensions are actually valid
 		if (rect.width === 0 || rect.height === 0) {
-			// Try again in a moment if canvas has no size yet
 			setTimeout(setupCanvas, 100);
 			return;
 		}
@@ -99,7 +186,7 @@
 		canvas.style.width = `${rect.width}px`;
 		canvas.style.height = `${rect.height}px`;
 
-		// Set actual size in memory (scaled for device pixel ratio)
+		// Set actual size in memory (scaled for DPR)
 		canvas.width = Math.floor(rect.width * dpr);
 		canvas.height = Math.floor(rect.height * dpr);
 
@@ -107,11 +194,12 @@
 		const ctx = canvas.getContext('2d');
 		ctx.scale(dpr, dpr);
 
-		// Draw the grid after setup
+		// Force redraw
+		lastRender.dark = !$Frame.dark;
 		drawGrid();
 	}
 
-	// Animation loop to keep the grid updated with store changes
+	// Animation loop
 	function animate() {
 		drawGrid();
 		animationFrameId = requestAnimationFrame(animate);
@@ -119,37 +207,26 @@
 
 	onMount(() => {
 		if (typeof window !== 'undefined') {
-			// Use ResizeObserver for better resize handling
+			// Set up resize observer
 			resizeObserver = new ResizeObserver(() => {
+				lastRender.width = 0; // Force redraw
 				setupCanvas();
 			});
 
-			if (containerRef) {
-				resizeObserver.observe(containerRef);
-			}
+			if (containerRef) resizeObserver.observe(containerRef);
 
 			// Initial setup
 			setTimeout(() => {
 				setupCanvas();
-
-				// Start animation loop
 				animate();
 			}, 100);
 		}
 	});
 
 	onDestroy(() => {
-		// Check if we're in a browser environment
 		if (typeof window !== 'undefined') {
-			// Only cancel animation if it exists
-			if (animationFrameId !== null) {
-				cancelAnimationFrame(animationFrameId);
-			}
-
-			// Disconnect resize observer if it exists
-			if (resizeObserver !== null) {
-				resizeObserver.disconnect();
-			}
+			if (animationFrameId !== null) cancelAnimationFrame(animationFrameId);
+			if (resizeObserver !== null) resizeObserver.disconnect();
 		}
 	});
 </script>
@@ -162,9 +239,8 @@
 	.grid-container {
 		width: 100%;
 		height: 100%;
-		pointer-events: none; /* Make non-interactive */
+		pointer-events: none;
 	}
-
 	.dot-grid {
 		width: 100%;
 		height: 100%;
