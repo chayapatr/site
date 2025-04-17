@@ -9,6 +9,7 @@
 	import { page } from '$app/stores';
 
 	import AddWindow from '$lib/AddWindow.svelte';
+	import Grid from '$lib/Grid.svelte';
 
 	let move = $state((_: MouseEvent) => {});
 	let touchMove = (_: TouchEvent) => {};
@@ -284,10 +285,14 @@
 	}}
 >
 	<div
-		class={`h-full w-full overflow-hidden ${$Frame.cur === -1 ? 'bg-neutral-100 dark:bg-neutral-800/80 md:dark:bg-neutral-900' : 'bg-neutral-200/95 md:bg-neutral-200 dark:bg-neutral-900/70'} `}
+		class={`h-full w-full overflow-hidden ${
+			$Frame.cur === -1
+				? 'bg-neutral-100 dark:bg-neutral-800/80 md:dark:bg-neutral-900'
+				: 'bg-neutral-200/95 md:bg-neutral-200 dark:bg-neutral-900/70'
+		} `}
 	>
 		<div
-			class="relative min-h-full min-w-full"
+			class="relative z-10 min-h-full min-w-full"
 			style={`
             transform: matrix(${$Frame.scale}, 0, 0, ${$Frame.scale}, ${$Frame.x}, ${$Frame.y});
         `}
@@ -296,6 +301,10 @@
 				<Block {block} {i} />
 			{/each}
 		</div>
+	</div>
+
+	<div class="fixed left-0 top-0 z-0 h-[100svh] w-full">
+		<Grid />
 	</div>
 </div>
 

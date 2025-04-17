@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Grid from '$lib/Grid.svelte';
 	import { micromark } from 'micromark';
 	import { gfmTable, gfmTableHtml } from 'micromark-extension-gfm-table';
 
@@ -19,5 +20,6 @@
 </script>
 
 <div class="p-6 text-white">
-	{@html output}
+	<!-- {@html output} -->
+	<Grid />
 </div>
