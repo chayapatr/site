@@ -8,14 +8,21 @@
 	let containerRef;
 
 	// Grid properties
-	const gridSpacing = 40;
+	const baseGridSpacing = 40;
 	const dotRadius = 1.1;
+
+	// Scale thresholds for dot density adjustment
+	const scaleThresholds = {
+		low: 0.6, // Below this, show very sparse dots
+		medium: 0.85, // Below this, show fewer dots
+		high: 1.0 // Normal density
+	};
 
 	// Used to keep track of animation
 	let animationFrameId = null;
 	let resizeObserver = null;
 
-	// Draw the grid based on current position
+	// Draw the grid based on current position and scale
 	function drawGrid() {
 		if (!canvas) return;
 
@@ -30,19 +37,45 @@
 		// Set dot style based on the theme from Frame store
 		ctx.fillStyle = $Frame.dark ? '#333333' : '#cccccc';
 
-		// Get current position from the store
+		// Get current position and scale from the store
 		const currentPos = $Frame;
+		const scale = currentPos.scale;
 
-		// Calculate starting positions with offset
-		const startX = currentPos.x % gridSpacing;
-		const startY = currentPos.y % gridSpacing;
+		// Determine which dots to show based on scale
+		let skipFactor = 1; // Default: show every dot
+		if (scale < scaleThresholds.low) {
+			skipFactor = 4; // Show every 4th dot when scale is very small
+		} else if (scale < scaleThresholds.medium) {
+			skipFactor = 2; // Show every 2nd dot when scale is medium
+		}
+
+		// Adjust grid spacing based on scale
+		const scaledSpacing = baseGridSpacing * scale * skipFactor;
+
+		// Calculate center offset for transform-origin
+		const centerOffsetX = (width / 2) * (1 - scale);
+		const centerOffsetY = (height / 2) * (1 - scale);
+
+		const adjustedX = currentPos.x + centerOffsetX;
+		const adjustedY = currentPos.y + centerOffsetY;
+
+		// Calculate starting positions for the grid
+		// We use modulo to create the repeating pattern
+		const startX = ((adjustedX % scaledSpacing) + scaledSpacing) % scaledSpacing;
+		const startY = ((adjustedY % scaledSpacing) + scaledSpacing) % scaledSpacing;
+
+		// Maintain consistent dot size regardless of scale
+		// But with a slight adjustment for very low scales for better visibility
+		const sizeFactor =
+			scale < scaleThresholds.low ? 1.2 : scale < scaleThresholds.medium ? 1.1 : 1.0;
+		const displayDotRadius = dotRadius * sizeFactor;
 
 		// Draw dots
-		for (let x = startX; x < width; x += gridSpacing) {
-			for (let y = startY; y < height; y += gridSpacing) {
+		for (let x = startX; x < width; x += scaledSpacing) {
+			for (let y = startY; y < height; y += scaledSpacing) {
 				// Draw precise dots with crisp edges
 				ctx.beginPath();
-				ctx.arc(Math.round(x), Math.round(y), dotRadius, 0, 2 * Math.PI);
+				ctx.arc(Math.round(x), Math.round(y), displayDotRadius, 0, 2 * Math.PI);
 				ctx.fill();
 			}
 		}

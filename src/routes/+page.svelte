@@ -295,6 +295,7 @@
 			class="relative z-10 min-h-full min-w-full"
 			style={`
             transform: matrix(${$Frame.scale}, 0, 0, ${$Frame.scale}, ${$Frame.x}, ${$Frame.y});
+			transform-origin: center;
         `}
 		>
 			{#each $ActiveBlocks as block, i}
