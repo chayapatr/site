@@ -8,8 +8,8 @@
 	let containerRef;
 
 	// Grid properties
-	const gridSpacing = 30;
-	const dotRadius = 1;
+	const gridSpacing = 40;
+	const dotRadius = 1.1;
 
 	// Used to keep track of animation
 	let animationFrameId = null;
@@ -28,7 +28,7 @@
 		ctx.clearRect(0, 0, width, height);
 
 		// Set dot style based on the theme from Frame store
-		ctx.fillStyle = $Frame.dark ? '#333' : '#ccc';
+		ctx.fillStyle = $Frame.dark ? '#333333' : '#cccccc';
 
 		// Get current position from the store
 		const currentPos = $Frame;
