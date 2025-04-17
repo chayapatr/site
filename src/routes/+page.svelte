@@ -10,6 +10,7 @@
 
 	import AddWindow from '$lib/AddWindow.svelte';
 	import Grid from '$lib/Grid.svelte';
+	import MiniMap from '$lib/MiniMap.svelte'; // Import the MiniMap component
 
 	let move = $state((_: MouseEvent) => {});
 	let touchMove = (_: TouchEvent) => {};
@@ -28,6 +29,12 @@
 	let load = $state(false);
 	let menu = $state('');
 
+	// MiniMap settings
+	let showMiniMap = $state(true); // Toggle for showing/hiding the minimap
+	let minimapPosition = $state<'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'>(
+		'bottom-right'
+	);
+
 	const url = $page.url;
 
 	// Function to apply zoom based on mouse position
@@ -35,8 +42,8 @@
 		const oldScale = $Frame.scale;
 
 		// Ensure scale is within bounds
-		const min = 0.4;
-		const max = 2.5; // Increased max zoom
+		const min = 0.5;
+		const max = 1; // Increased max zoom
 		newScale = newScale > min ? (newScale < max ? newScale : max) : min;
 
 		if (newScale === oldScale) return;
@@ -149,30 +156,6 @@
 		}
 	});
 
-	// window.addEventListener(
-	// 	'wheel',
-	// 	function (e) {
-	// 		const { ctrlKey } = e;
-	// 		if (ctrlKey && $Frame.cur !== -1) {
-	// 			e.preventDefault();
-	// 			return;
-	// 		}
-	// 		if ($Frame.cur === -1) {
-	// 			e.preventDefault();
-	// 			let d = $Frame.scale - 0.0015 * e.deltaY;
-	// 			const min = 0.5;
-	// 			const max = 1.5;
-	// 			$Frame.scale = d > min ? (d < max ? d : max) : min;
-
-	// 			// const { clientX, clientY } = e;
-	// 			// change origin
-	// 			// $Frame.originX = clientX - $Frame.x * $Frame.scale;
-	// 			// $Frame.originY = clientY - $Frame.y * $Frame.scale;
-	// 		}
-	// 	},
-	// 	{ passive: false }
-	// );
-
 	// Handle mouse wheel zoom
 	function handleWheel(e: WheelEvent) {
 		if ($Frame.cur === -1) {
@@ -183,6 +166,23 @@
 			// Apply zoom centered on mouse position
 			applyZoom(newScale, e.clientX, e.clientY);
 		}
+	}
+
+	// Toggle MiniMap visibility
+	function toggleMiniMap() {
+		showMiniMap = !showMiniMap;
+	}
+
+	// Change MiniMap position
+	function cycleMiniMapPosition() {
+		const positions: Array<'top-left' | 'top-right' | 'bottom-left' | 'bottom-right'> = [
+			'top-left',
+			'top-right',
+			'bottom-right',
+			'bottom-left'
+		];
+		const currentIndex = positions.indexOf(minimapPosition);
+		minimapPosition = positions[(currentIndex + 1) % positions.length];
 	}
 </script>
 
@@ -284,13 +284,9 @@
 						else menu = 'discovery';
 					}}>🔎</button
 				>
-				<!-- <button
-					title="Open Setting"
-					class="dot"
-					on:click={() => {
-						if (menu === 'save') menu = '';
-						else menu = 'save';
-					}}>⚙️</button
+				<!-- <button title="Toggle MiniMap" class="dot" onclick={toggleMiniMap}>🗺️</button>
+				<button title="Change MiniMap Position" class="dot" onclick={cycleMiniMapPosition}
+					>📍</button
 				> -->
 				<AddWindow
 					btn={{
@@ -364,6 +360,13 @@
 {#if $ActiveBlocks.length === 0}
 	<div class="absolute left-0 top-0 flex h-[100svh] w-full items-center justify-center text-lg">
 		<img src="/imgs/pub.svg" alt="" class="h-12 w-full animate-pulse" />
+	</div>
+{/if}
+
+<!-- Display MiniMap when showMiniMap is true -->
+{#if showMiniMap}
+	<div class="fixed bottom-0 right-0 z-[999999] m-3 hidden md:block">
+		<MiniMap position={minimapPosition} width={180} height={120} />
 	</div>
 {/if}
 
