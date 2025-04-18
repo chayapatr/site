@@ -364,9 +364,20 @@
 {/if}
 
 <!-- Display MiniMap when showMiniMap is true -->
-{#if showMiniMap}
-	<div class="fixed bottom-0 right-0 z-[999999] m-3 hidden md:block">
-		<MiniMap position={minimapPosition} width={180} height={120} />
+{#if $ActiveBlocks.length > 1}
+	<div class={`fixed bottom-0 right-0 z-[999999] m-3 hidden md:block ${$Frame.dark ? 'dark' : ''}`}>
+		<div class="flex items-end justify-end gap-2">
+			{#if showMiniMap}
+				<MiniMap position={minimapPosition} width={180} height={120} />
+			{/if}
+			<button
+				onclick={() => {
+					showMiniMap = !showMiniMap;
+				}}
+				title="Toggle MiniMap"
+				class="dot">🗺️</button
+			>
+		</div>
 	</div>
 {/if}
 
