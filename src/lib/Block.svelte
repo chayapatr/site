@@ -160,7 +160,7 @@
 		class={`h-full overflow-hidden ${$Frame.cur === i && !$Frame.drag && !$Frame.resize ? '' : 'noselect'}`}
 	>
 		{#if $Blocks[blockId].type === 'graph'}
-			<div class={`noselect ${$Frame.cur === i ? '' : 'opacity-50'}`}>
+			<div class={`noselect ${$Frame.cur === i ? '' : ''}`}>
 				<Graph
 					height={$Blocks[blockId].height}
 					width={$Blocks[blockId].width}
@@ -168,7 +168,7 @@
 				/>
 			</div>
 		{:else if $Blocks[blockId].type === 'setting'}
-			<div class={`noselect relative ${$Frame.cur === i ? '' : 'opacity-50'}`}>
+			<div class={`noselect relative ${$Frame.cur === i ? '' : ''}`}>
 				<Setting />
 				{#if $Frame.cur !== i}
 					<div class="fixed left-0 top-0 h-full w-full"></div>
@@ -183,7 +183,7 @@
 					touchAction: 'pan-y'
 				}}
 				onpinch={() => {}}
-				class={`prose prose-sm h-full overflow-y-scroll px-3 pb-4 pt-10 lg:prose-base dark:prose-invert ${$Frame.cur === i ? 'overflow-y-scroll' : 'opacity-50'}`}
+				class={`prose prose-sm h-full overflow-y-scroll px-3 pb-4 pt-10 lg:prose-base dark:prose-invert ${$Frame.cur === i ? 'overflow-y-scroll' : ''}`}
 				style="scroll-padding-top: 2.5rem;"
 			>
 				{@html $Blocks[blockId].text}
