@@ -183,7 +183,7 @@
 					touchAction: 'pan-y'
 				}}
 				onpinch={() => {}}
-				class={`prose prose-sm h-full overflow-y-scroll px-3 pb-4 pt-10 lg:prose-base dark:prose-invert ${$Frame.cur === i ? 'overflow-y-scroll' : ''}`}
+				class={`prose prose-sm h-full overflow-y-scroll px-3 pb-4 pt-10 lg:prose-base dark:prose-invert prose-h1:my-1 prose-h2:my-1 prose-h3:my-1 prose-h4:my-1 prose-p:mb-3 prose-img:m-1 ${$Frame.cur === i ? 'overflow-y-scroll' : ''}`}
 				style="scroll-padding-top: 2.5rem;"
 			>
 				{@html $Blocks[blockId].text}
