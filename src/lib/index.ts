@@ -134,7 +134,9 @@ export const generateBlock = async (
 	});
 	const frame = get(Frame);
 
-	const h = maybeMobile(frame.width, frame.height) ? Math.min(frame.height / 2, 400) : 250;
+	const h = maybeMobile(frame.width, frame.height)
+		? Math.min(frame.height / 2, 400)
+		: frame.height / 2.75;
 	const scale = scales[screenType(frame.width, frame.height)];
 
 	return {
