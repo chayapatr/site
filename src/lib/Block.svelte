@@ -183,7 +183,7 @@
 					touchAction: 'pan-y'
 				}}
 				onpinch={() => {}}
-				class={`prose prose-sm h-full overflow-y-scroll px-3 pb-4 pt-10 lg:prose-base dark:prose-invert prose-h1:my-1 prose-h2:my-1 prose-h3:my-1 prose-h4:my-1 prose-p:mb-3 prose-img:m-1 ${$Frame.cur === i ? 'overflow-y-scroll' : ''}`}
+				class={`prose-em:[#FF82B2] prose prose-sm h-full overflow-y-scroll px-3 pb-4 pt-10 lg:prose-base dark:prose-invert prose-h1:my-1 prose-h1:text-3xl prose-h2:my-1 prose-h3:my-1 prose-h4:my-1 prose-h4:text-emerald-300 prose-p:mb-3 prose-strong:text-[#FF82B2] prose-img:m-1 ${$Frame.cur === i ? 'overflow-y-scroll' : ''}`}
 				style="scroll-padding-top: 2.5rem;"
 			>
 				{@html $Blocks[blockId].text}
