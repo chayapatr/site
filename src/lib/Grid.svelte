@@ -104,7 +104,7 @@
 		}
 
 		// Set base color
-		const baseColor = dark ? '61, 61, 61' : '194, 194, 194';
+		const baseColor = dark ? '100, 100, 100' : '150, 150, 150';
 
 		// Draw primary dots positions (for skipping)
 		const primaryX = [];
