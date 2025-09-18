@@ -219,7 +219,7 @@
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
-	class={`noselect fixed bottom-0 left-0 z-50 flex w-screen flex-col items-center justify-center gap-2 p-3 ${$Frame.dark ? 'dark' : ''}`}
+	class={`noselect fixed bottom-0 left-0 z-50 flex w-screen flex-col items-center justify-center gap-2 p-3 dark:[color-scheme:dark] ${$Frame.dark ? 'dark' : ''}`}
 >
 	<div class="flex min-w-72 flex-col items-end gap-1 lg:gap-2">
 		{#if menu}
