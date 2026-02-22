@@ -35,6 +35,14 @@
 	let parentId = $derived($Blocks.findIndex((x) => x.id === block.parentIndex));
 	let blockId = $derived($Blocks.findIndex((x) => x.id === block.id));
 
+	function focusBlock() {
+		$Frame.cur = i;
+		if ($Blocks[blockId].z < $Frame.z) {
+			$Frame.z = $Frame.z + 1;
+			$Blocks[blockId].z = $Frame.z;
+		}
+	}
+
 	onMount(() => {
 		chToPixels = (ch: number, el: HTMLElement): number => {
 			const tempElement = document.createElement('div');
@@ -140,7 +148,7 @@
 	`}
 	onclick={() => {
 		if (!touch) {
-			$Frame.cur = i;
+			focusBlock();
 			if ($Blocks[blockId].type === 'graph') {
 				$Frame.scale = 1;
 			}
@@ -202,7 +210,7 @@
 		onmousedown={() => {
 			touch = true;
 			if (!$Frame.resize) {
-				$Frame.cur = i;
+				focusBlock();
 				$Frame.drag = true;
 			}
 		}}
@@ -212,7 +220,7 @@
 			}
 		}}
 		onclick={() => {
-			if ($Frame.cur !== i) $Frame.cur = i;
+			if ($Frame.cur !== i) focusBlock();
 		}}
 	>
 		<div class="text-neutral-500">
@@ -221,17 +229,6 @@
 			{$Blocks[blockId].y.toFixed(0)}]
 		</div>
 		<div class="flex gap-2">
-			<button
-				class=" text-neutral-500"
-				onclick={() => {
-					if ($Blocks[blockId].z < $Frame.z) {
-						$Frame.z = $Frame.z + 1;
-						$Blocks[blockId].z = $Frame.z;
-					}
-				}}
-			>
-				[↑]
-			</button>
 			<button
 				class=" text-neutral-500"
 				onclick={() => {
