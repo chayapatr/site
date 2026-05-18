@@ -1,0 +1,30 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+
+body {
+	font-family: 'ABC Diatype Variable Edu', sans-serif;
+}
+
+* {
+	font-weight: 400;
+}
+
+strong, b, h1, h2, h3, h4, h5, h6 {
+	font-weight: 500;
+}
+
+
+.prose [data-line] {
+	position: relative;
+}
+
+
+.external-link {
+	text-decoration-line: underline;
+	text-decoration-style: dotted;
+	text-underline-offset: 3px;
+}
+
+.external-link:hover {
+	cursor: alias;
+}
