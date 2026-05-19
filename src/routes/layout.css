@@ -9,15 +9,28 @@ body {
 	font-weight: 400;
 }
 
-strong, b, h1, h2, h3, h4, h5, h6 {
+strong,
+b,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
 	font-weight: 500;
 }
-
 
 .prose [data-line] {
 	position: relative;
 }
 
+.prose [data-internal-slug] {
+	/* text-decoration: none; */
+	/* color: rgb(123, 123, 123); */
+}
+.prose [data-internal-slug]:hover {
+	text-decoration: underline wavy 2px rgb(58, 58, 230);
+}
 
 .external-link {
 	text-decoration-line: underline;
@@ -27,4 +40,12 @@ strong, b, h1, h2, h3, h4, h5, h6 {
 
 .external-link:hover {
 	cursor: alias;
+}
+
+* {
+	scrollbar-width: none;
+}
+
+*::-webkit-scrollbar {
+	display: none;
 }
