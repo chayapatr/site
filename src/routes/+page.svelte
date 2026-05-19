@@ -86,15 +86,15 @@
 		return scrollFraction * sidebarHeight;
 	});
 
-	async function openSlug(slug: string) {
+	async function openSlug(slug: string, afterIndex: number) {
 		const { content, lineCount } = await getContent(slug);
-		blocks.push({ slug, content, lineCount });
+		blocks.splice(afterIndex + 1, 0, { slug, content, lineCount });
 		await tick();
 		await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
 		updateLines();
-		const el = blockEls[blockEls.length - 1];
+		const el = blockEls[afterIndex + 1];
 		if (el) {
-			window.scrollTo({ top: el.offsetTop - 48, behavior: 'smooth' });
+			window.scrollTo({ top: el.offsetTop, behavior: 'smooth' });
 		}
 	}
 
@@ -103,7 +103,17 @@
 		if (!target) return;
 		e.preventDefault();
 		const slug = (target as HTMLElement).dataset.internalSlug;
-		if (slug) openSlug(slug);
+		if (!slug) return;
+		const existing = blocks.findIndex((b) => b.slug === slug);
+		if (existing !== -1) {
+			const el = blockEls[existing];
+			if (el) window.scrollTo({ top: el.offsetTop - 48, behavior: 'smooth' });
+			return;
+
+		}
+		const blockEl = (e.target as HTMLElement).closest('[data-block-index]');
+		const afterIndex = blockEl ? Number((blockEl as HTMLElement).dataset.blockIndex) : blocks.length - 1;
+		openSlug(slug, afterIndex);
 	}
 </script>
 
@@ -185,7 +195,7 @@
 				<div class="h-px flex-1 bg-neutral-200"></div>
 			</div>
 		{/if}
-		<div bind:this={blockEls[i]} class="flex justify-center">
+		<div bind:this={blockEls[i]} data-block-index={i} class="flex justify-center">
 			<div class="prose w-full max-w-3xl overflow-visible py-4 text-lg leading-relaxed">
 				{@html block.content}
 			</div>
