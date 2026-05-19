@@ -53,7 +53,9 @@
 			prevScrollY = scrollY;
 			isScrolling = true;
 			clearTimeout(scrollEndTimer);
-			scrollEndTimer = setTimeout(() => { isScrolling = false; }, 600);
+			scrollEndTimer = setTimeout(() => {
+				isScrolling = false;
+			}, 600);
 			updateLines();
 		}
 	});
@@ -164,17 +166,18 @@
 			galleryScrollY = galleryEl!.scrollTop;
 			isGalleryScrolling = true;
 			clearTimeout(galleryScrollEndTimer);
-			galleryScrollEndTimer = setTimeout(() => { isGalleryScrolling = false; }, 600);
+			galleryScrollEndTimer = setTimeout(() => {
+				isGalleryScrolling = false;
+			}, 600);
 		};
 		galleryEl.addEventListener('scroll', handler);
 		return () => galleryEl!.removeEventListener('scroll', handler);
 	});
 	let galleryActiveTick = $derived.by(() => {
 		if (!galleryEl) return 0;
-		const fraction = galleryScrollY / ((galleryEl.scrollHeight - galleryEl.clientHeight) || 1);
+		const fraction = galleryScrollY / (galleryEl.scrollHeight - galleryEl.clientHeight || 1);
 		return Math.round(fraction * 40);
 	});
-
 
 	$effect(() => {
 		if (!projectsGrid) return;
@@ -210,12 +213,12 @@
 </div>
 
 <div
-	class="text-md fixed top-0 right-0 left-0 z-50 border-b border-neutral-200 bg-white/70 px-5 leading-none backdrop-blur-md {isMobile
-		? 'pt-3'
-		: 'pt-2'}"
+	class="text-md fixed top-0 right-0 left-0 z-50 border-b border-neutral-200 bg-white/70 leading-none backdrop-blur-md {isMobile
+		? 'px-4 pt-2.5'
+		: 'px-5 pt-2'}"
 >
 	{#if isMobile}
-		<div class="flex w-full items-center justify-between pb-3">
+		<div class="flex w-full items-center justify-between pb-2.5">
 			{#if showGallery}
 				<div class="flex gap-3">
 					<div>Gallery</div>
@@ -265,7 +268,7 @@
 		>
 			<!-- front: content -->
 			<div
-				class="absolute inset-0 overflow-y-auto pr-10 pb-3 pl-4"
+				class="absolute inset-0 overflow-y-auto pr-9 pb-3 pl-3.5"
 				style="backface-visibility: hidden"
 				role="presentation"
 				onclick={handleClick}
@@ -433,7 +436,7 @@
 		<!-- left: main content -->
 		<div
 			role="presentation"
-			class="flex w-full flex-col {splitView ? 'pr-8' : ''}"
+			class="flex w-full flex-col {splitView ? 'pr-6' : ''}"
 			onclick={handleClick}
 			onkeydown={() => {}}
 		>
@@ -614,7 +617,11 @@
 
 <!-- ruler + dot + labels -->
 <div
-	class="pointer-events-none fixed right-0 z-50 px-2 py-2 {isMobile && showGallery ? 'hidden' : isMobile ? 'top-14 h-[calc(100svh-3.5rem-16px)]' : 'top-12 h-[calc(100svh-3rem-16px)]'}"
+	class="pointer-events-none fixed right-0 z-50 px-2 py-2 {isMobile && showGallery
+		? 'hidden'
+		: isMobile
+			? 'top-14 h-[calc(100svh-3.5rem-16px)]'
+			: 'top-12 h-[calc(100svh-3rem-16px)]'}"
 >
 	<!-- ruler ticks -->
 	<div class="absolute top-0 right-2 flex h-full flex-col items-end justify-between">
@@ -622,13 +629,23 @@
 			<div class="relative flex items-center justify-end">
 				{#if i === activeTick}
 					{#if isScrolling}
-						<span class="text-[10px] font-medium leading-none text-blue-500 tabular-nums">{Math.round((scrollY / (document.body.scrollHeight - window.innerHeight || 1)) * 100)}</span>
+						<span class="text-[10px] leading-none font-medium text-blue-500 tabular-nums"
+							>{Math.round(
+								(scrollY / (document.body.scrollHeight - window.innerHeight || 1)) * 100
+							)}</span
+						>
 					{:else}
 						<div class="h-1.5 w-1.5 rounded-full bg-blue-500"></div>
 					{/if}
 				{:else if splitView && !isMobile && i === galleryActiveTick}
 					{#if isGalleryScrolling}
-						<span class="text-[10px] font-medium leading-none text-purple-500 tabular-nums">{Math.round((galleryScrollY / ((galleryEl?.scrollHeight ?? 1) - (galleryEl?.clientHeight ?? 0) || 1)) * 100)}</span>
+						<span class="text-[10px] leading-none font-medium text-purple-500 tabular-nums"
+							>{Math.round(
+								(galleryScrollY /
+									((galleryEl?.scrollHeight ?? 1) - (galleryEl?.clientHeight ?? 0) || 1)) *
+									100
+							)}</span
+						>
 					{:else}
 						<div class="h-1.5 w-1.5 rounded-full bg-purple-500"></div>
 					{/if}
