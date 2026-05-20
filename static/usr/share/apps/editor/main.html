@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; background: transparent; overflow: hidden; }
+  #editor { width: 100%; height: 100%; }
+  #toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 8px;
+    border-bottom: 1px solid #262626;
+    font-family: 'Zed Mono Extended', ui-monospace, monospace;
+    font-size: 11px;
+    color: #525252;
+    background: rgba(10,10,10,0.5);
+  }
+  #filename { color: #a3a3a3; }
+  #save-btn {
+    margin-left: auto;
+    padding: 2px 8px;
+    border: 1px solid #404040;
+    background: transparent;
+    color: #a3a3a3;
+    font-family: inherit;
+    font-size: 11px;
+    cursor: pointer;
+  }
+  #save-btn:hover { border-color: #737373; color: #e5e5e5; }
+  #container { height: calc(100% - 28px); }
+</style>
+</head>
+<body>
+<div id="toolbar">
+  <span id="filename">untitled</span>
+  <button id="save-btn">save</button>
+</div>
+<div id="container"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.52.0/min/vs/loader.js"></script>
+<script>
+  const args = typeof sys !== 'undefined' ? sys.env().then(e => e) : Promise.resolve({})
+  let filePath = null
+
+  require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.52.0/min/vs' } })
+  require(['vs/editor/editor.main'], function() {
+    const editor = monaco.editor.create(document.getElementById('container'), {
+      value: '',
+      language: 'javascript',
+      theme: 'vs-dark',
+      fontSize: 12,
+      fontFamily: "'Zed Mono Extended', ui-monospace, monospace",
+      minimap: { enabled: false },
+      scrollBeyondLastLine: false,
+      automaticLayout: true,
+      padding: { top: 8 },
+    })
+
+    if (typeof sys !== 'undefined') {
+      sys.env().then(env => {
+        const path = (window.location.hash || '').slice(1) || null
+        // check if opened with a file arg via title
+        sys.setTitle('Editor')
+      })
+
+      // load file if passed via args
+      const hash = decodeURIComponent(window.location.hash.slice(1))
+      if (hash) {
+        filePath = hash
+        document.getElementById('filename').textContent = hash.split('/').pop()
+        sys.read(hash).then(content => {
+          editor.setValue(content)
+          // detect language from extension
+          const ext = hash.split('.').pop()
+          const langMap = { js: 'javascript', ts: 'typescript', md: 'markdown', html: 'html', css: 'css', json: 'json', sh: 'shell', py: 'python' }
+          if (langMap[ext]) monaco.editor.setModelLanguage(editor.getModel(), langMap[ext])
+          sys.setTitle('Editor — ' + hash.split('/').pop())
+          document.getElementById('filename').textContent = hash.split('/').pop()
+        }).catch(() => {})
+      }
+
+      document.getElementById('save-btn').onclick = () => {
+        if (!filePath) {
+          const p = prompt('Save as:', '/home/user/untitled.js')
+          if (!p) return
+          filePath = p
+          document.getElementById('filename').textContent = p.split('/').pop()
+          sys.setTitle('Editor — ' + p.split('/').pop())
+        }
+        sys.write(filePath, editor.getValue()).then ? null : null
+        sys.write(filePath, editor.getValue())
+        document.getElementById('save-btn').textContent = 'saved'
+        setTimeout(() => { document.getElementById('save-btn').textContent = 'save' }, 1500)
+      }
+    }
+  })
+</script>
+</body>
+</html>

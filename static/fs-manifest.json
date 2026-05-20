@@ -243,6 +243,20 @@
     },
     {
       "type": "dir",
+      "name": "fonts",
+      "path": "/fonts",
+      "children": [
+        {
+          "type": "file",
+          "name": "zed-mono-extended.ttf",
+          "path": "/fonts/zed-mono-extended.ttf",
+          "size": 4915968,
+          "mtime": 1779263572392.752
+        }
+      ]
+    },
+    {
+      "type": "dir",
       "name": "img",
       "path": "/img",
       "children": [
@@ -542,6 +556,20 @@
       "children": [
         {
           "type": "dir",
+          "name": "lib",
+          "path": "/usr/lib",
+          "children": [
+            {
+              "type": "file",
+              "name": "marked.js",
+              "path": "/usr/lib/marked.js",
+              "size": 42899,
+              "mtime": 1779293979756.483
+            }
+          ]
+        },
+        {
+          "type": "dir",
           "name": "share",
           "path": "/usr/share",
           "children": [
@@ -563,6 +591,20 @@
                   "path": "/usr/share/applications/browser.desktop",
                   "size": 74,
                   "mtime": 1779262894769.3567
+                },
+                {
+                  "type": "file",
+                  "name": "camera.desktop",
+                  "path": "/usr/share/applications/camera.desktop",
+                  "size": 91,
+                  "mtime": 1779294106072.2166
+                },
+                {
+                  "type": "file",
+                  "name": "editor.desktop",
+                  "path": "/usr/share/applications/editor.desktop",
+                  "size": 91,
+                  "mtime": 1779294106069.5679
                 },
                 {
                   "type": "file",
@@ -607,6 +649,34 @@
                   "mtime": 1779262894773.852
                 },
                 {
+                  "type": "dir",
+                  "name": "camera",
+                  "path": "/usr/share/apps/camera",
+                  "children": [
+                    {
+                      "type": "file",
+                      "name": "camera.desktop",
+                      "path": "/usr/share/apps/camera/camera.desktop",
+                      "size": 91,
+                      "mtime": 1779294098182.0442
+                    },
+                    {
+                      "type": "file",
+                      "name": "main.html",
+                      "path": "/usr/share/apps/camera/main.html",
+                      "size": 4507,
+                      "mtime": 1779294089113.6094
+                    },
+                    {
+                      "type": "file",
+                      "name": "manifest.json",
+                      "path": "/usr/share/apps/camera/manifest.json",
+                      "size": 169,
+                      "mtime": 1779294093754.7712
+                    }
+                  ]
+                },
+                {
                   "type": "file",
                   "name": "clock.desktop",
                   "path": "/usr/share/apps/clock.desktop",
@@ -633,6 +703,34 @@
                   "path": "/usr/share/apps/conway.html",
                   "size": 3574,
                   "mtime": 1779262894776.5176
+                },
+                {
+                  "type": "dir",
+                  "name": "editor",
+                  "path": "/usr/share/apps/editor",
+                  "children": [
+                    {
+                      "type": "file",
+                      "name": "editor.desktop",
+                      "path": "/usr/share/apps/editor/editor.desktop",
+                      "size": 91,
+                      "mtime": 1779294048936.8638
+                    },
+                    {
+                      "type": "file",
+                      "name": "main.html",
+                      "path": "/usr/share/apps/editor/main.html",
+                      "size": 3442,
+                      "mtime": 1779294043996.46
+                    },
+                    {
+                      "type": "file",
+                      "name": "manifest.json",
+                      "path": "/usr/share/apps/editor/manifest.json",
+                      "size": 194,
+                      "mtime": 1779293999210.812
+                    }
+                  ]
                 },
                 {
                   "type": "file",

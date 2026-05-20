@@ -185,8 +185,19 @@ function createKernel() {
       return pid
     },
 
-    spawnWebapp(path: string, title?: string): Promise<number> {
-      const name = title ?? path.split('/').pop() ?? 'App'
+    async spawnWebapp(path: string, title?: string): Promise<number> {
+      // if path is a directory, look for manifest.json + main.html
+      let htmlPath = path
+      let icon = '/usr/share/icons/notepad.svg'
+      let name = title ?? path.split('/').pop() ?? 'App'
+      try {
+        const manifestRaw = await vfsRead(path + '/manifest.json', get({ subscribe }), manifest!)
+        const m = JSON.parse(manifestRaw)
+        htmlPath = path + '/main.html'
+        if (m.name) name = title ?? m.name
+        if (m.icon) icon = m.icon
+      } catch { /* not a package dir, treat path as direct html file */ }
+
       let pid = 0
       update(s => {
         pid = s.nextPid++
@@ -194,7 +205,7 @@ function createKernel() {
         s.processes.set(pid, { pid, name, app: 'webapp', status: 'running', windowId, startedAt: Date.now() })
         s.windows.set(windowId, {
           id: windowId, pid, title: name, appType: 'webapp',
-          appState: { path, icon: '/usr/share/icons/notepad.svg' },
+          appState: { path: htmlPath, icon },
           position: { x: 80 + Math.random() * 200, y: 60 + Math.random() * 100 },
           size: { width: 640, height: 440 },
           zIndex: Math.max(0, ...Array.from(s.windows.values()).map(w => w.zIndex)) + 1,
@@ -203,7 +214,7 @@ function createKernel() {
         for (const [id, win] of s.windows) if (id !== windowId) win.focused = false
         return s
       })
-      return Promise.resolve(pid)
+      return pid
     },
 
     kill(pid: number): void {
