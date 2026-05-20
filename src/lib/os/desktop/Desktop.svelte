@@ -156,7 +156,7 @@
 </script>
 
 <div
-  class="fixed inset-0 overflow-hidden pt-8"
+  class="fixed inset-0 pt-8"
   style="background: {wallpaper ? `black url('/usr/share/wallpaper/${wallpaper}.webp') center/cover no-repeat` : 'black'};"
 >
   <!-- Desktop icons -->

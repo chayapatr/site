@@ -61,7 +61,7 @@ h6 {
 
 /* --- tidbitOS --- */
 
-.glass-dark {
+@utility glass-dark {
 	background: rgba(20, 20, 20, 0.75);
 	backdrop-filter: blur(12px);
 	-webkit-backdrop-filter: blur(12px);
@@ -82,9 +82,9 @@ h6 {
 
 /* Light theme */
 [data-theme='light'] .glass-dark {
-	background: rgba(255, 255, 255, 0.85);
-	backdrop-filter: blur(12px);
-	-webkit-backdrop-filter: blur(12px);
+	background: rgba(255, 255, 255, 0.85) !important;
+	backdrop-filter: blur(12px) !important;
+	-webkit-backdrop-filter: blur(12px) !important;
 }
 [data-theme='light'] .border-neutral-800 { border-color: #d4d4d4; }
 [data-theme='light'] .border-neutral-900 { border-color: #e5e5e5; }
