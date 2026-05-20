@@ -29,13 +29,11 @@ h6 {
 	/* color: rgb(123, 123, 123); */
 }
 .prose [data-internal-slug]:hover {
-	text-decoration: underline wavy 2px rgb(58, 58, 230);
+	text-decoration: underline wavy 1.5px rgb(58, 58, 230);
 }
 
 .external-link {
-	text-decoration-line: underline;
-	text-decoration-style: dotted;
-	text-underline-offset: 3px;
+	text-decoration: underline dotted 2px;
 }
 
 .external-link:hover {

@@ -97,7 +97,7 @@ export const projects: ProjectYear[] = [
 			},
 			{
 				month: 'May',
-				title: 'Mad Unicorn',
+				title: "Netflix's Mad Unicorn",
 				image: 'madunicorn.webp',
 				types: ['Media', 'Engineering'],
 				size: '2x2'
@@ -214,7 +214,7 @@ export const projects: ProjectYear[] = [
 				image: 'recursive.webp',
 				types: ['Art & Design']
 			},
-			{ month: 'Oct', title: 'Starstuff', image: 'starstuff.webp', types: ['Media'] },
+			{ month: 'Oct', title: 'ThaiPBS: Starstuff', image: 'starstuff.webp', types: ['Media'] },
 			{ month: 'Mar', title: 'TEDxUTCC', image: 'ted.webp', types: ['Community'] }
 		]
 	},

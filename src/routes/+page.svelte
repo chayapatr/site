@@ -448,13 +448,13 @@
 {:else}
 	<!-- desktop: shared flex container, both panels centered together -->
 	<div
-		class="mx-auto flex min-h-svh w-full gap-6 px-10 pt-12 pb-3 transition-[max-width] duration-500 xl:px-16 {splitView
+		class="mx-auto flex min-h-svh w-full gap-8 px-10 pb-3 transition-[max-width] duration-500 xl:px-16 {splitView
 			? 'max-w-[1600px]'
 			: 'max-w-5xl'}"
 	>
 		<!-- left: main content -->
 		<div
-			class="flex min-w-0 flex-1 flex-col"
+			class="flex min-w-0 flex-1 flex-col pt-12"
 			role="presentation"
 			onclick={handleClick}
 			onkeydown={() => {}}
@@ -483,11 +483,11 @@
 		<!-- right: gallery panel -->
 		<div
 			bind:this={galleryEl}
-			class="sticky top-0 h-svh shrink-0 overflow-y-auto transition-all duration-500 {splitView
+			class="sticky top-0 h-svh shrink-0 overflow-y-auto pt-12 transition-all duration-500 {splitView
 				? 'w-1/2 opacity-100'
 				: 'pointer-events-none w-0 overflow-hidden opacity-0'}"
 		>
-			<div class="w-full pt-12">
+			<div class="w-full">
 				<div class="w-full max-w-2xl">
 					<!-- controls -->
 					<div class="flex flex-wrap items-center gap-1 px-1 pt-2 pb-1">
