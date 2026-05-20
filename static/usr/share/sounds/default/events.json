@@ -1,0 +1,8 @@
+{
+  "window-open": "window-open",
+  "window-close": "window-close",
+  "notify": "notify",
+  "error": "error",
+  "ping": "ping",
+  "boot": "boot"
+}

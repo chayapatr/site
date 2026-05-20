@@ -2,6 +2,7 @@ import { writable, get } from 'svelte/store';
 import type { KernelState, Process, AppType, Kernel, FSManifestNode } from './types';
 import { loadManifest } from './manifest';
 import { vfsRead, vfsWrite, vfsRemove, vfsList, vfsStat, vfsExists } from './vfs';
+import { soundd } from './soundd';
 
 const APP_META: Record<AppType, { title: string; icon: string }> = {
 	finder: { title: 'Finder', icon: '/usr/share/icons/finder.svg' },
@@ -101,9 +102,20 @@ function createKernel() {
 				windowId: null,
 				startedAt: Date.now()
 			});
-			s.nextPid = 2;
+			s.processes.set(2, {
+				pid: 2,
+				name: 'soundd',
+				app: 'script',
+				status: 'running',
+				windowId: null,
+				startedAt: Date.now()
+			});
+			s.nextPid = 3;
 			return s;
 		});
+
+		// start sound daemon (non-blocking, loads theme in background)
+		soundd.start((path) => vfsRead(path, get({ subscribe }), manifest!));
 	}
 
 	function getManifest(): FSManifestNode {
@@ -168,6 +180,10 @@ function createKernel() {
 			return vfsExists(path, getState(), getManifest());
 		},
 
+		emit(event: string): void {
+			soundd.play(event);
+		},
+
 		spawn(app: AppType, args: string[] = []): number {
 			let pid = 0;
 			update((s) => {
@@ -199,6 +215,7 @@ function createKernel() {
 				}
 				return s;
 			});
+			soundd.play('window-open');
 			return pid;
 		},
 
@@ -244,6 +261,7 @@ function createKernel() {
 				for (const [id, win] of s.windows) if (id !== windowId) win.focused = false;
 				return s;
 			});
+			soundd.play('window-open');
 			return pid;
 		},
 
@@ -254,6 +272,7 @@ function createKernel() {
 				s.processes.delete(pid);
 				return s;
 			});
+			soundd.play('window-close');
 		},
 
 		ps(): Process[] {

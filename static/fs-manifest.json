@@ -54,8 +54,8 @@
           "type": "file",
           "name": "help.js",
           "path": "/bin/help.js",
-          "size": 1471,
-          "mtime": 1779262894748.2366
+          "size": 1468,
+          "mtime": 1779301581931.0535
         },
         {
           "type": "file",
@@ -122,6 +122,13 @@
         },
         {
           "type": "file",
+          "name": "soundd.js",
+          "path": "/bin/soundd.js",
+          "size": 1070,
+          "mtime": 1779302582813.1404
+        },
+        {
+          "type": "file",
           "name": "top.js",
           "path": "/bin/top.js",
           "size": 279,
@@ -145,22 +152,22 @@
           "type": "file",
           "name": "environment",
           "path": "/etc/environment",
-          "size": 84,
-          "mtime": 1779262894759.945
+          "size": 81,
+          "mtime": 1779301581775.8574
         },
         {
           "type": "file",
           "name": "hostname",
           "path": "/etc/hostname",
-          "size": 8,
-          "mtime": 1779262894760.4663
+          "size": 5,
+          "mtime": 1779301581775.825
         },
         {
           "type": "file",
           "name": "motd",
           "path": "/etc/motd",
-          "size": 81,
-          "mtime": 1779262894760.7974
+          "size": 78,
+          "mtime": 1779301581775.8228
         },
         {
           "type": "file",
@@ -204,8 +211,8 @@
                   "type": "file",
                   "name": ".directory",
                   "path": "/etc/skel/Desktop/.directory",
-                  "size": 21,
-                  "mtime": 1779262894755.177
+                  "size": 16,
+                  "mtime": 1779301728180.1238
                 },
                 {
                   "type": "file",
@@ -243,8 +250,8 @@
           "type": "file",
           "name": "version",
           "path": "/etc/version",
-          "size": 14,
-          "mtime": 1779262894759.5728
+          "size": 11,
+          "mtime": 1779301581775.7727
         }
       ]
     },
@@ -694,8 +701,8 @@
                   "type": "file",
                   "name": ".directory",
                   "path": "/usr/share/applications/.directory",
-                  "size": 21,
-                  "mtime": 1779262894768.0945
+                  "size": 16,
+                  "mtime": 1779301728179.6392
                 },
                 {
                   "type": "dir",
@@ -827,8 +834,8 @@
                   "type": "file",
                   "name": "welcome.md",
                   "path": "/usr/share/docs/welcome.md",
-                  "size": 386,
-                  "mtime": 1779262894764.0266
+                  "size": 380,
+                  "mtime": 1779301582029.389
                 }
               ]
             },
@@ -913,8 +920,36 @@
               "type": "file",
               "name": "manual.md",
               "path": "/usr/share/manual.md",
-              "size": 8780,
-              "mtime": 1779262894773.0574
+              "size": 11005,
+              "mtime": 1779302648676.1501
+            },
+            {
+              "type": "dir",
+              "name": "sounds",
+              "path": "/usr/share/sounds",
+              "children": [
+                {
+                  "type": "dir",
+                  "name": "default",
+                  "path": "/usr/share/sounds/default",
+                  "children": [
+                    {
+                      "type": "file",
+                      "name": "events.json",
+                      "path": "/usr/share/sounds/default/events.json",
+                      "size": 147,
+                      "mtime": 1779302535973.4143
+                    },
+                    {
+                      "type": "file",
+                      "name": "theme.strudel",
+                      "path": "/usr/share/sounds/default/theme.strudel",
+                      "size": 2804,
+                      "mtime": 1779302532100.0166
+                    }
+                  ]
+                }
+              ]
             },
             {
               "type": "file",

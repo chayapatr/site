@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { kernel } from '$lib/os/kernel/store';
+	import { soundd } from '$lib/os/kernel/soundd';
 	import { executeCommand } from '$lib/os/kernel/commands';
 	import { onMount, tick } from 'svelte';
 	import hljs from 'highlight.js/lib/core';
@@ -59,7 +60,11 @@
 		}
 		if (text.startsWith('__readonly__: ')) {
 			lines = [...lines, { kind: 'error', text: '🔒 ' + text.slice('__readonly__: '.length) }];
+			soundd.play('error');
 			return;
+		}
+		if (text.startsWith('error: ') || text.endsWith(': command not found')) {
+			soundd.play('error');
 		}
 		const isDir = /^\S.*\/$/.test(text.trim()) && !text.includes(' $ ');
 		lines = [...lines, { kind: isDir ? 'dir' : 'output', text }];

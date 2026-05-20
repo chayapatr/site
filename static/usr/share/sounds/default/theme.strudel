@@ -1,0 +1,82 @@
+// pubOS default sound theme
+// Each cue receives a Web Audio AudioContext and plays a short sound.
+// Edit this file and run `soundd reload` to apply changes live.
+
+cue("window-open", (ctx) => {
+  const o = ctx.createOscillator();
+  const g = ctx.createGain();
+  o.connect(g); g.connect(ctx.destination);
+  o.type = "sine";
+  o.frequency.setValueAtTime(440, ctx.currentTime);
+  o.frequency.linearRampToValueAtTime(660, ctx.currentTime + 0.08);
+  g.gain.setValueAtTime(0.12, ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.18);
+  o.start(ctx.currentTime);
+  o.stop(ctx.currentTime + 0.18);
+});
+
+cue("window-close", (ctx) => {
+  const o = ctx.createOscillator();
+  const g = ctx.createGain();
+  o.connect(g); g.connect(ctx.destination);
+  o.type = "sine";
+  o.frequency.setValueAtTime(440, ctx.currentTime);
+  o.frequency.linearRampToValueAtTime(220, ctx.currentTime + 0.1);
+  g.gain.setValueAtTime(0.1, ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.2);
+  o.start(ctx.currentTime);
+  o.stop(ctx.currentTime + 0.2);
+});
+
+cue("notify", (ctx) => {
+  [0, 0.08].forEach((delay, i) => {
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type = "triangle";
+    o.frequency.value = i === 0 ? 880 : 1100;
+    g.gain.setValueAtTime(0.1, ctx.currentTime + delay);
+    g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + delay + 0.1);
+    o.start(ctx.currentTime + delay);
+    o.stop(ctx.currentTime + delay + 0.1);
+  });
+});
+
+cue("error", (ctx) => {
+  const o = ctx.createOscillator();
+  const g = ctx.createGain();
+  o.connect(g); g.connect(ctx.destination);
+  o.type = "sawtooth";
+  o.frequency.value = 180;
+  g.gain.setValueAtTime(0.08, ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.25);
+  o.start(ctx.currentTime);
+  o.stop(ctx.currentTime + 0.25);
+});
+
+cue("ping", (ctx) => {
+  const o = ctx.createOscillator();
+  const g = ctx.createGain();
+  o.connect(g); g.connect(ctx.destination);
+  o.type = "sine";
+  o.frequency.value = 1320;
+  g.gain.setValueAtTime(0.1, ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.15);
+  o.start(ctx.currentTime);
+  o.stop(ctx.currentTime + 0.15);
+});
+
+cue("boot", (ctx) => {
+  [0, 0.1, 0.2].forEach((delay, i) => {
+    const freqs = [330, 440, 660];
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type = "sine";
+    o.frequency.value = freqs[i];
+    g.gain.setValueAtTime(0.1, ctx.currentTime + delay);
+    g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + delay + 0.15);
+    o.start(ctx.currentTime + delay);
+    o.stop(ctx.currentTime + delay + 0.15);
+  });
+});

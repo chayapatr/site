@@ -32,15 +32,16 @@ the virtual filesystem has three backends, unified behind a single interface (`s
 
 - `/proc/<pid>/name` — process name
 - `/proc/<pid>/status` — process status
-- `/proc/<pid>/ctl` — write `kill`, `stop`, or `resume` to signal a process
+- `/proc/<pid>/ctl` — write `kill`, `stop`, or `resume` to signal a process; soundd (pid 2) also accepts `reload`, `mute`, `unmute`
 - `/dev/screen` — lists all open windows
+- `/dev/audio` — write a cue name to play a sound; read returns `active` or `muted`
 - `/sys/version` — os version string
 - `/sys/uptime` — seconds since boot
 - `/sys/hostname` — hostname
 
 all VFS operations (`read`, `write`, `list`, `stat`, `exists`) route through the same interface regardless of which backend handles them.
 
-write access is restricted to `/home/`. writing to any other path throws `read-only filesystem`; the terminal shows a 🔒 prefix on those errors.
+write access is restricted to `/home/` and special device paths like `/dev/audio` and `/proc/<pid>/ctl`. writing to any other path throws `read-only filesystem`; the terminal shows a 🔒 prefix on those errors.
 
 ---
 
@@ -52,6 +53,7 @@ on first boot, pubOS:
 2. reads `/etc/environment` and loads env vars (`USER`, `HOME`, `PATH`, `HOSTNAME`, `EDITOR`)
 3. copies `/etc/skel/` into `/home/user/` (only files not already in localStorage)
 4. sources `/etc/profile` in the terminal (sets up shell environment)
+5. starts `soundd` (pid 2) which loads the sound theme from `/usr/share/sounds/default/`
 
 `/etc/skel/` contains the default home directory layout — desktop icons, finder bookmarks, etc. to reset your home directory, clear localStorage and reload.
 
@@ -121,6 +123,10 @@ shell builtins (handled before file lookup): `export`, `clear`
 | `clear` | clear the terminal |
 | `reboot` | reload the page |
 | `help` | show command list |
+| `pkg list` | list available packages from the network registry |
+| `pkg install <name>` | install a package to `/usr/share/applications/` |
+| `pkg remove <name>` | uninstall a package |
+| `soundd [status\|reload\|mute\|unmute\|play <cue>]` | control the sound daemon |
 
 tab completion: press Tab to complete commands (first word) or file/dir paths (subsequent words).
 
@@ -134,12 +140,10 @@ apps are Svelte components mounted inside window frames. each app receives a `pi
 |-----|-------------|
 | `terminal` | interactive shell. executes commands from the VFS |
 | `finder` | filesystem browser. sidebar from `~/.config/finder/bookmarks` |
-| `browser` | renders `pub://`, `file://`, and `https://` URLs |
-| `notepad` | text editor. saves files to the VFS |
 | `settings` | wallpaper picker, light/dark/system theme |
 | `monitor` | live process and window monitor |
 
-webapps (`.html` files launched via `.desktop` files) run in sandboxed iframes with access to the `sys` bridge via `window.sys`.
+webapps (app packages in `/usr/share/applications/`) run in sandboxed iframes with access to the `sys` bridge via `window.sys`. bundled webapps include **browser**, **editor**, and **preview**. installable packages (snake, conway, clock, synth) live in the network registry — install with `pkg install <name>`.
 
 ---
 
@@ -167,7 +171,7 @@ default is `list`.
 
 ### .desktop files
 
-`.desktop` files are JSON descriptors. three forms:
+`.desktop` files are JSON descriptors. four forms:
 
 ```json
 { "app": "terminal", "label": "Terminal", "icon": "/usr/share/icons/terminal.svg" }
@@ -178,18 +182,22 @@ default is `list`.
 ```
 
 ```json
-{ "webapp": "/usr/share/apps/clock.html", "label": "Clock", "icon": "/usr/share/icons/monitor.svg" }
+{ "launch": "/usr/share/applications/browser", "label": "Browser", "icon": "/usr/share/icons/browser.svg" }
 ```
 
-system apps: `/usr/share/applications/`. user webapps: `/usr/share/apps/`. desktop icons: `/home/user/Desktop/`.
+```json
+{ "file": "/home/user/notes.txt", "label": "Notes", "icon": "/usr/share/icons/file.svg" }
+```
+
+app packages: `/usr/share/applications/`. desktop icons: `/home/user/Desktop/`.
 
 ---
 
 ### webapps
 
-webapps are standalone `.html` files that run inside a sandboxed iframe. they have access to `window.sys` — the same syscall interface as terminal scripts — via a postMessage bridge injected at load time.
+webapps are app packages — directories with a `manifest.json` and `main.html` — that run inside a sandboxed iframe. they have access to `window.sys` — the same syscall interface as terminal scripts — via a postMessage bridge injected at load time. the system font and CSS variables are also injected automatically via `/usr/share/style.css`.
 
-example webapp:
+example webapp `main.html`:
 
 ```html
 <script>
@@ -198,7 +206,54 @@ example webapp:
 </script>
 ```
 
-bundled webapps: **Clock**, **Conway**, **Snake**, **Synth** — all in `/usr/share/apps/`.
+`manifest.json` format:
+```json
+{ "name": "My App", "icon": "/usr/share/icons/app.svg", "version": "1.0" }
+```
+
+---
+
+### sound system
+
+pubOS has a live sound daemon (`soundd`, pid 2) that plays named audio cues on kernel events.
+
+**theme file:** `/usr/share/sounds/default/theme.strudel`
+
+each cue is a JavaScript function that receives a Web Audio `AudioContext`:
+
+```javascript
+cue("my-sound", (ctx) => {
+  const o = ctx.createOscillator()
+  const g = ctx.createGain()
+  o.connect(g); g.connect(ctx.destination)
+  o.frequency.value = 440
+  g.gain.setValueAtTime(0.1, ctx.currentTime)
+  g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.2)
+  o.start(ctx.currentTime)
+  o.stop(ctx.currentTime + 0.2)
+})
+```
+
+**event map:** `/usr/share/sounds/default/events.json` — maps kernel event names to cue names:
+
+```json
+{ "window-open": "my-sound", "window-close": "fall", "error": "buzz" }
+```
+
+**playing sounds from the shell:**
+
+```sh
+echo "ping" > /dev/audio          # play the "ping" cue
+soundd play notify                 # same thing
+soundd reload                      # reload theme after editing
+soundd mute                        # silence all sounds
+soundd unmute
+soundd status                      # show daemon status and loaded cues
+```
+
+**built-in events:** `window-open`, `window-close`, `notify`, `error`, `ping`, `boot`
+
+to create a custom sound theme, edit `/usr/share/sounds/default/theme.strudel` in the editor and run `soundd reload`.
 
 ---
 

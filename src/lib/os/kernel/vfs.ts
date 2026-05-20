@@ -1,5 +1,6 @@
 import type { KernelState, StatResult, FSManifestNode } from './types';
 import { findNode } from './manifest';
+import { soundd } from './soundd';
 
 const LS_PREFIX = 'pubOS:fs:';
 
@@ -13,7 +14,7 @@ function computedList(path: string, state: KernelState): string[] | null {
 	}
 	const procMatch = path.match(/^\/proc\/(\d+)$/);
 	if (procMatch) return ['status', 'name', 'ctl'];
-	if (path === '/dev') return ['screen', 'cons'];
+	if (path === '/dev') return ['screen', 'cons', 'audio'];
 	if (path === '/sys') return ['version', 'uptime', 'hostname'];
 	return null;
 }
@@ -25,12 +26,20 @@ function computedRead(path: string, state: KernelState): string | null {
 		const field = procMatch[2];
 		const proc = state.processes.get(pid);
 		if (!proc) throw new Error(`no such process: ${pid}`);
+		if (pid === 2 && field === 'status') {
+			const muted = soundd.isMuted ? ' muted' : '';
+			const loaded = soundd.isLoaded ? ' loaded' : ' loading';
+			return `running${loaded}${muted}`;
+		}
 		return field === 'status' ? proc.status : proc.name;
 	}
 	if (path === '/dev/screen') {
 		return Array.from(state.windows.values())
 			.map((w) => `${w.id} ${w.appType} ${w.title}`)
 			.join('\n');
+	}
+	if (path === '/dev/audio') {
+		return soundd.isMuted ? 'muted' : 'active';
 	}
 	if (path === '/sys/version') return 'pubOS 0.1.0';
 	if (path === '/sys/hostname') return state.env['HOSTNAME'] ?? 'pubOS';
@@ -80,6 +89,10 @@ export function vfsRemove(path: string): void {
 }
 
 export function vfsWrite(path: string, content: string, state: KernelState): void {
+	if (path === '/dev/audio') {
+		soundd.play(content.trim());
+		return;
+	}
 	if (isComputed(path) && !path.match(/^\/proc\/\d+\/ctl$/)) {
 		throw new Error(`${path}: read-only filesystem`);
 	}
@@ -102,6 +115,21 @@ export function vfsWrite(path: string, content: string, state: KernelState): voi
 			const proc = state.processes.get(pid);
 			if (proc) proc.status = 'running';
 			return;
+		}
+		// soundd-specific signals
+		if (pid === 2) {
+			if (signal === 'reload') {
+				soundd.load();
+				return;
+			}
+			if (signal === 'mute') {
+				soundd.mute();
+				return;
+			}
+			if (signal === 'unmute') {
+				soundd.unmute();
+				return;
+			}
 		}
 		throw new Error(`unknown signal: ${signal}`);
 	}

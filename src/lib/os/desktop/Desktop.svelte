@@ -83,14 +83,8 @@
   }
 
   function closeWindow(id: string) {
-    kernel.update(s => {
-      const win = s.windows.get(id)
-      if (win) {
-        s.processes.delete(win.pid)
-        s.windows.delete(id)
-      }
-      return s
-    })
+    const win = $kernel.windows.get(id)
+    if (win) kernel.kill(win.pid)
   }
 
   function minimizeWindow(id: string) {
