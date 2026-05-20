@@ -286,7 +286,6 @@
 
     // mount walld canvas
     if (wallCanvas) {
-      walld.setReader((path) => kernel.read(path))
       walld.mount(wallCanvas)
       window.addEventListener('resize', () => walld.resize())
     }

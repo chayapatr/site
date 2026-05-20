@@ -14,7 +14,7 @@ class WallpaperDaemon {
   private animFrame: number | null = null
   private eventHandlers = new Map<string, EventFn>()
   private offWatchers: Array<() => void> = []
-  private current: string | null = null
+  current: string | null = null
 
   setReader(read: ReadFn) {
     this._read = read

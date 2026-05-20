@@ -1,6 +1,7 @@
 import type { KernelState, StatResult, FSManifestNode } from './types';
 import { findNode } from './manifest';
 import { soundd } from './soundd';
+import { walld } from './walld';
 import { bus } from './events';
 
 const LS_PREFIX = 'pubOS:fs:';
@@ -31,6 +32,9 @@ function computedRead(path: string, state: KernelState): string | null {
 			const muted = soundd.isMuted ? ' muted' : '';
 			const loaded = soundd.isLoaded ? ' loaded' : ' loading';
 			return `running${loaded}${muted}`;
+		}
+		if (pid === 3 && field === 'status') {
+			return `running${walld.current ? ` theme:${walld.current}` : ' idle'}`;
 		}
 		return field === 'status' ? proc.status : proc.name;
 	}
@@ -124,18 +128,15 @@ export function vfsWrite(path: string, content: string, state: KernelState): voi
 		}
 		// soundd-specific signals
 		if (pid === 2) {
-			if (signal === 'reload') {
-				soundd.load();
-				return;
-			}
-			if (signal === 'mute') {
-				soundd.mute();
-				return;
-			}
-			if (signal === 'unmute') {
-				soundd.unmute();
-				return;
-			}
+			if (signal === 'reload') { soundd.load(); return; }
+			if (signal === 'mute')   { soundd.mute(); return; }
+			if (signal === 'unmute') { soundd.unmute(); return; }
+		}
+		// walld-specific signals
+		if (pid === 3) {
+			if (signal === 'unload') { walld.unload(); return; }
+			if (signal === 'reload' && walld.current) { walld.load(walld.current); return; }
+			if (signal.startsWith('load ')) { walld.load(signal.slice(5).trim()); return; }
 		}
 		throw new Error(`unknown signal: ${signal}`);
 	}

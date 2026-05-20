@@ -3,6 +3,7 @@ import type { KernelState, Process, AppType, Kernel, FSManifestNode } from './ty
 import { loadManifest, findNode } from './manifest';
 import { vfsRead, vfsWrite, vfsRemove, vfsList, vfsStat, vfsExists } from './vfs';
 import { soundd } from './soundd';
+import { walld } from './walld';
 import { bus } from './events';
 
 const APP_META: Record<AppType, { title: string; icon: string }> = {
@@ -110,12 +111,22 @@ function createKernel() {
 				windowId: null,
 				startedAt: Date.now()
 			});
-			s.nextPid = 3;
+			s.processes.set(3, {
+				pid: 3,
+				name: 'walld',
+				app: 'script',
+				status: 'running',
+				windowId: null,
+				startedAt: Date.now()
+			});
+			s.nextPid = 4;
 			return s;
 		});
 
 		// start sound daemon (non-blocking, loads theme in background)
 		soundd.start((path) => vfsRead(path, get({ subscribe }), manifest!));
+		// walld reader set here; canvas mounted later in Desktop.svelte
+		walld.setReader((path) => vfsRead(path, get({ subscribe }), manifest!));
 	}
 
 	function getManifest(): FSManifestNode {
@@ -277,6 +288,8 @@ function createKernel() {
 			if (windowId) bus.emit('win:close', { windowId, pid });
 			if (pid === 2) {
 				soundd.mute();
+			} else if (pid === 3) {
+				walld.unload();
 			} else {
 				soundd.play('window-close');
 			}

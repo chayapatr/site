@@ -124,7 +124,7 @@
         }).catch(() => {})
       }
 
-      document.getElementById('save-btn').onclick = () => {
+      function save() {
         if (!filePath) {
           const p = prompt('Save as:', '/home/user/untitled.js')
           if (!p) return
@@ -132,11 +132,25 @@
           document.getElementById('filename').textContent = p.split('/').pop()
           sys.setTitle('Editor — ' + p.split('/').pop())
         }
-        sys.write(filePath, editor.getValue()).then ? null : null
         sys.write(filePath, editor.getValue())
         document.getElementById('save-btn').textContent = 'saved'
         setTimeout(() => { document.getElementById('save-btn').textContent = 'save' }, 1500)
       }
+
+      document.getElementById('save-btn').onclick = save
+
+      editor.addCommand(
+        monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS,
+        save
+      )
+
+      // also catch at document level in case monaco doesn't have focus
+      document.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+          e.preventDefault()
+          save()
+        }
+      })
     }
   })
 </script>
