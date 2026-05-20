@@ -1,23 +1,14 @@
-// Sound daemon — loads /usr/share/sounds/default/theme.strudel and plays named cues
+// Sound daemon — loads /usr/share/sounds/default/theme.js and plays named cues
 // on kernel events. Acts as PID 2 in /proc.
+// Theme cues receive (ctx: AudioContext, Tone) and can use either Web Audio or Tone.js.
 
 interface CueFn {
 	(): void;
 }
 
-interface StrudelAPI {
-	evaluate(code: string): Promise<void>;
-}
-
-declare global {
-	interface Window {
-		__strudelRepl?: StrudelAPI;
-	}
-}
-
-const THEME_PATH = '/usr/share/sounds/default/theme.strudel';
+const THEME_PATH = '/usr/share/sounds/default/theme.js';
 const EVENTS_PATH = '/usr/share/sounds/default/events.json';
-const STRUDEL_CDN = 'https://unpkg.com/@strudel/repl@latest/dist/index.js';
+const TONE_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js';
 
 type ReadFn = (path: string) => Promise<string>;
 
@@ -28,8 +19,9 @@ class SoundDaemon {
 	private loading = false;
 	private muted = false;
 	private _read: ReadFn | null = null;
-	private AudioContext: typeof window.AudioContext | null = null;
 	private ctx: AudioContext | null = null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	private Tone: any = null;
 
 	setReader(read: ReadFn) {
 		this._read = read;
@@ -42,7 +34,20 @@ class SoundDaemon {
 
 	async start(read: ReadFn) {
 		this.setReader(read);
+		await this.loadTone();
 		await this.load();
+	}
+
+	private async loadTone() {
+		if (typeof window === 'undefined') return;
+		if ((window as any).Tone) { this.Tone = (window as any).Tone; return; }
+		await new Promise<void>((resolve) => {
+			const s = document.createElement('script');
+			s.src = TONE_CDN;
+			s.onload = () => { this.Tone = (window as any).Tone; resolve(); };
+			s.onerror = () => resolve();
+			document.head.appendChild(s);
+		});
 	}
 
 	async load() {
@@ -65,15 +70,13 @@ class SoundDaemon {
 
 	private parseCues(source: string) {
 		this.cues.clear();
-		// execute the theme file in a sandboxed context
-		// theme format: cue("name", () => { /* tone.js or web audio */ })
 		const register = (name: string, fn: CueFn) => {
 			this.cues.set(name, fn);
 		};
 		try {
 			// eslint-disable-next-line no-new-func
-			const fn = new Function('cue', source);
-			fn(register);
+			const fn = new Function('cue', 'Tone', source);
+			fn(register, this.Tone);
 		} catch (e) {
 			console.warn('soundd: theme parse error', e);
 		}
@@ -95,8 +98,7 @@ class SoundDaemon {
 		const cue = this.cues.get(cueName);
 		if (!cue) return;
 		try {
-			// inject AudioContext into the cue call
-			(cue as (ctx: AudioContext) => void)(this.getAudioContext());
+			(cue as (ctx: AudioContext, Tone: unknown) => void)(this.getAudioContext(), this.Tone);
 		} catch (e) {
 			console.warn(`soundd: cue "${cueName}" error`, e);
 		}

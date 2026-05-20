@@ -217,7 +217,7 @@ example webapp `main.html`:
 
 pubOS has a live sound daemon (`soundd`, pid 2) that plays named audio cues on kernel events.
 
-**theme file:** `/usr/share/sounds/default/theme.strudel`
+**theme file:** `/usr/share/sounds/default/theme.js`
 
 each cue is a JavaScript function that receives a Web Audio `AudioContext`:
 
@@ -253,7 +253,7 @@ soundd status                      # show daemon status and loaded cues
 
 **built-in events:** `window-open`, `window-close`, `notify`, `error`, `ping`, `boot`
 
-to create a custom sound theme, edit `/usr/share/sounds/default/theme.strudel` in the editor and run `soundd reload`.
+to create a custom sound theme, edit `/usr/share/sounds/default/theme.js` in the editor and run `soundd reload`.
 
 ---
 

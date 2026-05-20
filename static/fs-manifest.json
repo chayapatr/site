@@ -927,8 +927,8 @@
               "type": "file",
               "name": "manual.md",
               "path": "/usr/share/manual.md",
-              "size": 11005,
-              "mtime": 1779302648676.1501
+              "size": 10995,
+              "mtime": 1779306789588.5498
             },
             {
               "type": "dir",
@@ -949,10 +949,10 @@
                     },
                     {
                       "type": "file",
-                      "name": "theme.strudel",
-                      "path": "/usr/share/sounds/default/theme.strudel",
-                      "size": 2804,
-                      "mtime": 1779302532100.0166
+                      "name": "theme.js",
+                      "path": "/usr/share/sounds/default/theme.js",
+                      "size": 2361,
+                      "mtime": 1779306858909.0535
                     }
                   ]
                 }
