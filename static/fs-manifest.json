@@ -1,0 +1,791 @@
+{
+  "type": "dir",
+  "name": "",
+  "path": "/",
+  "children": [
+    {
+      "type": "dir",
+      "name": "bin",
+      "path": "/bin",
+      "children": [
+        {
+          "type": "file",
+          "name": "cat.js",
+          "path": "/bin/cat.js",
+          "size": 421,
+          "mtime": 1779262894745.0586
+        },
+        {
+          "type": "file",
+          "name": "cd.js",
+          "path": "/bin/cd.js",
+          "size": 474,
+          "mtime": 1779262894748.5776
+        },
+        {
+          "type": "file",
+          "name": "clear.js",
+          "path": "/bin/clear.js",
+          "size": 88,
+          "mtime": 1779262894747.7917
+        },
+        {
+          "type": "file",
+          "name": "cp.js",
+          "path": "/bin/cp.js",
+          "size": 352,
+          "mtime": 1779262894747.2278
+        },
+        {
+          "type": "file",
+          "name": "echo.js",
+          "path": "/bin/echo.js",
+          "size": 22,
+          "mtime": 1779262894748.985
+        },
+        {
+          "type": "file",
+          "name": "export.js",
+          "path": "/bin/export.js",
+          "size": 339,
+          "mtime": 1779262894746.3164
+        },
+        {
+          "type": "file",
+          "name": "help.js",
+          "path": "/bin/help.js",
+          "size": 1471,
+          "mtime": 1779262894748.2366
+        },
+        {
+          "type": "file",
+          "name": "kill.js",
+          "path": "/bin/kill.js",
+          "size": 100,
+          "mtime": 1779262894749.2666
+        },
+        {
+          "type": "file",
+          "name": "ls.js",
+          "path": "/bin/ls.js",
+          "size": 505,
+          "mtime": 1779262894746.7559
+        },
+        {
+          "type": "file",
+          "name": "mkdir.js",
+          "path": "/bin/mkdir.js",
+          "size": 100,
+          "mtime": 1779262894749.942
+        },
+        {
+          "type": "file",
+          "name": "open.js",
+          "path": "/bin/open.js",
+          "size": 159,
+          "mtime": 1779262894751.0574
+        },
+        {
+          "type": "file",
+          "name": "ps.js",
+          "path": "/bin/ps.js",
+          "size": 130,
+          "mtime": 1779262894750.7227
+        },
+        {
+          "type": "file",
+          "name": "pwd.js",
+          "path": "/bin/pwd.js",
+          "size": 21,
+          "mtime": 1779262894749.5774
+        },
+        {
+          "type": "file",
+          "name": "reboot.js",
+          "path": "/bin/reboot.js",
+          "size": 58,
+          "mtime": 1779262894751.385
+        },
+        {
+          "type": "file",
+          "name": "rm.js",
+          "path": "/bin/rm.js",
+          "size": 76,
+          "mtime": 1779262894745.486
+        },
+        {
+          "type": "file",
+          "name": "top.js",
+          "path": "/bin/top.js",
+          "size": 279,
+          "mtime": 1779262894745.8958
+        },
+        {
+          "type": "file",
+          "name": "touch.js",
+          "path": "/bin/touch.js",
+          "size": 116,
+          "mtime": 1779262894750.3064
+        }
+      ]
+    },
+    {
+      "type": "dir",
+      "name": "etc",
+      "path": "/etc",
+      "children": [
+        {
+          "type": "file",
+          "name": "environment",
+          "path": "/etc/environment",
+          "size": 84,
+          "mtime": 1779262894759.945
+        },
+        {
+          "type": "file",
+          "name": "hostname",
+          "path": "/etc/hostname",
+          "size": 8,
+          "mtime": 1779262894760.4663
+        },
+        {
+          "type": "file",
+          "name": "motd",
+          "path": "/etc/motd",
+          "size": 81,
+          "mtime": 1779262894760.7974
+        },
+        {
+          "type": "file",
+          "name": "profile",
+          "path": "/etc/profile",
+          "size": 133,
+          "mtime": 1779262894758.4497
+        },
+        {
+          "type": "dir",
+          "name": "skel",
+          "path": "/etc/skel",
+          "children": [
+            {
+              "type": "dir",
+              "name": ".config",
+              "path": "/etc/skel/.config",
+              "children": [
+                {
+                  "type": "dir",
+                  "name": "finder",
+                  "path": "/etc/skel/.config/finder",
+                  "children": [
+                    {
+                      "type": "file",
+                      "name": "bookmarks",
+                      "path": "/etc/skel/.config/finder/bookmarks",
+                      "size": 275,
+                      "mtime": 1779262894754.6094
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "dir",
+              "name": "Desktop",
+              "path": "/etc/skel/Desktop",
+              "children": [
+                {
+                  "type": "file",
+                  "name": ".directory",
+                  "path": "/etc/skel/Desktop/.directory",
+                  "size": 21,
+                  "mtime": 1779262894755.177
+                },
+                {
+                  "type": "file",
+                  "name": "Applications.desktop",
+                  "path": "/etc/skel/Desktop/Applications.desktop",
+                  "size": 97,
+                  "mtime": 1779262894755.5261
+                },
+                {
+                  "type": "file",
+                  "name": "Browser.desktop",
+                  "path": "/etc/skel/Desktop/Browser.desktop",
+                  "size": 74,
+                  "mtime": 1779262894757.229
+                },
+                {
+                  "type": "file",
+                  "name": "Finder.desktop",
+                  "path": "/etc/skel/Desktop/Finder.desktop",
+                  "size": 71,
+                  "mtime": 1779262894756.089
+                },
+                {
+                  "type": "file",
+                  "name": "Terminal.desktop",
+                  "path": "/etc/skel/Desktop/Terminal.desktop",
+                  "size": 77,
+                  "mtime": 1779262894756.6147
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "file",
+          "name": "version",
+          "path": "/etc/version",
+          "size": 14,
+          "mtime": 1779262894759.5728
+        }
+      ]
+    },
+    {
+      "type": "dir",
+      "name": "img",
+      "path": "/img",
+      "children": [
+        {
+          "type": "dir",
+          "name": "projects",
+          "path": "/img/projects",
+          "children": [
+            {
+              "type": "file",
+              "name": "Frame 159.webp",
+              "path": "/img/projects/Frame 159.webp",
+              "size": 28078,
+              "mtime": 1779229549374.8994
+            },
+            {
+              "type": "file",
+              "name": "abit.webp",
+              "path": "/img/projects/abit.webp",
+              "size": 46616,
+              "mtime": 1779229549435.964
+            },
+            {
+              "type": "file",
+              "name": "aispace.webp",
+              "path": "/img/projects/aispace.webp",
+              "size": 11520,
+              "mtime": 1779229549471.6914
+            },
+            {
+              "type": "file",
+              "name": "aiwrapped.webp",
+              "path": "/img/projects/aiwrapped.webp",
+              "size": 163956,
+              "mtime": 1779229549541.853
+            },
+            {
+              "type": "file",
+              "name": "alien.webp",
+              "path": "/img/projects/alien.webp",
+              "size": 61510,
+              "mtime": 1779229549590.0974
+            },
+            {
+              "type": "file",
+              "name": "anthology.webp",
+              "path": "/img/projects/anthology.webp",
+              "size": 6714,
+              "mtime": 1779229549620.6128
+            },
+            {
+              "type": "file",
+              "name": "atlas.webp",
+              "path": "/img/projects/atlas.webp",
+              "size": 54390,
+              "mtime": 1779229549669.829
+            },
+            {
+              "type": "file",
+              "name": "bangkokopensource.webp",
+              "path": "/img/projects/bangkokopensource.webp",
+              "size": 6632,
+              "mtime": 1779229549700.9514
+            },
+            {
+              "type": "file",
+              "name": "benchmark.webp",
+              "path": "/img/projects/benchmark.webp",
+              "size": 35374,
+              "mtime": 1779229549744.9639
+            },
+            {
+              "type": "file",
+              "name": "bio.webp",
+              "path": "/img/projects/bio.webp",
+              "size": 38748,
+              "mtime": 1779229549796.3643
+            },
+            {
+              "type": "file",
+              "name": "bkkjs.webp",
+              "path": "/img/projects/bkkjs.webp",
+              "size": 32944,
+              "mtime": 1779229549842.7952
+            },
+            {
+              "type": "file",
+              "name": "borg.webp",
+              "path": "/img/projects/borg.webp",
+              "size": 4370,
+              "mtime": 1779229549871.0334
+            },
+            {
+              "type": "file",
+              "name": "chasing.webp",
+              "path": "/img/projects/chasing.webp",
+              "size": 68800,
+              "mtime": 1779229549935.9993
+            },
+            {
+              "type": "file",
+              "name": "common.webp",
+              "path": "/img/projects/common.webp",
+              "size": 6200,
+              "mtime": 1779229549964.456
+            },
+            {
+              "type": "file",
+              "name": "creatorsgarten.webp",
+              "path": "/img/projects/creatorsgarten.webp",
+              "size": 125470,
+              "mtime": 1779229550040.2664
+            },
+            {
+              "type": "file",
+              "name": "cyborg.webp",
+              "path": "/img/projects/cyborg.webp",
+              "size": 36544,
+              "mtime": 1779229550082.3066
+            },
+            {
+              "type": "file",
+              "name": "dataset.webp",
+              "path": "/img/projects/dataset.webp",
+              "size": 365898,
+              "mtime": 1779229550181.29
+            },
+            {
+              "type": "file",
+              "name": "deathofthechatbot.webp",
+              "path": "/img/projects/deathofthechatbot.webp",
+              "size": 15970,
+              "mtime": 1779229550214.6646
+            },
+            {
+              "type": "file",
+              "name": "digitalgarden.webp",
+              "path": "/img/projects/digitalgarden.webp",
+              "size": 25234,
+              "mtime": 1779229550257.9001
+            },
+            {
+              "type": "file",
+              "name": "extinction.webp",
+              "path": "/img/projects/extinction.webp",
+              "size": 39046,
+              "mtime": 1779229550311.51
+            },
+            {
+              "type": "file",
+              "name": "falsememories.webp",
+              "path": "/img/projects/falsememories.webp",
+              "size": 26176,
+              "mtime": 1779229550348.3962
+            },
+            {
+              "type": "file",
+              "name": "forgotten.webp",
+              "path": "/img/projects/forgotten.webp",
+              "size": 15664,
+              "mtime": 1779229550395.384
+            },
+            {
+              "type": "file",
+              "name": "futureyou.webp",
+              "path": "/img/projects/futureyou.webp",
+              "size": 41126,
+              "mtime": 1779229550457.7568
+            },
+            {
+              "type": "file",
+              "name": "learn.webp",
+              "path": "/img/projects/learn.webp",
+              "size": 52356,
+              "mtime": 1779229550516.6277
+            },
+            {
+              "type": "file",
+              "name": "madunicorn.webp",
+              "path": "/img/projects/madunicorn.webp",
+              "size": 88664,
+              "mtime": 1779229550586.6113
+            },
+            {
+              "type": "file",
+              "name": "messe.webp",
+              "path": "/img/projects/messe.webp",
+              "size": 45626,
+              "mtime": 1779229550627.1497
+            },
+            {
+              "type": "file",
+              "name": "music.webp",
+              "path": "/img/projects/music.webp",
+              "size": 103884,
+              "mtime": 1779229550690.334
+            },
+            {
+              "type": "file",
+              "name": "phylogenetic.webp",
+              "path": "/img/projects/phylogenetic.webp",
+              "size": 12050,
+              "mtime": 1779229550722.655
+            },
+            {
+              "type": "file",
+              "name": "portrait.webp",
+              "path": "/img/projects/portrait.webp",
+              "size": 75954,
+              "mtime": 1779229550780.1755
+            },
+            {
+              "type": "file",
+              "name": "psychorisk.webp",
+              "path": "/img/projects/psychorisk.webp",
+              "size": 73578,
+              "mtime": 1779229550834.6157
+            },
+            {
+              "type": "file",
+              "name": "recursive.webp",
+              "path": "/img/projects/recursive.webp",
+              "size": 16404,
+              "mtime": 1779229550868.102
+            },
+            {
+              "type": "file",
+              "name": "scisart.webp",
+              "path": "/img/projects/scisart.webp",
+              "size": 142456,
+              "mtime": 1779229550949.2856
+            },
+            {
+              "type": "file",
+              "name": "spaceth.webp",
+              "path": "/img/projects/spaceth.webp",
+              "size": 78718,
+              "mtime": 1779229551016.7786
+            },
+            {
+              "type": "file",
+              "name": "starstuff.webp",
+              "path": "/img/projects/starstuff.webp",
+              "size": 79226,
+              "mtime": 1779229551081.0454
+            },
+            {
+              "type": "file",
+              "name": "stupidhack.webp",
+              "path": "/img/projects/stupidhack.webp",
+              "size": 10188,
+              "mtime": 1779229551112.3203
+            },
+            {
+              "type": "file",
+              "name": "ted.webp",
+              "path": "/img/projects/ted.webp",
+              "size": 21416,
+              "mtime": 1779229551159.3684
+            },
+            {
+              "type": "file",
+              "name": "thinkingabout.webp",
+              "path": "/img/projects/thinkingabout.webp",
+              "size": 29830,
+              "mtime": 1779229551197.9062
+            },
+            {
+              "type": "file",
+              "name": "utopia.webp",
+              "path": "/img/projects/utopia.webp",
+              "size": 53628,
+              "mtime": 1779229551262.0813
+            },
+            {
+              "type": "file",
+              "name": "wellbeing.webp",
+              "path": "/img/projects/wellbeing.webp",
+              "size": 18416,
+              "mtime": 1779229551296.3633
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "robots.txt",
+      "path": "/robots.txt",
+      "size": 63,
+      "mtime": 1779128673227.7068
+    },
+    {
+      "type": "dir",
+      "name": "usr",
+      "path": "/usr",
+      "children": [
+        {
+          "type": "dir",
+          "name": "share",
+          "path": "/usr/share",
+          "children": [
+            {
+              "type": "dir",
+              "name": "applications",
+              "path": "/usr/share/applications",
+              "children": [
+                {
+                  "type": "file",
+                  "name": ".directory",
+                  "path": "/usr/share/applications/.directory",
+                  "size": 21,
+                  "mtime": 1779262894768.0945
+                },
+                {
+                  "type": "file",
+                  "name": "browser.desktop",
+                  "path": "/usr/share/applications/browser.desktop",
+                  "size": 74,
+                  "mtime": 1779262894769.3567
+                },
+                {
+                  "type": "file",
+                  "name": "monitor.desktop",
+                  "path": "/usr/share/applications/monitor.desktop",
+                  "size": 74,
+                  "mtime": 1779262894768.351
+                },
+                {
+                  "type": "file",
+                  "name": "notepad.desktop",
+                  "path": "/usr/share/applications/notepad.desktop",
+                  "size": 74,
+                  "mtime": 1779262894769.6707
+                },
+                {
+                  "type": "file",
+                  "name": "settings.desktop",
+                  "path": "/usr/share/applications/settings.desktop",
+                  "size": 76,
+                  "mtime": 1779262894768.7512
+                },
+                {
+                  "type": "file",
+                  "name": "terminal.desktop",
+                  "path": "/usr/share/applications/terminal.desktop",
+                  "size": 77,
+                  "mtime": 1779262894769.0618
+                }
+              ]
+            },
+            {
+              "type": "dir",
+              "name": "apps",
+              "path": "/usr/share/apps",
+              "children": [
+                {
+                  "type": "file",
+                  "name": ".directory",
+                  "path": "/usr/share/apps/.directory",
+                  "size": 21,
+                  "mtime": 1779262894773.852
+                },
+                {
+                  "type": "file",
+                  "name": "clock.desktop",
+                  "path": "/usr/share/apps/clock.desktop",
+                  "size": 94,
+                  "mtime": 1779262894773.5474
+                },
+                {
+                  "type": "file",
+                  "name": "clock.html",
+                  "path": "/usr/share/apps/clock.html",
+                  "size": 1044,
+                  "mtime": 1779262894775.8667
+                },
+                {
+                  "type": "file",
+                  "name": "conway.desktop",
+                  "path": "/usr/share/apps/conway.desktop",
+                  "size": 96,
+                  "mtime": 1779262894774.68
+                },
+                {
+                  "type": "file",
+                  "name": "conway.html",
+                  "path": "/usr/share/apps/conway.html",
+                  "size": 3574,
+                  "mtime": 1779262894776.5176
+                },
+                {
+                  "type": "file",
+                  "name": "snake.desktop",
+                  "path": "/usr/share/apps/snake.desktop",
+                  "size": 94,
+                  "mtime": 1779262894776.1462
+                },
+                {
+                  "type": "file",
+                  "name": "snake.html",
+                  "path": "/usr/share/apps/snake.html",
+                  "size": 3168,
+                  "mtime": 1779262894775.1904
+                },
+                {
+                  "type": "file",
+                  "name": "synth.desktop",
+                  "path": "/usr/share/apps/synth.desktop",
+                  "size": 94,
+                  "mtime": 1779262894774.3938
+                },
+                {
+                  "type": "file",
+                  "name": "synth.html",
+                  "path": "/usr/share/apps/synth.html",
+                  "size": 5385,
+                  "mtime": 1779262894775.6074
+                }
+              ]
+            },
+            {
+              "type": "dir",
+              "name": "docs",
+              "path": "/usr/share/docs",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "welcome.md",
+                  "path": "/usr/share/docs/welcome.md",
+                  "size": 386,
+                  "mtime": 1779262894764.0266
+                }
+              ]
+            },
+            {
+              "type": "dir",
+              "name": "icons",
+              "path": "/usr/share/icons",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "browser.svg",
+                  "path": "/usr/share/icons/browser.svg",
+                  "size": 4090,
+                  "mtime": 1779262894766.7346
+                },
+                {
+                  "type": "file",
+                  "name": "finder.svg",
+                  "path": "/usr/share/icons/finder.svg",
+                  "size": 5587,
+                  "mtime": 1779262894766.4639
+                },
+                {
+                  "type": "file",
+                  "name": "folder.svg",
+                  "path": "/usr/share/icons/folder.svg",
+                  "size": 3220,
+                  "mtime": 1779262894767.268
+                },
+                {
+                  "type": "file",
+                  "name": "monitor.svg",
+                  "path": "/usr/share/icons/monitor.svg",
+                  "size": 3517,
+                  "mtime": 1779262894767.5474
+                },
+                {
+                  "type": "file",
+                  "name": "notepad.svg",
+                  "path": "/usr/share/icons/notepad.svg",
+                  "size": 4437,
+                  "mtime": 1779262894765.8557
+                },
+                {
+                  "type": "file",
+                  "name": "pub.svg",
+                  "path": "/usr/share/icons/pub.svg",
+                  "size": 1318,
+                  "mtime": 1779262894764.447
+                },
+                {
+                  "type": "file",
+                  "name": "settings.svg",
+                  "path": "/usr/share/icons/settings.svg",
+                  "size": 2209,
+                  "mtime": 1779262894765.1807
+                },
+                {
+                  "type": "file",
+                  "name": "terminal.svg",
+                  "path": "/usr/share/icons/terminal.svg",
+                  "size": 3983,
+                  "mtime": 1779262894764.8066
+                }
+              ]
+            },
+            {
+              "type": "file",
+              "name": "manual.md",
+              "path": "/usr/share/manual.md",
+              "size": 8780,
+              "mtime": 1779262894773.0574
+            },
+            {
+              "type": "dir",
+              "name": "wallpaper",
+              "path": "/usr/share/wallpaper",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "w1.webp",
+                  "path": "/usr/share/wallpaper/w1.webp",
+                  "size": 822872,
+                  "mtime": 1779262894772.34
+                },
+                {
+                  "type": "file",
+                  "name": "w2.webp",
+                  "path": "/usr/share/wallpaper/w2.webp",
+                  "size": 115006,
+                  "mtime": 1779262894771.2095
+                },
+                {
+                  "type": "file",
+                  "name": "w3.webp",
+                  "path": "/usr/share/wallpaper/w3.webp",
+                  "size": 319972,
+                  "mtime": 1779262894770.7017
+                },
+                {
+                  "type": "file",
+                  "name": "w4.webp",
+                  "path": "/usr/share/wallpaper/w4.webp",
+                  "size": 69718,
+                  "mtime": 1779262894770.1477
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

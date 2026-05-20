@@ -1,0 +1,3 @@
+# /etc/profile — sourced by every terminal on boot
+# add export KEY=value lines to set environment variables
+export EDITOR=notepad

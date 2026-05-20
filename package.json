@@ -4,6 +4,9 @@
 	"version": "0.0.1",
 	"type": "module",
 	"scripts": {
+		"build:manifest": "node scripts/build-manifest.js",
+		"predev": "node scripts/build-manifest.js",
+		"prebuild": "node scripts/build-manifest.js",
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
@@ -39,6 +42,8 @@
 	},
 	"dependencies": {
 		"@types/hast": "^3.0.4",
+		"highlight.js": "^11.11.1",
+		"marked": "^18.0.4",
 		"micromark": "^4.0.2",
 		"micromark-extension-gfm-table": "^2.1.1",
 		"rehype": "^13.0.2",
