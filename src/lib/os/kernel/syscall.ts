@@ -1,4 +1,5 @@
 import type { Kernel, AppType, Process, StatResult } from './types'
+import { bus, type KernelEventName, type KernelEventMap } from './events'
 
 export interface Sys {
   read(path: string): Promise<string>
@@ -18,6 +19,8 @@ export interface Sys {
   reload(): void
   resolve(path: string): string
   patches(): string[]
+  on<E extends KernelEventName>(event: E, handler: (payload: KernelEventMap[E]) => void): () => void
+  watch(pathPrefix: string, handler: (event: 'write' | 'delete', path: string) => void): () => void
 }
 
 function normalizePath(path: string): string {
@@ -58,5 +61,7 @@ export function createSyscall(pid: number, kernel: Kernel): Sys {
     reload: () => window.location.reload(),
     resolve,
     patches: () => kernel.patches(),
+    on: (event, handler) => bus.on(event, handler),
+    watch: (pathPrefix, handler) => bus.watch(pathPrefix, handler),
   }
 }

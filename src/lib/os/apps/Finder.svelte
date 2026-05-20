@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { kernel } from '$lib/os/kernel/store';
+	import { bus } from '$lib/os/kernel/events';
 	import type { AppType } from '$lib/os/kernel/types';
 	import type { MenuItem } from '$lib/os/desktop/ContextMenu.svelte';
 	import { showContextMenu } from '$lib/os/desktop/contextmenu';
@@ -43,17 +44,12 @@
 		.catch(() => { showDotfiles = true });
 
 	$effect(() => {
-		void $kernel.fsRev;
-		if (loaded) reload();
+		const dir = cwd;
+		return bus.watch(dir, () => reload());
 	});
 
 	$effect(() => {
-		const handler = (e: Event) => {
-			showDotfiles = (e as CustomEvent<boolean>).detail;
-			reload();
-		};
-		window.addEventListener('dotfiles-change', handler);
-		return () => window.removeEventListener('dotfiles-change', handler);
+		return bus.on('dotfiles:change', ({ show }) => { showDotfiles = show; reload(); });
 	});
 
 	async function reload() {

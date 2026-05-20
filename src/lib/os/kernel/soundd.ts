@@ -1,3 +1,5 @@
+import { bus } from './events';
+
 // Sound daemon — loads /usr/share/sounds/default/theme.js and plays named cues
 // on kernel events. Acts as PID 2 in /proc.
 // Theme cues receive (ctx: AudioContext, Tone) and can use either Web Audio or Tone.js.
@@ -106,12 +108,12 @@ class SoundDaemon {
 
 	mute() {
 		this.muted = true;
-		window.dispatchEvent(new CustomEvent('soundd-mute-change', { detail: true }));
+		bus.emit('soundd:mute', {});
 	}
 
 	unmute() {
 		this.muted = false;
-		window.dispatchEvent(new CustomEvent('soundd-mute-change', { detail: false }));
+		bus.emit('soundd:unmute', {});
 	}
 
 	get isMuted() {

@@ -14,9 +14,54 @@ the kernel is a single Svelte writable store (`src/lib/kernel/store.ts`). it hol
 - `windows` — a Map of windowId → window records
 - `env` — environment variables (`CWD`, `HOME`, `USER`, `PATH`, `HOSTNAME`)
 - `nextPid` — auto-incrementing process id counter
-- `fsRev` — filesystem revision counter; incremented on every write or remove; components watch this to detect changes (analogous to Linux `inotify`)
+- `fsRev` — filesystem revision counter; incremented on every write or remove
 
 because it is a Svelte store, any component can subscribe to it with `$kernel` and react to state changes automatically.
+
+---
+
+### event bus
+
+the kernel has a typed event bus (`src/lib/kernel/events.ts`) that replaces ad-hoc `window.dispatchEvent` calls. any part of the system can emit or subscribe to named events.
+
+**kernel events:**
+
+| event | payload | fired when |
+|-------|---------|------------|
+| `fs:write` | `{ path }` | a file is written to the VFS |
+| `fs:delete` | `{ path }` | a file is removed from the VFS |
+| `proc:spawn` | `{ pid, name }` | a process is created |
+| `proc:kill` | `{ pid, name }` | a process is killed |
+| `win:open` | `{ windowId, pid }` | a window is opened |
+| `win:close` | `{ windowId, pid }` | a window is closed |
+| `win:focus` | `{ windowId }` | a window is focused |
+| `soundd:mute` | `{}` | sound daemon is muted |
+| `soundd:unmute` | `{}` | sound daemon is unmuted |
+| `theme:change` | `{ theme }` | theme is changed |
+| `wallpaper:change` | `{ wallpaper }` | wallpaper is changed |
+| `dotfiles:change` | `{ show }` | dot-file visibility is toggled |
+
+**from app packages (`sys`):**
+
+```js
+// listen to any kernel event
+const off = sys.on('fs:write', ({ path }) => {
+  console.log('file written:', path)
+})
+off() // unsubscribe
+
+// watch a path prefix for changes
+const off = sys.watch('/home/user/Pictures', (event, path) => {
+  // event is 'write' or 'delete'
+  console.log(event, path)
+})
+```
+
+**from the shell:**
+
+```sh
+cat /dev/events    # show recent event log (last 64 events)
+```
 
 ---
 
@@ -35,6 +80,7 @@ the virtual filesystem has three backends, unified behind a single interface (`s
 - `/proc/<pid>/ctl` — write `kill`, `stop`, or `resume` to signal a process; soundd (pid 2) also accepts `reload`, `mute`, `unmute`
 - `/dev/screen` — lists all open windows
 - `/dev/audio` — write a cue name to play a sound; read returns `active` or `muted`
+- `/dev/events` — read returns the recent kernel event log (last 64 events)
 - `/sys/version` — os version string
 - `/sys/uptime` — seconds since boot
 - `/sys/hostname` — hostname

@@ -39,7 +39,6 @@
   <div id="toolbar">
     <button onclick="switchCamera()">flip</button>
     <button class="primary" onclick="capture()">[capture]</button>
-    <button onclick="saveLatest()">save</button>
   </div>
   <div id="shots"></div>
 </div>
@@ -87,15 +86,14 @@
     flash.style.opacity = '0.8'
     setTimeout(() => { flash.style.opacity = '0' }, 100)
 
+    // auto-save
+    saveDataUrl(lastDataUrl, shotCount)
+
     // add thumbnail
     const img = document.createElement('img')
     img.src = lastDataUrl
-    img.title = 'click to save'
-    img.onclick = () => saveDataUrl(lastDataUrl, shotCount)
     shots.appendChild(img)
     shots.scrollLeft = shots.scrollWidth
-    status.textContent = 'captured'
-    setTimeout(() => { status.textContent = '' }, 1500)
   }
 
   async function saveDataUrl(dataUrl, n) {
@@ -104,11 +102,6 @@
     await sys.write(path, dataUrl)
     status.textContent = 'saved → ' + path
     setTimeout(() => { status.textContent = '' }, 2000)
-  }
-
-  function saveLatest() {
-    if (!lastDataUrl) { status.textContent = 'capture first'; return }
-    saveDataUrl(lastDataUrl, shotCount)
   }
 
   // ensure Pictures dir

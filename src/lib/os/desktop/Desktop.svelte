@@ -1,5 +1,6 @@
 <script lang="ts">
   import { kernel } from '$lib/os/kernel/store'
+  import { bus } from '$lib/os/kernel/events'
   import Window from './Window.svelte'
   import Terminal from '$lib/os/apps/Terminal.svelte'
   import Finder from '$lib/os/apps/Finder.svelte'
@@ -149,8 +150,7 @@
 
   // reload desktop icons when filesystem changes
   $effect(() => {
-    void $kernel.fsRev
-    loadDesktop()
+    return bus.watch('/home/user/Desktop', () => loadDesktop())
   })
 
   function parseDirectory(raw: string): Record<string, string> {
@@ -284,16 +284,9 @@
     // load saved dotfiles pref
     try { showDotfiles = (await kernel.read(DOTFILES_PATH)).trim() !== 'false' } catch { showDotfiles = true }
 
-    window.addEventListener('wallpaper-change', (e) => {
-      wallpaper = (e as CustomEvent<string>).detail
-    })
-    window.addEventListener('theme-change', (e) => {
-      applyTheme((e as CustomEvent<string>).detail)
-    })
-    window.addEventListener('dotfiles-change', (e) => {
-      showDotfiles = (e as CustomEvent<boolean>).detail
-      loadDesktop()
-    })
+    bus.on('wallpaper:change', ({ wallpaper: w }) => { wallpaper = w })
+    bus.on('theme:change',    ({ theme }) => applyTheme(theme))
+    bus.on('dotfiles:change', ({ show }) => { showDotfiles = show; loadDesktop() })
 
     await loadDesktop()
   })

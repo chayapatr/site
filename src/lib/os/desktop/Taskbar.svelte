@@ -20,22 +20,19 @@
 </script>
 
 <div
-	class="fixed top-0 right-0 left-0 z-9999 flex items-center gap-2 border-b border-neutral-800 px-3"
-	style="height: 32px; background: var(--os-glass); backdrop-filter: var(--os-glass-blur); -webkit-backdrop-filter: var(--os-glass-blur);"
+	class="fixed top-0 right-0 left-0 z-9999 flex items-center gap-2 border-b px-3"
+	style="height: 32px; border-color: var(--os-border); background: var(--os-glass); backdrop-filter: var(--os-glass-blur); -webkit-backdrop-filter: var(--os-glass-blur);"
 >
-	<span class="mr-2 shrink-0 font-mono text-xs text-neutral-400">pubOS</span>
+	<span class="mr-2 shrink-0 font-mono text-xs" style="color: var(--os-text);">pubOS</span>
 
 	{#each [...$kernel.processes.values()] as proc}
 		{#if proc.windowId}
 			{@const focused = $kernel.windows.get(proc.windowId)?.focused}
 			<button
 				class="border px-2 py-0.5 font-mono text-xs transition-colors"
-				class:border-neutral-600={focused}
-				class:text-neutral-300={focused}
-				class:border-neutral-800={!focused}
-				class:text-neutral-500={!focused}
-				class:hover:text-neutral-300={!focused}
-				class:hover:border-neutral-600={!focused}
+				style={focused
+					? 'border-color: var(--os-text); color: var(--os-text);'
+					: 'border-color: var(--os-border); color: var(--os-text-dim);'}
 				onclick={() => focusWindow(proc.windowId)}
 			>
 				{proc.name}
@@ -43,5 +40,5 @@
 		{/if}
 	{/each}
 
-	<div class="ml-auto font-mono text-xs text-neutral-600">{time}</div>
+	<div class="ml-auto font-mono text-xs" style="color: var(--os-text-dim);">{time}</div>
 </div>

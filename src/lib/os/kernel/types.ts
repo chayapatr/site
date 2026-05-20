@@ -43,7 +43,6 @@ export interface KernelState {
   nextPid: number
   startedAt: number
   env: Record<string, string>
-  fsRev: number
 }
 
 export interface Kernel {

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { kernel } from '$lib/os/kernel/store'
   import { soundd } from '$lib/os/kernel/soundd'
+  import { bus } from '$lib/os/kernel/events'
   import { onMount } from 'svelte'
 
   let { pid, args = [] }: { pid: number; args?: string[] } = $props()
@@ -14,8 +15,6 @@
   let theme = $state<'dark' | 'light' | 'system'>('dark')
   let showDotfiles = $state(true)
   let muted = $state(false)
-  let saved = $state(true)
-
   async function load() {
     try { wallpaper = (await kernel.read(WALLPAPER_PATH)).trim() } catch { wallpaper = '' }
     try { theme = (await kernel.read(THEME_PATH)).trim() as typeof theme } catch { theme = 'dark' }
@@ -23,13 +22,22 @@
     muted = soundd.isMuted
   }
 
-  function selectWallpaper(w: string) { wallpaper = w; saved = false }
-  function selectTheme(t: typeof theme) { theme = t; saved = false }
+  function selectWallpaper(w: string) {
+    wallpaper = w
+    kernel.write(WALLPAPER_PATH, w)
+    bus.emit('wallpaper:change', { wallpaper: w })
+  }
+
+  function selectTheme(t: typeof theme) {
+    theme = t
+    kernel.write(THEME_PATH, t)
+    bus.emit('theme:change', { theme: t })
+  }
 
   function toggleDotfiles() {
     showDotfiles = !showDotfiles
     kernel.write(DOTFILES_PATH, showDotfiles ? 'true' : 'false')
-    window.dispatchEvent(new CustomEvent('dotfiles-change', { detail: showDotfiles }))
+    bus.emit('dotfiles:change', { show: showDotfiles })
   }
 
   function toggleSound() {
@@ -37,33 +45,18 @@
     if (muted) soundd.mute(); else soundd.unmute()
   }
 
-  function save() {
-    kernel.write(WALLPAPER_PATH, wallpaper)
-    kernel.write(THEME_PATH, theme)
-    saved = true
-    window.dispatchEvent(new CustomEvent('wallpaper-change', { detail: wallpaper }))
-    window.dispatchEvent(new CustomEvent('theme-change', { detail: theme }))
-  }
-
   onMount(() => {
     load()
-    const handler = (e: Event) => { muted = (e as CustomEvent<boolean>).detail }
-    window.addEventListener('soundd-mute-change', handler)
-    return () => window.removeEventListener('soundd-mute-change', handler)
+    const offMute   = bus.on('soundd:mute',   () => { muted = true })
+    const offUnmute = bus.on('soundd:unmute', () => { muted = false })
+    return () => { offMute(); offUnmute() }
   })
 </script>
 
 <div class="flex h-full flex-col">
   <!-- header -->
-  <div class="flex shrink-0 items-center justify-between border-b border-neutral-800 px-3 py-2">
+  <div class="flex shrink-0 items-center border-b border-neutral-800 px-3 py-2">
     <span class="font-mono text-xs text-neutral-500">settings</span>
-    <button
-      class="font-mono text-xs transition-colors"
-      class:text-neutral-600={saved}
-      class:hover:text-neutral-400={saved}
-      class:text-neutral-300={!saved}
-      onclick={save}
-    >{saved ? 'saved' : 'save'}</button>
   </div>
 
   <div class="flex-1 overflow-y-auto">

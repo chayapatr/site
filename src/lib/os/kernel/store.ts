@@ -3,6 +3,7 @@ import type { KernelState, Process, AppType, Kernel, FSManifestNode } from './ty
 import { loadManifest, findNode } from './manifest';
 import { vfsRead, vfsWrite, vfsRemove, vfsList, vfsStat, vfsExists } from './vfs';
 import { soundd } from './soundd';
+import { bus } from './events';
 
 const APP_META: Record<AppType, { title: string; icon: string }> = {
 	finder: { title: 'Finder', icon: '/usr/share/icons/finder.svg' },
@@ -19,7 +20,6 @@ function createKernel() {
 		windows: new Map(),
 		nextPid: 1,
 		startedAt: Date.now(),
-		fsRev: 0,
 		env: {
 			USER: 'user',
 			HOME: '/home/user',
@@ -154,18 +154,10 @@ function createKernel() {
 		write(path: string, content: string): void {
 			const state = getState();
 			vfsWrite(path, content, state);
-			update((s) => {
-				s.fsRev++;
-				return s;
-			});
 		},
 
 		remove(path: string): void {
 			vfsRemove(path);
-			update((s) => {
-				s.fsRev++;
-				return s;
-			});
 		},
 
 		async list(path: string): Promise<string[]> {
@@ -216,6 +208,11 @@ function createKernel() {
 				return s;
 			});
 			soundd.play('window-open');
+			const state = getState();
+			const proc = state.processes.get(pid);
+			if (proc) bus.emit('proc:spawn', { pid, name: proc.name });
+			const win = Array.from(getState().windows.values()).find(w => w.pid === pid);
+			if (win) bus.emit('win:open', { windowId: win.id, pid });
 			return pid;
 		},
 
@@ -262,16 +259,22 @@ function createKernel() {
 				return s;
 			});
 			soundd.play('window-open');
+			bus.emit('proc:spawn', { pid, name });
+			bus.emit('win:open', { windowId: (getState().processes.get(pid)?.windowId ?? ''), pid });
 			return pid;
 		},
 
 		kill(pid: number): void {
+			const proc = getState().processes.get(pid);
+			const windowId = proc?.windowId ?? null;
+			const name = proc?.name ?? '';
 			update((s) => {
-				const proc = s.processes.get(pid);
 				if (proc?.windowId) s.windows.delete(proc.windowId);
 				s.processes.delete(pid);
 				return s;
 			});
+			bus.emit('proc:kill', { pid, name });
+			if (windowId) bus.emit('win:close', { windowId, pid });
 			if (pid === 2) {
 				soundd.mute();
 			} else {

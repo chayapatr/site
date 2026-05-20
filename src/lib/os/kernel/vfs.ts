@@ -1,6 +1,7 @@
 import type { KernelState, StatResult, FSManifestNode } from './types';
 import { findNode } from './manifest';
 import { soundd } from './soundd';
+import { bus } from './events';
 
 const LS_PREFIX = 'pubOS:fs:';
 
@@ -14,7 +15,7 @@ function computedList(path: string, state: KernelState): string[] | null {
 	}
 	const procMatch = path.match(/^\/proc\/(\d+)$/);
 	if (procMatch) return ['status', 'name', 'ctl'];
-	if (path === '/dev') return ['screen', 'cons', 'audio'];
+	if (path === '/dev') return ['screen', 'cons', 'audio', 'events'];
 	if (path === '/sys') return ['version', 'uptime', 'hostname'];
 	return null;
 }
@@ -40,6 +41,9 @@ function computedRead(path: string, state: KernelState): string | null {
 	}
 	if (path === '/dev/audio') {
 		return soundd.isMuted ? 'muted' : 'active';
+	}
+	if (path === '/dev/events') {
+		return bus.recentLog();
 	}
 	if (path === '/sys/version') return 'pubOS 0.1.0';
 	if (path === '/sys/hostname') return state.env['HOSTNAME'] ?? 'pubOS';
@@ -78,14 +82,13 @@ export async function vfsRead(
 
 export function vfsRemove(path: string): void {
 	const key = lsKey(path);
-	// remove the file itself
 	localStorage.removeItem(key);
-	// remove any children (directory)
 	const prefix = key + '/';
 	for (let i = localStorage.length - 1; i >= 0; i--) {
 		const k = localStorage.key(i);
 		if (k?.startsWith(prefix)) localStorage.removeItem(k);
 	}
+	bus.emit('fs:delete', { path });
 }
 
 export function vfsWrite(path: string, content: string, state: KernelState): void {
@@ -136,6 +139,7 @@ export function vfsWrite(path: string, content: string, state: KernelState): voi
 	}
 
 	localStorage.setItem(lsKey(path), content);
+	bus.emit('fs:write', { path });
 }
 
 export async function vfsList(
