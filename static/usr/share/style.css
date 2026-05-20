@@ -1,0 +1,23 @@
+@font-face {
+  font-family: 'Zed Mono Extended';
+  src: url('/fonts/zed-mono-extended.ttf') format('truetype');
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --font-mono: 'Zed Mono Extended', ui-monospace, monospace;
+  --bg: #0a0a0a;
+  --fg: #d4d4d4;
+  --fg-muted: #737373;
+  --fg-dim: #404040;
+  --border: #262626;
+  --surface: #171717;
+}
+
+body {
+  font-family: var(--font-mono);
+  background: var(--bg);
+  color: var(--fg);
+  font-size: 12px;
+}

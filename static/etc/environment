@@ -1,5 +1,5 @@
 USER=user
 HOME=/home/user
 PATH=/home/user/bin:/bin
-HOSTNAME=tidbitOS
+HOSTNAME=pubOS
 EDITOR=notepad

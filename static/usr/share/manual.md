@@ -1,6 +1,6 @@
-# tidbitOS manual
+# pubOS manual
 
-tidbitOS is a toy operating system that runs entirely in a web browser. it simulates a Unix-like environment — processes, a filesystem, a window manager — using only JavaScript, Svelte, and localStorage.
+pubOS is a toy operating system that runs entirely in a web browser. it simulates a Unix-like environment — processes, a filesystem, a window manager — using only JavaScript, Svelte, and localStorage.
 
 ---
 
@@ -26,7 +26,7 @@ the virtual filesystem has three backends, unified behind a single interface (`s
 
 **static** — files under `static/` are served by the web server and fetched on demand. the directory tree is pre-built into `static/fs-manifest.json` at build time by `scripts/build-manifest.js`. paths: `/bin`, `/etc`, `/usr`.
 
-**localStorage** — files under `/home/` are stored in the browser's localStorage under keys prefixed with `tidbitOS:fs:`. they persist across sessions. this is where user files, config, and custom commands live.
+**localStorage** — files under `/home/` are stored in the browser's localStorage under keys prefixed with `pubOS:fs:`. they persist across sessions. this is where user files, config, and custom commands live.
 
 **computed** — virtual paths that reflect live kernel state:
 
@@ -46,7 +46,7 @@ write access is restricted to `/home/`. writing to any other path throws `read-o
 
 ### boot sequence
 
-on first boot, tidbitOS:
+on first boot, pubOS:
 
 1. loads `static/fs-manifest.json` to index the static filesystem
 2. reads `/etc/environment` and loads env vars (`USER`, `HOME`, `PATH`, `HOSTNAME`, `EDITOR`)

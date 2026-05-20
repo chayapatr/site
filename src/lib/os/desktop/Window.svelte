@@ -135,8 +135,15 @@
 			</div>
 		</div>
 
-		<div class="flex-1 overflow-hidden">
+		<div class="relative flex-1 overflow-hidden">
 			{@render children()}
+			{#if !win.focused}
+				<div
+					class="absolute inset-0 z-10"
+					role="none"
+					onmousedown={() => onFocus()}
+				></div>
+			{/if}
 		</div>
 	</div>
 

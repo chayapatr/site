@@ -1,6 +1,6 @@
-# Welcome to tidbitOS
+# Welcome to pubOS
 
-tidbitOS is a minimal web OS.
+pubOS is a minimal web OS.
 
 ## Getting started
 

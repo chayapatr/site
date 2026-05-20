@@ -1,0 +1,26 @@
+[
+  {
+    "name": "snake",
+    "description": "Classic snake game",
+    "type": "app",
+    "src": "/net/registry.from.pub/snake"
+  },
+  {
+    "name": "conway",
+    "description": "Conway's Game of Life",
+    "type": "app",
+    "src": "/net/registry.from.pub/conway"
+  },
+  {
+    "name": "clock",
+    "description": "Analog clock",
+    "type": "app",
+    "src": "/net/registry.from.pub/clock"
+  },
+  {
+    "name": "synth",
+    "description": "Browser synthesizer",
+    "type": "app",
+    "src": "/net/registry.from.pub/synth"
+  }
+]

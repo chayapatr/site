@@ -82,8 +82,15 @@
           "type": "file",
           "name": "open.js",
           "path": "/bin/open.js",
-          "size": 907,
-          "mtime": 1779298287315.0032
+          "size": 1653,
+          "mtime": 1779299273896.5054
+        },
+        {
+          "type": "file",
+          "name": "pkg.js",
+          "path": "/bin/pkg.js",
+          "size": 2744,
+          "mtime": 1779300078808.5398
         },
         {
           "type": "file",
@@ -212,7 +219,7 @@
                   "name": "Browser.desktop",
                   "path": "/etc/skel/Desktop/Browser.desktop",
                   "size": 101,
-                  "mtime": 1779298303022.022
+                  "mtime": 1779298960051.9385
                 },
                 {
                   "type": "file",
@@ -543,6 +550,111 @@
       ]
     },
     {
+      "type": "dir",
+      "name": "net",
+      "path": "/net",
+      "children": [
+        {
+          "type": "dir",
+          "name": "registry.from.pub",
+          "path": "/net/registry.from.pub",
+          "children": [
+            {
+              "type": "dir",
+              "name": "clock",
+              "path": "/net/registry.from.pub/clock",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "main.html",
+                  "path": "/net/registry.from.pub/clock/main.html",
+                  "size": 1044,
+                  "mtime": 1779262894775.8667
+                },
+                {
+                  "type": "file",
+                  "name": "manifest.json",
+                  "path": "/net/registry.from.pub/clock/manifest.json",
+                  "size": 132,
+                  "mtime": 1779298557958.5466
+                }
+              ]
+            },
+            {
+              "type": "dir",
+              "name": "conway",
+              "path": "/net/registry.from.pub/conway",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "main.html",
+                  "path": "/net/registry.from.pub/conway/main.html",
+                  "size": 3574,
+                  "mtime": 1779262894776.5176
+                },
+                {
+                  "type": "file",
+                  "name": "manifest.json",
+                  "path": "/net/registry.from.pub/conway/manifest.json",
+                  "size": 143,
+                  "mtime": 1779298557978.7905
+                }
+              ]
+            },
+            {
+              "type": "file",
+              "name": "packages.json",
+              "path": "/net/registry.from.pub/packages.json",
+              "size": 531,
+              "mtime": 1779300064871.1128
+            },
+            {
+              "type": "dir",
+              "name": "snake",
+              "path": "/net/registry.from.pub/snake",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "main.html",
+                  "path": "/net/registry.from.pub/snake/main.html",
+                  "size": 3168,
+                  "mtime": 1779262894775.1904
+                },
+                {
+                  "type": "file",
+                  "name": "manifest.json",
+                  "path": "/net/registry.from.pub/snake/manifest.json",
+                  "size": 131,
+                  "mtime": 1779298557997.7056
+                }
+              ]
+            },
+            {
+              "type": "dir",
+              "name": "synth",
+              "path": "/net/registry.from.pub/synth",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "main.html",
+                  "path": "/net/registry.from.pub/synth/main.html",
+                  "size": 5385,
+                  "mtime": 1779262894775.6074
+                },
+                {
+                  "type": "file",
+                  "name": "manifest.json",
+                  "path": "/net/registry.from.pub/synth/manifest.json",
+                  "size": 153,
+                  "mtime": 1779298558015.7375
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
       "type": "file",
       "name": "robots.txt",
       "path": "/robots.txt",
@@ -594,8 +706,8 @@
                       "type": "file",
                       "name": "main.html",
                       "path": "/usr/share/applications/browser/main.html",
-                      "size": 9489,
-                      "mtime": 1779298250777.839
+                      "size": 10360,
+                      "mtime": 1779301077821.4878
                     },
                     {
                       "type": "file",
@@ -615,8 +727,8 @@
                       "type": "file",
                       "name": "camera.desktop",
                       "path": "/usr/share/applications/camera/camera.desktop",
-                      "size": 99,
-                      "mtime": 1779296412841.6733
+                      "size": 95,
+                      "mtime": 1779298960058.7156
                     },
                     {
                       "type": "file",
@@ -629,50 +741,8 @@
                       "type": "file",
                       "name": "manifest.json",
                       "path": "/usr/share/applications/camera/manifest.json",
-                      "size": 169,
-                      "mtime": 1779294093754.7712
-                    }
-                  ]
-                },
-                {
-                  "type": "dir",
-                  "name": "clock",
-                  "path": "/usr/share/applications/clock",
-                  "children": [
-                    {
-                      "type": "file",
-                      "name": "main.html",
-                      "path": "/usr/share/applications/clock/main.html",
-                      "size": 1044,
-                      "mtime": 1779262894775.8667
-                    },
-                    {
-                      "type": "file",
-                      "name": "manifest.json",
-                      "path": "/usr/share/applications/clock/manifest.json",
-                      "size": 116,
-                      "mtime": 1779296399220.2244
-                    }
-                  ]
-                },
-                {
-                  "type": "dir",
-                  "name": "conway",
-                  "path": "/usr/share/applications/conway",
-                  "children": [
-                    {
-                      "type": "file",
-                      "name": "main.html",
-                      "path": "/usr/share/applications/conway/main.html",
-                      "size": 3574,
-                      "mtime": 1779262894776.5176
-                    },
-                    {
-                      "type": "file",
-                      "name": "manifest.json",
-                      "path": "/usr/share/applications/conway/manifest.json",
-                      "size": 127,
-                      "mtime": 1779296399224.677
+                      "size": 172,
+                      "mtime": 1779298557935.1626
                     }
                   ]
                 },
@@ -686,14 +756,14 @@
                       "name": "editor.desktop",
                       "path": "/usr/share/applications/editor/editor.desktop",
                       "size": 99,
-                      "mtime": 1779298309134.2212
+                      "mtime": 1779298960064.414
                     },
                     {
                       "type": "file",
                       "name": "main.html",
                       "path": "/usr/share/applications/editor/main.html",
-                      "size": 3184,
-                      "mtime": 1779294518122.0906
+                      "size": 5024,
+                      "mtime": 1779298990668.7417
                     },
                     {
                       "type": "file",
@@ -720,8 +790,8 @@
                       "type": "file",
                       "name": "main.html",
                       "path": "/usr/share/applications/preview/main.html",
-                      "size": 3285,
-                      "mtime": 1779298091883.4585
+                      "size": 3311,
+                      "mtime": 1779298622601.9468
                     },
                     {
                       "type": "file",
@@ -738,48 +808,6 @@
                   "path": "/usr/share/applications/settings.desktop",
                   "size": 76,
                   "mtime": 1779262894768.7512
-                },
-                {
-                  "type": "dir",
-                  "name": "snake",
-                  "path": "/usr/share/applications/snake",
-                  "children": [
-                    {
-                      "type": "file",
-                      "name": "main.html",
-                      "path": "/usr/share/applications/snake/main.html",
-                      "size": 3168,
-                      "mtime": 1779262894775.1904
-                    },
-                    {
-                      "type": "file",
-                      "name": "manifest.json",
-                      "path": "/usr/share/applications/snake/manifest.json",
-                      "size": 115,
-                      "mtime": 1779296399228.3357
-                    }
-                  ]
-                },
-                {
-                  "type": "dir",
-                  "name": "synth",
-                  "path": "/usr/share/applications/synth",
-                  "children": [
-                    {
-                      "type": "file",
-                      "name": "main.html",
-                      "path": "/usr/share/applications/synth/main.html",
-                      "size": 5385,
-                      "mtime": 1779262894775.6074
-                    },
-                    {
-                      "type": "file",
-                      "name": "manifest.json",
-                      "path": "/usr/share/applications/synth/manifest.json",
-                      "size": 129,
-                      "mtime": 1779296399232.0286
-                    }
-                  ]
                 },
                 {
                   "type": "file",
@@ -887,6 +915,13 @@
               "path": "/usr/share/manual.md",
               "size": 8780,
               "mtime": 1779262894773.0574
+            },
+            {
+              "type": "file",
+              "name": "style.css",
+              "path": "/usr/share/style.css",
+              "size": 489,
+              "mtime": 1779301060709.9885
             },
             {
               "type": "dir",

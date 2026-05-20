@@ -1,4 +1,4 @@
-print('tidbitOS — available commands')
+print('pubOS — available commands')
 print('')
 print('filesystem')
 print('  ls [path]       list directory contents')

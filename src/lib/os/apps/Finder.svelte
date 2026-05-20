@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { kernel } from '$lib/os/kernel/store';
 	import type { AppType } from '$lib/os/kernel/types';
+	import type { MenuItem } from '$lib/os/desktop/ContextMenu.svelte';
+	import { showContextMenu } from '$lib/os/desktop/contextmenu';
 
 	let { pid, args = [] }: { pid: number; args?: string[] } = $props();
 
@@ -9,8 +11,9 @@
 		| { app: AppType }
 		| { folder: string }
 		| { launch: string }
+		| { webapp: string }
 	);
-	type ViewMode = 'list' | 'icon-grid';
+	type ViewMode = 'list' | 'grid';
 
 	type Bookmark = { label: string; path: string };
 
@@ -72,7 +75,7 @@
 		entries = withStats;
 		try {
 			const cfg = JSON.parse(await kernel.read((cwd === '/' ? '' : cwd) + '/.directory'));
-			view = cfg.view === 'icon-grid' ? 'icon-grid' : 'list';
+			view = cfg.view === 'grid' ? 'grid' : 'list';
 		} catch {
 			view = 'list';
 		}
@@ -110,7 +113,11 @@
 					return;
 				}
 				if ('launch' in def) {
-					kernel.spawnWebapp(def.launch, def.label);
+					kernel.spawnWebapp(def.launch);
+					return;
+				}
+				if ('webapp' in def) {
+					kernel.spawnWebapp(def.webapp);
 					return;
 				}
 			} catch {
@@ -149,6 +156,59 @@
 		return entry.name.replace(/\.desktop$/, '');
 	}
 
+	async function onEntryContextMenu(e: MouseEvent, entry: Entry) {
+		e.preventDefault();
+		e.stopPropagation();
+		const path = fullPath(entry.name);
+		const ext = entry.name.split('.').pop() ?? '';
+		const items: MenuItem[] = [];
+
+		// Open (default)
+		items.push({ label: 'Open', action: () => openEntry(entry) });
+
+		// Open With
+		const openWith: MenuItem[] = [];
+		if (entry.isDir) {
+			openWith.push({ label: 'Browse Folder', action: () => navigate(path) });
+			const hasManifest = await kernel.exists(path + '/manifest.json');
+			if (hasManifest) openWith.push({ label: 'Launch App', action: () => kernel.spawnWebapp(path) });
+		} else if (['png','jpg','jpeg','gif','webp','bmp'].includes(ext)) {
+			openWith.push({ label: 'Preview', action: () => kernel.spawnWebapp('/usr/share/applications/preview', path) });
+			openWith.push({ label: 'Editor', action: () => kernel.spawnWebapp('/usr/share/applications/editor', path) });
+		} else if (['html','htm'].includes(ext)) {
+			openWith.push({ label: 'Browser', action: () => kernel.spawnWebapp('/usr/share/applications/browser', path) });
+			openWith.push({ label: 'Editor', action: () => kernel.spawnWebapp('/usr/share/applications/editor', path) });
+		} else if (['md','js','ts','css','json','txt'].includes(ext)) {
+			openWith.push({ label: 'Editor', action: () => kernel.spawnWebapp('/usr/share/applications/editor', path) });
+			openWith.push({ label: 'Browser', action: () => kernel.spawnWebapp('/usr/share/applications/browser', 'file://' + path) });
+		}
+		if (openWith.length > 1) items.push({ label: 'Open With', children: openWith });
+
+		items.push({ separator: true });
+
+		// Rename
+		items.push({
+			label: 'Rename',
+			action: async () => {
+				const newName = prompt('Rename to:', displayName(entry));
+				if (!newName || newName === displayName(entry)) return;
+				const newPath = `${cwd === '/' ? '' : cwd}/${newName}`;
+				try {
+					const content = await kernel.read(path);
+					kernel.write(newPath, content);
+					kernel.remove(path);
+				} catch {
+					/* dir or unreadable */
+				}
+			}
+		});
+
+		// Delete
+		items.push({ label: 'Delete', danger: true, action: () => kernel.remove(path) });
+
+		showContextMenu(e.clientX, e.clientY, items);
+	}
+
 	navigate(cwd);
 </script>
 
@@ -184,12 +244,13 @@
 				<div class="p-3 font-mono text-xs text-red-500/80">{error}</div>
 			{:else if !loaded}
 				<div class="p-3 font-mono text-xs text-neutral-700">loading...</div>
-			{:else if view === 'icon-grid'}
+			{:else if view === 'grid'}
 				<div class="flex flex-wrap gap-4 p-4">
 					{#each entries as entry}
 						<button
 							class="group flex w-16 flex-col items-center gap-1.5 text-center"
 							onclick={() => openEntry(entry)}
+							oncontextmenu={(e) => onEntryContextMenu(e, entry)}
 						>
 							<img
 								src={entry.icon ?? '/usr/share/icons/file.svg'}
@@ -210,6 +271,7 @@
 						class:text-neutral-500={entry.isDir}
 						class:text-neutral-400={!entry.isDir}
 						onclick={() => openEntry(entry)}
+						oncontextmenu={(e) => onEntryContextMenu(e, entry)}
 					>
 						<span class="text-neutral-600">{entry.isDir ? '/' : ' '}</span>
 						{displayName(entry)}

@@ -37,9 +37,11 @@
   }
 })()`
     const bridge = '<scr' + 'ipt>' + bridgeCode + '</scr' + 'ipt>'
+    const systemStyle = '<link rel="stylesheet" href="/usr/share/style.css">'
+    const inject = systemStyle + bridge
     const injected = /<head[\s>]/i.test(html)
-      ? html.replace(/<head([\s>])/i, `<head$1${bridge}`)
-      : bridge + '\n' + html
+      ? html.replace(/<head([\s>])/i, `<head$1${inject}`)
+      : inject + '\n' + html
     const blob = new Blob([injected], { type: 'text/html' })
     return URL.createObjectURL(blob)
   }
