@@ -109,7 +109,7 @@
 	class="absolute rounded-md border text-xs shadow-sm"
 	class:border-neutral-600={win.focused}
 	class:border-neutral-800={!win.focused}
-	style="left:{localX}px; top:{localY}px; width:{localW}px; height:{localH}px; z-index:{win.zIndex}; background: rgba(20,20,20,0.75); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);"
+	style="left:{localX}px; top:{localY}px; width:{localW}px; height:{localH}px; z-index:{win.zIndex}; background: var(--os-glass); backdrop-filter: var(--os-glass-blur); -webkit-backdrop-filter: var(--os-glass-blur);"
 	onmousedown={onFocus}
 	role="none"
 >
@@ -117,17 +117,17 @@
 	<div class="flex h-full flex-col overflow-hidden rounded-md">
 		<!-- Title bar -->
 		<div
-			class="no-drag-wrapper noselect flex w-full shrink-0 cursor-default items-center justify-between border-b border-neutral-800 bg-neutral-950/80 p-2 text-neutral-500 select-none"
-			style="backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px);"
+			class="no-drag-wrapper noselect flex w-full shrink-0 cursor-default items-center justify-between border-b p-2 select-none"
+			style="border-color: var(--os-border); background: var(--os-glass); backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); color: var(--os-text-dim);"
 			onmousedown={startDrag}
 			role="none"
 		>
 			<div class="no-drag flex gap-2">
-				<button class="text-neutral-500 hover:text-red-400" aria-label="Close" onclick={onClose}>[x]</button>
-				<button class="text-neutral-500 hover:text-yellow-400" aria-label="Minimize" onclick={onMinimize}>[-]</button>
-				<button class="text-neutral-500 hover:text-green-400" aria-label="Fullscreen" onclick={toggleFullscreen}>{fullscreen ? '[↙]' : '[↗]'}</button>
+				<button class="hover:text-red-400 transition-colors" style="color: var(--os-text-dim);" aria-label="Close" onclick={onClose}>[x]</button>
+				<button class="hover:text-yellow-400 transition-colors" style="color: var(--os-text-dim);" aria-label="Minimize" onclick={onMinimize}>[-]</button>
+				<button class="hover:text-green-400 transition-colors" style="color: var(--os-text-dim);" aria-label="Fullscreen" onclick={toggleFullscreen}>{fullscreen ? '[↙]' : '[↗]'}</button>
 			</div>
-			<span class="absolute left-1/2 -translate-x-1/2 font-mono text-xs text-neutral-500">{win.title}</span>
+			<span class="absolute left-1/2 -translate-x-1/2 font-mono text-xs" style="color: var(--os-text-dim);">{win.title}</span>
 			<div class="flex items-center">
 				{#if iconPath}
 					<img src={iconPath} alt={win.appType} class="h-4 w-4 opacity-50" />

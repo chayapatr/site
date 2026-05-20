@@ -32,8 +32,8 @@
 />
 
 <div
-  class="fixed z-[9999] min-w-40 border border-neutral-700 bg-neutral-900/95 py-0.5 shadow-lg backdrop-blur-sm"
-  style="left:{Math.min(x, window.innerWidth - 176)}px; top:{Math.min(y, window.innerHeight - 200)}px;"
+  class="fixed z-[9999] min-w-40 border py-0.5 shadow-lg backdrop-blur-sm"
+  style="left:{Math.min(x, window.innerWidth - 176)}px; top:{Math.min(y, window.innerHeight - 200)}px; background: var(--os-surface); border-color: var(--os-border);"
   onmousedown={(e) => e.stopPropagation()}
   role="menu"
 >
@@ -42,7 +42,8 @@
       <div class="my-0.5 border-t border-neutral-800"></div>
     {:else if 'children' in item}
       <div
-        class="group relative flex w-full items-center justify-between px-3 py-1.5 font-mono text-xs text-neutral-300 transition-colors hover:bg-neutral-700"
+        class="group relative flex w-full items-center justify-between px-3 py-1.5 font-mono text-xs transition-colors"
+        style="color: var(--os-text);"
         role="menuitem"
         onmouseenter={() => submenuOpen = item.label}
         onmouseleave={() => submenuOpen = null}
@@ -51,7 +52,8 @@
         <span class="text-neutral-600">›</span>
         {#if submenuOpen === item.label}
           <div
-            class="absolute top-0 left-full min-w-40 border border-neutral-700 bg-neutral-900/95 py-0.5 shadow-lg backdrop-blur-sm"
+            class="absolute top-0 left-full min-w-40 border py-0.5 shadow-lg backdrop-blur-sm"
+            style="background: var(--os-surface); border-color: var(--os-border);"
             onmouseenter={() => submenuOpen = item.label}
           >
             {#each item.children as child}
@@ -59,9 +61,9 @@
                 <div class="my-0.5 border-t border-neutral-800"></div>
               {:else if !('children' in child)}
                 <button
-                  class="flex w-full px-3 py-1.5 text-left font-mono text-xs transition-colors hover:bg-neutral-700"
-                  class:text-neutral-300={!child.danger}
+                  class="menu-item flex w-full px-3 py-1.5 text-left font-mono text-xs transition-colors"
                   class:text-red-400={child.danger}
+                  style={!child.danger ? 'color: var(--os-text);' : ''}
                   onclick={() => { child.action(); onclose() }}
                   role="menuitem"
                 >{child.label}</button>
@@ -72,9 +74,9 @@
       </div>
     {:else}
       <button
-        class="flex w-full px-3 py-1.5 text-left font-mono text-xs transition-colors hover:bg-neutral-700"
-        class:text-neutral-300={!item.danger}
+        class="menu-item flex w-full px-3 py-1.5 text-left font-mono text-xs transition-colors"
         class:text-red-400={item.danger}
+        style={!item.danger ? 'color: var(--os-text);' : ''}
         onclick={() => handleClick(item)}
         role="menuitem"
       >{item.label}</button>

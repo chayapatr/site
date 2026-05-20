@@ -6,6 +6,7 @@
 		time = new Date().toLocaleTimeString();
 	}, 1000);
 
+
 	function focusWindow(windowId: string | null) {
 		if (!windowId) return;
 		kernel.update((s) => {
@@ -19,8 +20,8 @@
 </script>
 
 <div
-	class="fixed top-0 right-0 left-0 z-9999 flex items-center gap-2 border-b border-neutral-800 px-3 glass-dark"
-	style="height: 32px;"
+	class="fixed top-0 right-0 left-0 z-9999 flex items-center gap-2 border-b border-neutral-800 px-3"
+	style="height: 32px; background: var(--os-glass); backdrop-filter: var(--os-glass-blur); -webkit-backdrop-filter: var(--os-glass-blur);"
 >
 	<span class="mr-2 shrink-0 font-mono text-xs text-neutral-400">pubOS</span>
 

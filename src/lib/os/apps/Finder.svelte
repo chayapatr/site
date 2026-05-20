@@ -87,7 +87,6 @@
 				}
 			})
 		);
-		entries = withStats;
 		try {
 			const cfg = parseDirFile(await kernel.read((cwd === '/' ? '' : cwd) + '/.directory'));
 			view = cfg.view === 'grid' ? 'grid' : 'list';
@@ -99,6 +98,7 @@
 		} catch {
 			view = 'list';
 		}
+		entries = withStats;
 		loaded = true;
 		error = '';
 	}
@@ -305,14 +305,13 @@
 
 <div class="flex h-full">
 	<!-- Sidebar -->
-	<div class="flex w-32 shrink-0 flex-col border-r border-neutral-800 py-2">
+	<div class="flex w-32 shrink-0 flex-col border-r py-2" style="border-color: var(--os-border);">
 		{#each sidebar as item}
 			<button
 				class="px-3 py-1.5 text-left font-mono text-xs transition-colors"
-				class:text-neutral-300={cwd === item.path}
-				class:bg-neutral-800={cwd === item.path}
-				class:text-neutral-600={cwd !== item.path}
-				class:hover:text-neutral-400={cwd !== item.path}
+				style={cwd === item.path
+					? 'color: var(--os-text); background: var(--os-selected);'
+					: 'color: var(--os-text-dim);'}
 				onclick={() => navigate(item.path)}>{item.label}</button
 			>
 		{/each}
@@ -321,12 +320,13 @@
 	<!-- Main area -->
 	<div class="flex flex-1 flex-col overflow-hidden">
 		<!-- Toolbar -->
-		<div class="flex shrink-0 items-center gap-2 border-b border-neutral-800 px-3 py-2">
+		<div class="flex shrink-0 items-center gap-2 border-b px-3 py-2" style="border-color: var(--os-border);">
 			<button
-				class="font-mono text-xs text-neutral-600 transition-colors hover:text-neutral-400"
+				class="font-mono text-xs transition-colors"
+				style="color: var(--os-text-dim);"
 				onclick={goUp}>↑</button
 			>
-			<span class="flex-1 truncate font-mono text-xs text-neutral-600">{cwd}</span>
+			<span class="flex-1 truncate font-mono text-xs" style="color: var(--os-text-dim);">{cwd}</span>
 		</div>
 
 		<!-- Content -->
@@ -358,13 +358,12 @@
 			{:else}
 				{#each entries as entry}
 					<button
-						class="flex w-full items-center gap-2 border-b border-neutral-900 px-4 py-1.5 text-left font-mono text-xs transition-colors hover:bg-neutral-900"
-						class:text-neutral-500={entry.isDir}
-						class:text-neutral-400={!entry.isDir}
+						class="finder-row flex w-full items-center gap-2 border-b px-4 py-1.5 text-left font-mono text-xs transition-colors"
+						style="border-color: var(--os-border-subtle); color: var(--os-text);"
 						onclick={() => openEntry(entry)}
 						oncontextmenu={(e) => onEntryContextMenu(e, entry)}
 					>
-						<span class="text-neutral-600">{entry.isDir ? '/' : ' '}</span>
+						<span style="color: var(--os-text-dim);">{entry.isDir ? '/' : ' '}</span>
 						{displayName(entry)}
 					</button>
 				{/each}

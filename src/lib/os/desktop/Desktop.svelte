@@ -24,7 +24,6 @@
   async function onDesktopContextMenu(e: MouseEvent) {
     e.preventDefault()
     const cfg = await readDesktopDir()
-    const isGrid = cfg.view === 'grid'
     showContextMenu(e.clientX, e.clientY, [
       {
         label: 'New File',
@@ -43,14 +42,6 @@
         }
       },
       { separator: true as const },
-      {
-        label: isGrid ? 'View: List' : 'View: Grid',
-        action: async () => {
-          const c = await readDesktopDir()
-          c.view = isGrid ? 'list' : 'grid'
-          await writeDesktopDir(c)
-        }
-      },
       {
         label: 'Order',
         children: [
@@ -310,8 +301,7 @@
 
 <div
   class="fixed inset-0 pt-8"
-  class:bg-black={!wallpaper}
-  style={wallpaper ? `background: black url('/usr/share/wallpaper/${wallpaper}.webp') center/cover no-repeat` : undefined}
+  style={wallpaper ? `background: black url('/usr/share/wallpaper/${wallpaper}.webp') center/cover no-repeat` : 'background: var(--os-desktop-bg)'}
   oncontextmenu={onDesktopContextMenu}
   role="none"
 >
