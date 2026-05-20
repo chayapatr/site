@@ -1,5 +1,0 @@
-# Prevent Cloudflare Pages from stripping .html extensions from VFS static files
-/usr/share/applications/* /usr/share/applications/:splat 200
-/usr/share/sounds/* /usr/share/sounds/:splat 200
-/bin/* /bin/:splat 200
-/etc/* /etc/:splat 200
