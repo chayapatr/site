@@ -7,7 +7,7 @@
   let iframeEl: HTMLIFrameElement | null = null
   let blobUrl = $state('')
 
-  function makeBlobUrl(html: string): string {
+  function makeBlobUrl(html: string, fileArg: string | null = null): string {
     const bridgeCode = `(function(){
   let _id=0,_p={}
   window.addEventListener('message',e=>{
@@ -18,10 +18,10 @@
   })
   function call(m,a){return new Promise((res,rej)=>{const id=++_id;_p[id]={resolve:res,reject:rej};parent.postMessage({id,method:m,args:a},'*')})}
   const _required={}
-  window.sys={
+  window.sys={args:${JSON.stringify(fileArg ? [fileArg] : [])},
     read:(p)=>call('read',[p]),write:(p,c)=>call('write',[p,c]),remove:(p)=>call('remove',[p]),
     list:(p)=>call('list',[p]),stat:(p)=>call('stat',[p]),exists:(p)=>call('exists',[p]),
-    spawn:(a,r)=>call('spawn',[a,r]),kill:(p)=>call('kill',[p]),ps:()=>call('ps',[]),
+    spawn:(a,r)=>call('spawn',[a,r]),spawnWebapp:(p,t)=>call('spawnWebapp',[p,t]),kill:(p)=>call('kill',[p]),ps:()=>call('ps',[]),
     env:()=>call('env',[]),setenv:(k,v)=>call('setenv',[k,v]),
     setTitle:(t)=>call('setTitle',[t]),exit:()=>call('exit',[]),
     require:async(p)=>{
@@ -61,6 +61,7 @@
           case 'stat':     result = await kernel.stat(a[0]); break
           case 'exists':   result = await kernel.exists(a[0]); break
           case 'spawn':    result = kernel.spawn(a[0], a[1]); break
+          case 'spawnWebapp': result = await kernel.spawnWebapp(a[0], a[1]); break
           case 'kill':     kernel.kill(a[0]); result = null; break
           case 'ps':       result = kernel.ps(); break
           case 'env':      result = { ...kernel.env }; break
@@ -86,8 +87,12 @@
     const path = args[0] ?? ''
     if (path) {
       await kernel.init()
+      // get fileArg from window appState (for apps like editor that open a file)
+      const winState = kernel.getState().processes.get(pid)
+      const winId = winState?.windowId
+      const fileArg = winId ? (kernel.getState().windows.get(winId)?.appState?.fileArg as string | null) ?? null : null
       const html = await kernel.read(path).catch((e) => `<p style="font-family:monospace;padding:1rem;color:#f88">${e.message}</p>`)
-      blobUrl = makeBlobUrl(html)
+      blobUrl = makeBlobUrl(html, fileArg)
     }
   })
 

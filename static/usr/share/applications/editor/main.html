@@ -15,7 +15,7 @@
     font-family: 'Zed Mono Extended', ui-monospace, monospace;
     font-size: 11px;
     color: #525252;
-    background: rgba(10,10,10,0.5);
+    background: #21222c;
   }
   #filename { color: #a3a3a3; }
   #save-btn {
@@ -46,10 +46,52 @@
 
   require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.52.0/min/vs' } })
   require(['vs/editor/editor.main'], function() {
+    monaco.editor.defineTheme('dracula', {
+      base: 'vs-dark',
+      inherit: true,
+      rules: [
+        { token: 'comment', foreground: '6272a4', fontStyle: 'italic' },
+        { token: 'keyword', foreground: 'ff79c6' },
+        { token: 'string', foreground: 'f1fa8c' },
+        { token: 'number', foreground: 'bd93f9' },
+        { token: 'regexp', foreground: 'f1fa8c' },
+        { token: 'type', foreground: '8be9fd', fontStyle: 'italic' },
+        { token: 'class', foreground: '50fa7b' },
+        { token: 'function', foreground: '50fa7b' },
+        { token: 'variable', foreground: 'f8f8f2' },
+        { token: 'constant', foreground: 'bd93f9' },
+        { token: 'operator', foreground: 'ff79c6' },
+        { token: 'delimiter', foreground: 'f8f8f2' },
+        { token: 'tag', foreground: 'ff79c6' },
+        { token: 'attribute.name', foreground: '50fa7b' },
+        { token: 'attribute.value', foreground: 'f1fa8c' },
+      ],
+      colors: {
+        'editor.background': '#282a36',
+        'editor.foreground': '#f8f8f2',
+        'editor.lineHighlightBackground': '#44475a',
+        'editor.selectionBackground': '#44475a',
+        'editor.inactiveSelectionBackground': '#44475a80',
+        'editorLineNumber.foreground': '#6272a4',
+        'editorLineNumber.activeForeground': '#f8f8f2',
+        'editorCursor.foreground': '#f8f8f2',
+        'editorWhitespace.foreground': '#44475a',
+        'editorIndentGuide.background': '#44475a',
+        'editor.findMatchBackground': '#ffb86c50',
+        'editor.findMatchHighlightBackground': '#ffffff20',
+        'editorWidget.background': '#21222c',
+        'editorWidget.border': '#6272a4',
+        'input.background': '#21222c',
+        'input.foreground': '#f8f8f2',
+        'scrollbarSlider.background': '#44475a80',
+        'scrollbarSlider.hoverBackground': '#44475aaa',
+      }
+    })
+
     const editor = monaco.editor.create(document.getElementById('container'), {
       value: '',
-      language: 'javascript',
-      theme: 'vs-dark',
+      language: 'plaintext',
+      theme: 'dracula',
       fontSize: 12,
       fontFamily: "'Zed Mono Extended', ui-monospace, monospace",
       minimap: { enabled: false },
@@ -59,25 +101,20 @@
     })
 
     if (typeof sys !== 'undefined') {
-      sys.env().then(env => {
-        const path = (window.location.hash || '').slice(1) || null
-        // check if opened with a file arg via title
-        sys.setTitle('Editor')
-      })
+      sys.setTitle('Editor')
 
-      // load file if passed via args
-      const hash = decodeURIComponent(window.location.hash.slice(1))
-      if (hash) {
-        filePath = hash
-        document.getElementById('filename').textContent = hash.split('/').pop()
-        sys.read(hash).then(content => {
+      // load file if passed via sys.args[0]
+      const fileArg = sys.args && sys.args[0] ? sys.args[0] : null
+      if (fileArg) {
+        filePath = fileArg
+        const name = fileArg.split('/').pop()
+        document.getElementById('filename').textContent = name
+        sys.read(fileArg).then(content => {
           editor.setValue(content)
-          // detect language from extension
-          const ext = hash.split('.').pop()
+          const ext = fileArg.split('.').pop()
           const langMap = { js: 'javascript', ts: 'typescript', md: 'markdown', html: 'html', css: 'css', json: 'json', sh: 'shell', py: 'python' }
           if (langMap[ext]) monaco.editor.setModelLanguage(editor.getModel(), langMap[ext])
-          sys.setTitle('Editor — ' + hash.split('/').pop())
-          document.getElementById('filename').textContent = hash.split('/').pop()
+          sys.setTitle('Editor — ' + name)
         }).catch(() => {})
       }
 

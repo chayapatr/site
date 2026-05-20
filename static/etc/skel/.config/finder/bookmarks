@@ -2,6 +2,5 @@
   {"label": "home",         "path": "/home/user"},
   {"label": "desktop",      "path": "/home/user/Desktop"},
   {"label": "applications", "path": "/usr/share/applications"},
-  {"label": "apps",         "path": "/usr/share/apps"},
   {"label": "/",            "path": "/"}
 ]

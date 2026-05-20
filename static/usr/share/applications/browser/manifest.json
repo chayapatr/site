@@ -1,0 +1,7 @@
+{
+  "name": "Browser",
+  "version": "1.0",
+  "description": "Web browser with pub:// support",
+  "icon": "/usr/share/icons/browser.svg",
+  "permissions": []
+}

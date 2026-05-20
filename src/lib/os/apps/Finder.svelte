@@ -8,7 +8,7 @@
 	type DesktopFile = { label: string; icon: string } & (
 		| { app: AppType }
 		| { folder: string }
-		| { webapp: string }
+		| { launch: string }
 	);
 	type ViewMode = 'list' | 'icon-grid';
 
@@ -47,8 +47,15 @@
 				try {
 					const s = await kernel.stat(full);
 					const isDir = s.type === 'dir';
-					let icon = isDir ? '/usr/share/icons/folder.svg' : '/usr/share/icons/notepad.svg';
-					if (!isDir && n.endsWith('.desktop')) {
+					let icon = isDir ? '/usr/share/icons/folder.svg' : '/usr/share/icons/file.svg';
+					if (isDir) {
+						try {
+							const m = JSON.parse(await kernel.read(full + '/manifest.json'));
+							icon = m.icon ?? '/usr/share/icons/app.svg';
+						} catch {
+							/* keep folder icon */
+						}
+					} else if (n.endsWith('.desktop')) {
 						try {
 							const def = JSON.parse(await kernel.read(full)) as DesktopFile;
 							if (def.icon) icon = def.icon;
@@ -58,7 +65,7 @@
 					}
 					return { name: n, isDir, icon };
 				} catch {
-					return { name: n, isDir: false, icon: '/usr/share/icons/notepad.svg' };
+					return { name: n, isDir: false, icon: '/usr/share/icons/file.svg' };
 				}
 			})
 		);
@@ -102,21 +109,27 @@
 					navigate(def.folder);
 					return;
 				}
-				if ('webapp' in def) {
-					kernel.spawnWebapp(def.webapp, def.label);
+				if ('launch' in def) {
+					kernel.spawnWebapp(def.launch, def.label);
 					return;
 				}
 			} catch {
 				/* fall through */
 			}
 		}
-		if (ext === 'md' || ext === 'html') kernel.spawn('browser', [path]);
-		else kernel.spawn('notepad', [path]);
+		if (ext && ['png','jpg','jpeg','gif','webp','svg','bmp'].includes(ext)) kernel.spawnWebapp('/usr/share/applications/preview', path)
+		else if (ext && ['md','html','js','ts','css','json'].includes(ext)) kernel.spawnWebapp('/usr/share/applications/editor', path)
+		else kernel.spawnWebapp('/usr/share/applications/editor', path);
 	}
 
 	async function openEntry(entry: Entry) {
 		const path = fullPath(entry.name);
 		if (entry.isDir) {
+			const hasManifest = await kernel.exists(path + '/manifest.json');
+			if (hasManifest) {
+				kernel.spawnWebapp(path);
+				return;
+			}
 			navigate(path);
 			return;
 		}
@@ -179,7 +192,7 @@
 							onclick={() => openEntry(entry)}
 						>
 							<img
-								src={entry.icon ?? '/usr/share/icons/notepad.svg'}
+								src={entry.icon ?? '/usr/share/icons/file.svg'}
 								alt={displayName(entry)}
 								class="pointer-events-none h-10 w-10"
 							/>

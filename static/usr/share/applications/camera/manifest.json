@@ -2,6 +2,8 @@
   "name": "Camera",
   "version": "1.0",
   "description": "Take photos and save to ~/Pictures",
-  "icon": "/usr/share/icons/monitor.svg",
-  "permissions": ["camera"]
+  "icon": "/usr/share/icons/app.svg",
+  "permissions": [
+    "camera"
+  ]
 }

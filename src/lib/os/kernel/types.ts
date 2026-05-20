@@ -1,4 +1,4 @@
-export type AppType = 'finder' | 'terminal' | 'browser' | 'notepad' | 'settings' | 'monitor' | 'script' | 'webapp'
+export type AppType = 'finder' | 'terminal' | 'settings' | 'monitor' | 'script' | 'app'
 
 export interface Process {
   pid: number

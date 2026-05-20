@@ -1,0 +1,9 @@
+{
+  "name": "Synth",
+  "version": "1.0",
+  "description": "Audio synthesizer",
+  "icon": "/usr/share/icons/app.svg",
+  "permissions": [
+    "audio"
+  ]
+}

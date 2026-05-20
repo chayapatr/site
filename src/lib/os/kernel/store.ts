@@ -6,12 +6,10 @@ import { vfsRead, vfsWrite, vfsRemove, vfsList, vfsStat, vfsExists } from './vfs
 const APP_META: Record<AppType, { title: string; icon: string }> = {
   finder:   { title: 'Finder',   icon: '/usr/share/icons/finder.svg' },
   terminal: { title: 'Terminal', icon: '/usr/share/icons/terminal.svg' },
-  browser:  { title: 'Browser',  icon: '/usr/share/icons/browser.svg' },
-  notepad:  { title: 'Notepad',  icon: '/usr/share/icons/notepad.svg' },
   settings: { title: 'Settings', icon: '/usr/share/icons/settings.svg' },
   monitor:  { title: 'Monitor',  icon: '/usr/share/icons/monitor.svg' },
   script:   { title: 'Script',   icon: '' },
-  webapp:   { title: 'App',      icon: '/usr/share/icons/notepad.svg' },
+  app:      { title: 'App',      icon: '/usr/share/icons/app.svg' },
 }
 
 function createKernel() {
@@ -152,6 +150,7 @@ function createKernel() {
     },
 
     spawn(app: AppType, args: string[] = []): number {
+
       let pid = 0
       update(s => {
         pid = s.nextPid++
@@ -185,16 +184,16 @@ function createKernel() {
       return pid
     },
 
-    async spawnWebapp(path: string, title?: string): Promise<number> {
+    async spawnWebapp(path: string, fileArg?: string): Promise<number> {
       // if path is a directory, look for manifest.json + main.html
       let htmlPath = path
-      let icon = '/usr/share/icons/notepad.svg'
-      let name = title ?? path.split('/').pop() ?? 'App'
+      let icon = '/usr/share/icons/app.svg'
+      let name = fileArg ? (fileArg.split('/').pop() ?? 'App') : (path.split('/').pop() ?? 'App')
       try {
         const manifestRaw = await vfsRead(path + '/manifest.json', get({ subscribe }), manifest!)
         const m = JSON.parse(manifestRaw)
         htmlPath = path + '/main.html'
-        if (m.name) name = title ?? m.name
+        if (m.name) name = fileArg ? (fileArg.split('/').pop() ?? m.name) : m.name
         if (m.icon) icon = m.icon
       } catch { /* not a package dir, treat path as direct html file */ }
 
@@ -202,10 +201,10 @@ function createKernel() {
       update(s => {
         pid = s.nextPid++
         const windowId = crypto.randomUUID()
-        s.processes.set(pid, { pid, name, app: 'webapp', status: 'running', windowId, startedAt: Date.now() })
+        s.processes.set(pid, { pid, name, app: 'app', status: 'running', windowId, startedAt: Date.now() })
         s.windows.set(windowId, {
-          id: windowId, pid, title: name, appType: 'webapp',
-          appState: { path: htmlPath, icon },
+          id: windowId, pid, title: name, appType: 'app',
+          appState: { path: htmlPath, icon, fileArg: fileArg ?? null },
           position: { x: 80 + Math.random() * 200, y: 60 + Math.random() * 100 },
           size: { width: 640, height: 440 },
           zIndex: Math.max(0, ...Array.from(s.windows.values()).map(w => w.zIndex)) + 1,

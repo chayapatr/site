@@ -1,8 +1,7 @@
 {
   "name": "Editor",
   "version": "1.0",
-  "description": "Code editor powered by Monaco",
+  "description": "Code editor",
   "icon": "/usr/share/icons/notepad.svg",
-  "requires": ["/usr/lib/monaco.js"],
   "permissions": []
 }

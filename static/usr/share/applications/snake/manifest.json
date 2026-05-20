@@ -1,0 +1,7 @@
+{
+  "name": "Snake",
+  "version": "1.0",
+  "description": "Snake game",
+  "icon": "/usr/share/icons/app.svg",
+  "permissions": []
+}

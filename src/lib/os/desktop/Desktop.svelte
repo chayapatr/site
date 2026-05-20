@@ -3,8 +3,6 @@
   import Window from './Window.svelte'
   import Terminal from '$lib/os/apps/Terminal.svelte'
   import Finder from '$lib/os/apps/Finder.svelte'
-  import Browser from '$lib/os/apps/Browser.svelte'
-  import Notepad from '$lib/os/apps/Notepad.svelte'
   import Settings from '$lib/os/apps/Settings.svelte'
   import Monitor from '$lib/os/apps/Monitor.svelte'
   import WebApp from '$lib/os/apps/WebApp.svelte'
@@ -16,11 +14,9 @@
   const appComponents: Partial<Record<AppType, any>> = {
     terminal: Terminal,
     finder: Finder,
-    browser: Browser,
-    notepad: Notepad,
     settings: Settings,
     monitor: Monitor,
-    webapp: WebApp,
+    app: WebApp,
   }
 
   const CONFIG_PATH = '/home/user/.config/wallpaper'
@@ -86,7 +82,7 @@
     })
   }
 
-  type DesktopEntry = { label: string; icon: string } & ({ app: AppType } | { folder: string } | { webapp: string } | { file: string })
+  type DesktopEntry = { label: string; icon: string } & ({ app: AppType } | { folder: string } | { launch: string } | { file: string })
   let desktopEntries = $state<DesktopEntry[]>([])
 
   // reload desktop icons when filesystem changes
@@ -109,7 +105,7 @@
           } catch { /* skip malformed */ }
         } else {
           const ext = name.split('.').pop() ?? ''
-          const icon = ext === 'md' || ext === 'txt' ? '/usr/share/icons/notepad.svg' : '/usr/share/icons/notepad.svg'
+          const icon = '/usr/share/icons/file.svg'
           entries.push({ label: name, icon, file: path })
         }
       }
@@ -120,12 +116,17 @@
   function openEntry(entry: DesktopEntry) {
     if ('app' in entry) {
       kernel.spawn(entry.app)
-    } else if ('webapp' in entry) {
-      kernel.spawnWebapp(entry.webapp, entry.label)
+    } else if ('launch' in entry) {
+      kernel.spawnWebapp(entry.launch, entry.label)
     } else if ('file' in entry) {
       const ext = entry.file.split('.').pop()
-      if (ext === 'md' || ext === 'html') kernel.spawn('browser', [entry.file])
-      else kernel.spawn('notepad', [entry.file])
+      if (ext && ['png','jpg','jpeg','gif','webp','svg','bmp'].includes(ext)) {
+        kernel.spawnWebapp('/usr/share/applications/preview', entry.file)
+      } else if (ext === 'md' || ext === 'html' || ext === 'js' || ext === 'ts' || ext === 'css' || ext === 'json') {
+        kernel.spawnWebapp('/usr/share/applications/editor', entry.file)
+      } else {
+        kernel.spawnWebapp('/usr/share/applications/editor', entry.file)
+      }
     } else {
       kernel.spawn('finder', [entry.folder])
     }

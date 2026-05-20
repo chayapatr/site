@@ -1,0 +1,7 @@
+{
+  "name": "Conway",
+  "version": "1.0",
+  "description": "Conway's Game of Life",
+  "icon": "/usr/share/icons/app.svg",
+  "permissions": []
+}

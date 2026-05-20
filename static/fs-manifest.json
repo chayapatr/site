@@ -82,8 +82,8 @@
           "type": "file",
           "name": "open.js",
           "path": "/bin/open.js",
-          "size": 159,
-          "mtime": 1779262894751.0574
+          "size": 907,
+          "mtime": 1779298287315.0032
         },
         {
           "type": "file",
@@ -181,8 +181,8 @@
                       "type": "file",
                       "name": "bookmarks",
                       "path": "/etc/skel/.config/finder/bookmarks",
-                      "size": 275,
-                      "mtime": 1779262894754.6094
+                      "size": 219,
+                      "mtime": 1779297918295.255
                     }
                   ]
                 }
@@ -211,8 +211,8 @@
                   "type": "file",
                   "name": "Browser.desktop",
                   "path": "/etc/skel/Desktop/Browser.desktop",
-                  "size": 74,
-                  "mtime": 1779262894757.229
+                  "size": 101,
+                  "mtime": 1779298303022.022
                 },
                 {
                   "type": "file",
@@ -586,25 +586,123 @@
                   "mtime": 1779262894768.0945
                 },
                 {
-                  "type": "file",
-                  "name": "browser.desktop",
-                  "path": "/usr/share/applications/browser.desktop",
-                  "size": 74,
-                  "mtime": 1779262894769.3567
+                  "type": "dir",
+                  "name": "browser",
+                  "path": "/usr/share/applications/browser",
+                  "children": [
+                    {
+                      "type": "file",
+                      "name": "main.html",
+                      "path": "/usr/share/applications/browser/main.html",
+                      "size": 9489,
+                      "mtime": 1779298250777.839
+                    },
+                    {
+                      "type": "file",
+                      "name": "manifest.json",
+                      "path": "/usr/share/applications/browser/manifest.json",
+                      "size": 159,
+                      "mtime": 1779298206623.9421
+                    }
+                  ]
                 },
                 {
-                  "type": "file",
-                  "name": "camera.desktop",
-                  "path": "/usr/share/applications/camera.desktop",
-                  "size": 91,
-                  "mtime": 1779294106072.2166
+                  "type": "dir",
+                  "name": "camera",
+                  "path": "/usr/share/applications/camera",
+                  "children": [
+                    {
+                      "type": "file",
+                      "name": "camera.desktop",
+                      "path": "/usr/share/applications/camera/camera.desktop",
+                      "size": 99,
+                      "mtime": 1779296412841.6733
+                    },
+                    {
+                      "type": "file",
+                      "name": "main.html",
+                      "path": "/usr/share/applications/camera/main.html",
+                      "size": 4507,
+                      "mtime": 1779294089113.6094
+                    },
+                    {
+                      "type": "file",
+                      "name": "manifest.json",
+                      "path": "/usr/share/applications/camera/manifest.json",
+                      "size": 169,
+                      "mtime": 1779294093754.7712
+                    }
+                  ]
                 },
                 {
-                  "type": "file",
-                  "name": "editor.desktop",
-                  "path": "/usr/share/applications/editor.desktop",
-                  "size": 91,
-                  "mtime": 1779294106069.5679
+                  "type": "dir",
+                  "name": "clock",
+                  "path": "/usr/share/applications/clock",
+                  "children": [
+                    {
+                      "type": "file",
+                      "name": "main.html",
+                      "path": "/usr/share/applications/clock/main.html",
+                      "size": 1044,
+                      "mtime": 1779262894775.8667
+                    },
+                    {
+                      "type": "file",
+                      "name": "manifest.json",
+                      "path": "/usr/share/applications/clock/manifest.json",
+                      "size": 116,
+                      "mtime": 1779296399220.2244
+                    }
+                  ]
+                },
+                {
+                  "type": "dir",
+                  "name": "conway",
+                  "path": "/usr/share/applications/conway",
+                  "children": [
+                    {
+                      "type": "file",
+                      "name": "main.html",
+                      "path": "/usr/share/applications/conway/main.html",
+                      "size": 3574,
+                      "mtime": 1779262894776.5176
+                    },
+                    {
+                      "type": "file",
+                      "name": "manifest.json",
+                      "path": "/usr/share/applications/conway/manifest.json",
+                      "size": 127,
+                      "mtime": 1779296399224.677
+                    }
+                  ]
+                },
+                {
+                  "type": "dir",
+                  "name": "editor",
+                  "path": "/usr/share/applications/editor",
+                  "children": [
+                    {
+                      "type": "file",
+                      "name": "editor.desktop",
+                      "path": "/usr/share/applications/editor/editor.desktop",
+                      "size": 99,
+                      "mtime": 1779298309134.2212
+                    },
+                    {
+                      "type": "file",
+                      "name": "main.html",
+                      "path": "/usr/share/applications/editor/main.html",
+                      "size": 3184,
+                      "mtime": 1779294518122.0906
+                    },
+                    {
+                      "type": "file",
+                      "name": "manifest.json",
+                      "path": "/usr/share/applications/editor/manifest.json",
+                      "size": 138,
+                      "mtime": 1779298309137.9536
+                    }
+                  ]
                 },
                 {
                   "type": "file",
@@ -614,11 +712,25 @@
                   "mtime": 1779262894768.351
                 },
                 {
-                  "type": "file",
-                  "name": "notepad.desktop",
-                  "path": "/usr/share/applications/notepad.desktop",
-                  "size": 74,
-                  "mtime": 1779262894769.6707
+                  "type": "dir",
+                  "name": "preview",
+                  "path": "/usr/share/applications/preview",
+                  "children": [
+                    {
+                      "type": "file",
+                      "name": "main.html",
+                      "path": "/usr/share/applications/preview/main.html",
+                      "size": 3285,
+                      "mtime": 1779298091883.4585
+                    },
+                    {
+                      "type": "file",
+                      "name": "manifest.json",
+                      "path": "/usr/share/applications/preview/manifest.json",
+                      "size": 135,
+                      "mtime": 1779298074967.2422
+                    }
+                  ]
                 },
                 {
                   "type": "file",
@@ -628,137 +740,53 @@
                   "mtime": 1779262894768.7512
                 },
                 {
+                  "type": "dir",
+                  "name": "snake",
+                  "path": "/usr/share/applications/snake",
+                  "children": [
+                    {
+                      "type": "file",
+                      "name": "main.html",
+                      "path": "/usr/share/applications/snake/main.html",
+                      "size": 3168,
+                      "mtime": 1779262894775.1904
+                    },
+                    {
+                      "type": "file",
+                      "name": "manifest.json",
+                      "path": "/usr/share/applications/snake/manifest.json",
+                      "size": 115,
+                      "mtime": 1779296399228.3357
+                    }
+                  ]
+                },
+                {
+                  "type": "dir",
+                  "name": "synth",
+                  "path": "/usr/share/applications/synth",
+                  "children": [
+                    {
+                      "type": "file",
+                      "name": "main.html",
+                      "path": "/usr/share/applications/synth/main.html",
+                      "size": 5385,
+                      "mtime": 1779262894775.6074
+                    },
+                    {
+                      "type": "file",
+                      "name": "manifest.json",
+                      "path": "/usr/share/applications/synth/manifest.json",
+                      "size": 129,
+                      "mtime": 1779296399232.0286
+                    }
+                  ]
+                },
+                {
                   "type": "file",
                   "name": "terminal.desktop",
                   "path": "/usr/share/applications/terminal.desktop",
                   "size": 77,
                   "mtime": 1779262894769.0618
-                }
-              ]
-            },
-            {
-              "type": "dir",
-              "name": "apps",
-              "path": "/usr/share/apps",
-              "children": [
-                {
-                  "type": "file",
-                  "name": ".directory",
-                  "path": "/usr/share/apps/.directory",
-                  "size": 21,
-                  "mtime": 1779262894773.852
-                },
-                {
-                  "type": "dir",
-                  "name": "camera",
-                  "path": "/usr/share/apps/camera",
-                  "children": [
-                    {
-                      "type": "file",
-                      "name": "camera.desktop",
-                      "path": "/usr/share/apps/camera/camera.desktop",
-                      "size": 91,
-                      "mtime": 1779294098182.0442
-                    },
-                    {
-                      "type": "file",
-                      "name": "main.html",
-                      "path": "/usr/share/apps/camera/main.html",
-                      "size": 4507,
-                      "mtime": 1779294089113.6094
-                    },
-                    {
-                      "type": "file",
-                      "name": "manifest.json",
-                      "path": "/usr/share/apps/camera/manifest.json",
-                      "size": 169,
-                      "mtime": 1779294093754.7712
-                    }
-                  ]
-                },
-                {
-                  "type": "file",
-                  "name": "clock.desktop",
-                  "path": "/usr/share/apps/clock.desktop",
-                  "size": 94,
-                  "mtime": 1779262894773.5474
-                },
-                {
-                  "type": "file",
-                  "name": "clock.html",
-                  "path": "/usr/share/apps/clock.html",
-                  "size": 1044,
-                  "mtime": 1779262894775.8667
-                },
-                {
-                  "type": "file",
-                  "name": "conway.desktop",
-                  "path": "/usr/share/apps/conway.desktop",
-                  "size": 96,
-                  "mtime": 1779262894774.68
-                },
-                {
-                  "type": "file",
-                  "name": "conway.html",
-                  "path": "/usr/share/apps/conway.html",
-                  "size": 3574,
-                  "mtime": 1779262894776.5176
-                },
-                {
-                  "type": "dir",
-                  "name": "editor",
-                  "path": "/usr/share/apps/editor",
-                  "children": [
-                    {
-                      "type": "file",
-                      "name": "editor.desktop",
-                      "path": "/usr/share/apps/editor/editor.desktop",
-                      "size": 91,
-                      "mtime": 1779294048936.8638
-                    },
-                    {
-                      "type": "file",
-                      "name": "main.html",
-                      "path": "/usr/share/apps/editor/main.html",
-                      "size": 3442,
-                      "mtime": 1779294043996.46
-                    },
-                    {
-                      "type": "file",
-                      "name": "manifest.json",
-                      "path": "/usr/share/apps/editor/manifest.json",
-                      "size": 194,
-                      "mtime": 1779293999210.812
-                    }
-                  ]
-                },
-                {
-                  "type": "file",
-                  "name": "snake.desktop",
-                  "path": "/usr/share/apps/snake.desktop",
-                  "size": 94,
-                  "mtime": 1779262894776.1462
-                },
-                {
-                  "type": "file",
-                  "name": "snake.html",
-                  "path": "/usr/share/apps/snake.html",
-                  "size": 3168,
-                  "mtime": 1779262894775.1904
-                },
-                {
-                  "type": "file",
-                  "name": "synth.desktop",
-                  "path": "/usr/share/apps/synth.desktop",
-                  "size": 94,
-                  "mtime": 1779262894774.3938
-                },
-                {
-                  "type": "file",
-                  "name": "synth.html",
-                  "path": "/usr/share/apps/synth.html",
-                  "size": 5385,
-                  "mtime": 1779262894775.6074
                 }
               ]
             },
@@ -783,10 +811,24 @@
               "children": [
                 {
                   "type": "file",
+                  "name": "app.svg",
+                  "path": "/usr/share/icons/app.svg",
+                  "size": 2707,
+                  "mtime": 1779297516112.5103
+                },
+                {
+                  "type": "file",
                   "name": "browser.svg",
                   "path": "/usr/share/icons/browser.svg",
                   "size": 4090,
                   "mtime": 1779262894766.7346
+                },
+                {
+                  "type": "file",
+                  "name": "file.svg",
+                  "path": "/usr/share/icons/file.svg",
+                  "size": 3225,
+                  "mtime": 1779297516112.7915
                 },
                 {
                   "type": "file",

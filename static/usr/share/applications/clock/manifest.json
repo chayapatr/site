@@ -1,0 +1,7 @@
+{
+  "name": "Clock",
+  "version": "1.0",
+  "description": "World clock",
+  "icon": "/usr/share/icons/app.svg",
+  "permissions": []
+}
