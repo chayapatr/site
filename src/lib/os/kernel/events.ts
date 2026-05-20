@@ -1,7 +1,10 @@
 export type KernelEventMap = {
   // filesystem
-  'fs:write':  { path: string }
-  'fs:delete': { path: string }
+  'fs:write':      { path: string }
+  'fs:create':     { path: string }          // new file, didn't exist before
+  'fs:modify':     { path: string }          // existing file updated
+  'fs:delete':     { path: string }
+  'fs:dir-change': { dir: string; path: string; op: 'add' | 'remove' }  // directory contents changed
   // process
   'proc:spawn': { pid: number; name: string }
   'proc:kill':  { pid: number; name: string }
@@ -48,13 +51,13 @@ class EventBus {
     this.listeners.get(event)?.delete(handler as Handler<unknown>)
   }
 
-  // watch a path prefix — fires on fs:write and fs:delete beneath it
-  watch(pathPrefix: string, handler: (event: 'write' | 'delete', path: string) => void): () => void {
-    const onWrite  = ({ path }: { path: string }) => { if (path.startsWith(pathPrefix)) handler('write',  path) }
-    const onDelete = ({ path }: { path: string }) => { if (path.startsWith(pathPrefix)) handler('delete', path) }
-    const offWrite  = this.on('fs:write',  onWrite)
-    const offDelete = this.on('fs:delete', onDelete)
-    return () => { offWrite(); offDelete() }
+  // watch a path prefix — fires on any fs change beneath it
+  watch(pathPrefix: string, handler: (event: 'create' | 'modify' | 'delete', path: string) => void): () => void {
+    const match = (path: string) => path.startsWith(pathPrefix)
+    const offCreate = this.on('fs:create', ({ path }) => { if (match(path)) handler('create', path) })
+    const offModify = this.on('fs:modify', ({ path }) => { if (match(path)) handler('modify', path) })
+    const offDelete = this.on('fs:delete', ({ path }) => { if (match(path)) handler('delete', path) })
+    return () => { offCreate(); offModify(); offDelete() }
   }
 
   // recent event log as a string — for /dev/events

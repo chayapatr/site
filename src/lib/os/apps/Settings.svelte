@@ -7,6 +7,7 @@
   let { pid, args = [] }: { pid: number; args?: string[] } = $props()
 
   const wallpapers = ['w1', 'w2', 'w3', 'w4']
+  const liveWallpapers = ['noise.js', 'particles.js', 'grid.js']
   const WALLPAPER_PATH = '/home/user/.config/wallpaper'
   const THEME_PATH = '/home/user/.config/theme'
   const DOTFILES_PATH = '/home/user/.config/show-dotfiles'
@@ -129,6 +130,19 @@
                 <span class="font-mono text-[10px] text-white" style="text-shadow: 0 1px 3px black;">{w}</span>
               </div>
             {/if}
+          </button>
+        {/each}
+
+        <!-- live wallpapers -->
+        {#each liveWallpapers as w}
+          <button
+            class="relative flex items-center justify-center overflow-hidden border transition-colors"
+            class:border-neutral-400={wallpaper === w}
+            class:border-neutral-800={wallpaper !== w}
+            style="aspect-ratio: 16/9; background: #080808;"
+            onclick={() => selectWallpaper(w)}
+          >
+            <span class="font-mono text-[10px]" style="color: var(--os-text-dim);">{w.replace('.js', '')} <span style="color: var(--os-text-dim); opacity: 0.5;">live</span></span>
           </button>
         {/each}
       </div>

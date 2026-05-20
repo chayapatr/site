@@ -20,7 +20,7 @@ export interface Sys {
   resolve(path: string): string
   patches(): string[]
   on<E extends KernelEventName>(event: E, handler: (payload: KernelEventMap[E]) => void): () => void
-  watch(pathPrefix: string, handler: (event: 'write' | 'delete', path: string) => void): () => void
+  watch(pathPrefix: string, handler: (event: 'create' | 'modify' | 'delete', path: string) => void): () => void
 }
 
 function normalizePath(path: string): string {

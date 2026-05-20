@@ -14,7 +14,6 @@ the kernel is a single Svelte writable store (`src/lib/kernel/store.ts`). it hol
 - `windows` — a Map of windowId → window records
 - `env` — environment variables (`CWD`, `HOME`, `USER`, `PATH`, `HOSTNAME`)
 - `nextPid` — auto-incrementing process id counter
-- `fsRev` — filesystem revision counter; incremented on every write or remove
 
 because it is a Svelte store, any component can subscribe to it with `$kernel` and react to state changes automatically.
 
@@ -193,7 +192,12 @@ apps are Svelte components mounted inside window frames. each app receives a `pi
 | `terminal` | interactive shell. executes commands from the VFS |
 | `finder` | filesystem browser. sidebar from `~/.config/finder/bookmarks` |
 | `settings` | wallpaper picker, light/dark/system theme |
-| `monitor` | live process and window monitor |
+| `monitor` | live process and window monitor with event log |
+
+**monitor** shows three panels:
+- **processes** — all running processes with pid, name, status, and a kill button
+- **windows** — open windows with title and size; click to focus
+- **events** — live stream of kernel events as they happen: file writes/deletes, process spawns/kills, window opens/closes, theme changes, sound mute/unmute. auto-scrolls. color-coded by event type.
 
 webapps (app packages in `/usr/share/applications/`) run in sandboxed iframes with access to the `sys` bridge via `window.sys`. bundled webapps include **browser**, **editor**, and **preview**. installable packages (snake, conway, clock, synth) live in the network registry — install with `pkg install <name>`.
 

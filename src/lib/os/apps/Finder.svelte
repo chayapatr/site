@@ -45,7 +45,7 @@
 
 	$effect(() => {
 		const dir = cwd;
-		return bus.watch(dir, () => reload());
+		return bus.watch(dir, (_event, _path) => reload());
 	});
 
 	$effect(() => {

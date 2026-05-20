@@ -14,7 +14,8 @@
 
   function formatPayload(event: string, payload: unknown): string {
     const p = payload as Record<string, unknown>
-    if (event === 'fs:write' || event === 'fs:delete') return p.path as string
+    if (event === 'fs:write' || event === 'fs:create' || event === 'fs:modify' || event === 'fs:delete') return p.path as string
+    if (event === 'fs:dir-change') return `${p.op} ${p.path}`
     if (event === 'proc:spawn' || event === 'proc:kill') return `pid ${p.pid} (${p.name})`
     if (event === 'win:open' || event === 'win:close') return `pid ${p.pid}`
     if (event === 'win:focus') return String(p.windowId).slice(0, 8)
@@ -26,7 +27,7 @@
 
   function subscribe() {
     const events: KernelEventName[] = [
-      'fs:write', 'fs:delete',
+      'fs:write', 'fs:create', 'fs:modify', 'fs:delete', 'fs:dir-change',
       'proc:spawn', 'proc:kill',
       'win:open', 'win:close', 'win:focus', 'win:minimize',
       'soundd:mute', 'soundd:unmute',
@@ -78,14 +79,21 @@
 
   const EVENT_COLOR: Partial<Record<string, string>> = {
     'fs:write':       'text-blue-400',
+    'fs:create':      'text-cyan-400',
+    'fs:modify':      'text-blue-400',
     'fs:delete':      'text-red-400',
+    'fs:dir-change':  'text-sky-400',
     'proc:spawn':     'text-green-400',
     'proc:kill':      'text-red-400',
     'win:open':       'text-green-400',
     'win:close':      'text-red-400',
+    'win:focus':      'text-neutral-500',
+    'win:minimize':   'text-neutral-500',
     'soundd:mute':    'text-yellow-400',
     'soundd:unmute':  'text-yellow-400',
     'theme:change':   'text-purple-400',
+    'wallpaper:change': 'text-purple-400',
+    'dotfiles:change':  'text-neutral-400',
   }
 </script>
 

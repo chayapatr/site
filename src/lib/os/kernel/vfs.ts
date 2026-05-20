@@ -89,6 +89,8 @@ export function vfsRemove(path: string): void {
 		if (k?.startsWith(prefix)) localStorage.removeItem(k);
 	}
 	bus.emit('fs:delete', { path });
+	const dir = path.split('/').slice(0, -1).join('/') || '/';
+	bus.emit('fs:dir-change', { dir, path, op: 'remove' });
 }
 
 export function vfsWrite(path: string, content: string, state: KernelState): void {
@@ -138,8 +140,14 @@ export function vfsWrite(path: string, content: string, state: KernelState): voi
 		throw new Error(`unknown signal: ${signal}`);
 	}
 
+	const isNew = localStorage.getItem(lsKey(path)) === null;
 	localStorage.setItem(lsKey(path), content);
 	bus.emit('fs:write', { path });
+	bus.emit(isNew ? 'fs:create' : 'fs:modify', { path });
+	if (isNew) {
+		const dir = path.split('/').slice(0, -1).join('/') || '/';
+		bus.emit('fs:dir-change', { dir, path, op: 'add' });
+	}
 }
 
 export async function vfsList(

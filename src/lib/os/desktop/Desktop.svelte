@@ -1,6 +1,7 @@
 <script lang="ts">
   import { kernel } from '$lib/os/kernel/store'
   import { bus } from '$lib/os/kernel/events'
+  import { walld } from '$lib/os/kernel/walld'
   import Window from './Window.svelte'
   import Terminal from '$lib/os/apps/Terminal.svelte'
   import Finder from '$lib/os/apps/Finder.svelte'
@@ -92,6 +93,18 @@
 
   let wallpaper = $state('')
   let showDotfiles = $state(true)
+  let wallCanvas = $state<HTMLCanvasElement | null>(null)
+
+  function isLiveWallpaper(w: string) { return w.endsWith('.js') }
+
+  function applyWallpaper(w: string) {
+    wallpaper = w
+    if (isLiveWallpaper(w)) {
+      walld.load(w)
+    } else {
+      walld.unload()
+    }
+  }
 
   function applyTheme(t: string) {
     const root = document.documentElement
@@ -150,7 +163,7 @@
 
   // reload desktop icons when filesystem changes
   $effect(() => {
-    return bus.watch('/home/user/Desktop', () => loadDesktop())
+    return bus.watch('/home/user/Desktop', (_event, _path) => loadDesktop())
   })
 
   function parseDirectory(raw: string): Record<string, string> {
@@ -271,9 +284,16 @@
   onMount(async () => {
     await kernel.init()
 
+    // mount walld canvas
+    if (wallCanvas) {
+      walld.setReader((path) => kernel.read(path))
+      walld.mount(wallCanvas)
+      window.addEventListener('resize', () => walld.resize())
+    }
+
     // load saved wallpaper
     try {
-      wallpaper = (await kernel.read(CONFIG_PATH)).trim()
+      applyWallpaper((await kernel.read(CONFIG_PATH)).trim())
     } catch {
       wallpaper = ''
     }
@@ -284,7 +304,7 @@
     // load saved dotfiles pref
     try { showDotfiles = (await kernel.read(DOTFILES_PATH)).trim() !== 'false' } catch { showDotfiles = true }
 
-    bus.on('wallpaper:change', ({ wallpaper: w }) => { wallpaper = w })
+    bus.on('wallpaper:change', ({ wallpaper: w }) => applyWallpaper(w))
     bus.on('theme:change',    ({ theme }) => applyTheme(theme))
     bus.on('dotfiles:change', ({ show }) => { showDotfiles = show; loadDesktop() })
 
@@ -292,9 +312,18 @@
   })
 </script>
 
+<canvas
+  bind:this={wallCanvas}
+  class="fixed inset-0 z-0"
+  class:hidden={!isLiveWallpaper(wallpaper)}
+  style="width:100%;height:100%;"
+></canvas>
+
 <div
-  class="fixed inset-0 pt-8"
-  style={wallpaper ? `background: black url('/usr/share/wallpaper/${wallpaper}.webp') center/cover no-repeat` : 'background: var(--os-desktop-bg)'}
+  class="fixed inset-0 pt-8 z-10"
+  style={wallpaper && !isLiveWallpaper(wallpaper)
+    ? `background: black url('/usr/share/wallpaper/${wallpaper}.webp') center/cover no-repeat`
+    : isLiveWallpaper(wallpaper) ? 'background: transparent' : 'background: var(--os-desktop-bg)'}
   oncontextmenu={onDesktopContextMenu}
   role="none"
 >

@@ -449,6 +449,21 @@
               "children": [
                 {
                   "type": "file",
+                  "name": "grid.js",
+                  "path": "/usr/share/wallpaper/grid.js"
+                },
+                {
+                  "type": "file",
+                  "name": "noise.js",
+                  "path": "/usr/share/wallpaper/noise.js"
+                },
+                {
+                  "type": "file",
+                  "name": "particles.js",
+                  "path": "/usr/share/wallpaper/particles.js"
+                },
+                {
+                  "type": "file",
                   "name": "w1.webp",
                   "path": "/usr/share/wallpaper/w1.webp"
                 },
