@@ -104,6 +104,7 @@ export function vfsWrite(path: string, content: string, state: KernelState): voi
 			const proc = state.processes.get(pid);
 			if (!proc) throw new Error(`no such process: ${pid}`);
 			state.processes.delete(pid);
+			if (pid === 2) soundd.mute();
 			return;
 		}
 		if (signal === 'stop') {

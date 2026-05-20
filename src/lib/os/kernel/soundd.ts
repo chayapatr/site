@@ -106,10 +106,12 @@ class SoundDaemon {
 
 	mute() {
 		this.muted = true;
+		window.dispatchEvent(new CustomEvent('soundd-mute-change', { detail: true }));
 	}
 
 	unmute() {
 		this.muted = false;
+		window.dispatchEvent(new CustomEvent('soundd-mute-change', { detail: false }));
 	}
 
 	get isMuted() {

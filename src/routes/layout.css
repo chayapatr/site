@@ -61,6 +61,14 @@ h6 {
 
 /* --- pubOS --- */
 
+body {
+	user-select: none;
+}
+
+input, textarea, [contenteditable] {
+	user-select: text;
+}
+
 @utility glass-dark {
 	background: rgba(20, 20, 20, 0.75);
 	backdrop-filter: blur(12px);
@@ -117,6 +125,10 @@ h6 {
 }
 
 /* Light theme */
+[data-theme='light'] .bg-black {
+	background-color: #e8e8e8 !important;
+}
+
 [data-theme='light'] .glass-dark {
 	background: rgba(255, 255, 255, 0.85) !important;
 	backdrop-filter: blur(12px) !important;
@@ -155,6 +167,10 @@ h6 {
 
 /* System theme */
 @media (prefers-color-scheme: light) {
+	:not([data-theme='dark']) .bg-black {
+		background-color: #e8e8e8 !important;
+	}
+
 	:not([data-theme='dark']) .glass-dark {
 		background: rgba(255, 255, 255, 0.85);
 		backdrop-filter: blur(12px);

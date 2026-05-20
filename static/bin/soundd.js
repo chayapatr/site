@@ -7,7 +7,7 @@ if (!sub || sub === 'status') {
   print('audio:  ' + muted)
   try {
     // list loaded cues by reading theme file and extracting cue names
-    const theme = await sys.read('/usr/share/sounds/default/theme.strudel')
+    const theme = await sys.read('/usr/share/sounds/default/theme.js')
     const cues = [...theme.matchAll(/^cue\("([^"]+)"/gm)].map(m => m[1])
     if (cues.length) print('cues:   ' + cues.join(', '))
   } catch { /* theme unreadable */ }
@@ -22,9 +22,8 @@ if (!sub || sub === 'status') {
   print('soundd: unmuted')
 } else if (sub === 'play') {
   const cue = args[1]
-  if (!cue) { print('usage: soundd play <cue>'); sys.exit() }
-  sys.write('/dev/audio', cue)
-  print('soundd: playing ' + cue)
+  if (!cue) { print('usage: soundd play <cue>') }
+  else { sys.write('/dev/audio', cue); print('soundd: playing ' + cue) }
 } else {
   print('usage: soundd [status|reload|mute|unmute|play <cue>]')
 }

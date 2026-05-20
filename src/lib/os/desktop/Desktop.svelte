@@ -12,38 +12,78 @@
   import type { AppType } from '$lib/os/kernel/types'
   import { isDragging } from './drag'
 
-  function onDesktopContextMenu(e: MouseEvent) {
-    e.preventDefault()
-    showContextMenu(e.clientX, e.clientY, desktopMenuItems)
+  async function readDesktopDir(): Promise<Record<string, string>> {
+    try { return parseDirectory(await kernel.read('/home/user/Desktop/.directory')) } catch { return {} }
   }
 
-  const desktopMenuItems = [
-    {
-      label: 'New File',
-      action: async () => {
-        const name = prompt('File name:', 'untitled.txt')
-        if (!name) return
-        kernel.write(`/home/user/Desktop/${name}`, '')
-      }
-    },
-    {
-      label: 'New Folder',
-      action: async () => {
-        const name = prompt('Folder name:', 'New Folder')
-        if (!name) return
-        kernel.write(`/home/user/Desktop/${name}/.keep`, '')
-      }
-    },
-    { separator: true as const },
-    {
-      label: 'Open Terminal Here',
-      action: () => kernel.spawn('terminal')
-    },
-    {
-      label: 'Open Finder',
-      action: () => kernel.spawn('finder', ['/home/user/Desktop'])
-    },
-  ]
+  async function writeDesktopDir(cfg: Record<string, string>) {
+    const lines = Object.entries(cfg).map(([k, v]) => `${k}: ${v}`).join('\n')
+    kernel.write('/home/user/Desktop/.directory', lines + '\n')
+  }
+
+  async function onDesktopContextMenu(e: MouseEvent) {
+    e.preventDefault()
+    const cfg = await readDesktopDir()
+    const isGrid = cfg.view === 'grid'
+    showContextMenu(e.clientX, e.clientY, [
+      {
+        label: 'New File',
+        action: async () => {
+          const name = prompt('File name:', 'untitled.txt')
+          if (!name) return
+          kernel.write(`/home/user/Desktop/${name}`, '')
+        }
+      },
+      {
+        label: 'New Folder',
+        action: async () => {
+          const name = prompt('Folder name:', 'New Folder')
+          if (!name) return
+          kernel.write(`/home/user/Desktop/${name}/.keep`, '')
+        }
+      },
+      { separator: true as const },
+      {
+        label: isGrid ? 'View: List' : 'View: Grid',
+        action: async () => {
+          const c = await readDesktopDir()
+          c.view = isGrid ? 'list' : 'grid'
+          await writeDesktopDir(c)
+        }
+      },
+      {
+        label: 'Order',
+        children: [
+          {
+            label: 'Alphabetical' + (cfg.order === 'alpha' ? ' ✓' : ''),
+            action: async () => { const c = await readDesktopDir(); c.order = 'alpha'; await writeDesktopDir(c) }
+          },
+          {
+            label: 'Type' + (cfg.order === 'type' ? ' ✓' : ''),
+            action: async () => { const c = await readDesktopDir(); c.order = 'type'; await writeDesktopDir(c) }
+          },
+          {
+            label: 'None' + (!cfg.order || cfg.order === 'none' ? ' ✓' : ''),
+            action: async () => { const c = await readDesktopDir(); delete c.order; await writeDesktopDir(c) }
+          },
+        ]
+      },
+      { separator: true as const },
+      {
+        label: 'Open Terminal Here',
+        action: () => kernel.spawn('terminal')
+      },
+      {
+        label: 'Open Finder',
+        action: () => kernel.spawn('finder', ['/home/user/Desktop'])
+      },
+      { separator: true as const },
+      {
+        label: 'Settings',
+        action: () => kernel.spawn('settings')
+      },
+    ])
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const appComponents: Partial<Record<AppType, any>> = {
@@ -56,8 +96,10 @@
 
   const CONFIG_PATH = '/home/user/.config/wallpaper'
   const THEME_PATH = '/home/user/.config/theme'
+  const DOTFILES_PATH = '/home/user/.config/show-dotfiles'
 
   let wallpaper = $state('')
+  let showDotfiles = $state(true)
 
   function applyTheme(t: string) {
     const root = document.documentElement
@@ -120,12 +162,31 @@
     loadDesktop()
   })
 
+  function parseDirectory(raw: string): Record<string, string> {
+    const cfg: Record<string, string> = {}
+    for (const line of raw.split('\n')) {
+      const colon = line.indexOf(':')
+      if (colon === -1) continue
+      cfg[line.slice(0, colon).trim()] = line.slice(colon + 1).trim()
+    }
+    return cfg
+  }
+
   async function loadDesktop() {
     try {
-      const names = await kernel.list('/home/user/Desktop')
+      const allNames = await kernel.list('/home/user/Desktop')
+      const names = showDotfiles ? allNames : allNames.filter(n => !n.startsWith('.'))
+
+      // read .directory config for ordering
+      let cfg: Record<string, string> = {}
+      let order: string[] = []
+      try {
+        cfg = parseDirectory(await kernel.read('/home/user/Desktop/.directory'))
+        if (cfg.order && cfg.order !== 'alpha') order = cfg.order.split(',').map(s => s.trim()).filter(Boolean)
+      } catch { /* no .directory */ }
+
       const entries: DesktopEntry[] = []
       for (const name of names) {
-        if (name.startsWith('.')) continue
         const path = `/home/user/Desktop/${name}`
         if (name.endsWith('.desktop')) {
           try {
@@ -133,11 +194,32 @@
             entries.push(JSON.parse(raw) as DesktopEntry)
           } catch { /* skip malformed */ }
         } else {
-          const ext = name.split('.').pop() ?? ''
-          const icon = '/usr/share/icons/file.svg'
-          entries.push({ label: name, icon, file: path })
+          const stat = await kernel.stat(path).catch(() => null)
+          if (stat?.type === 'dir') {
+            entries.push({ label: name, icon: '/usr/share/icons/folder.svg', folder: path })
+          } else {
+            entries.push({ label: name, icon: '/usr/share/icons/file.svg', file: path })
+          }
         }
       }
+
+      // sort entries
+      if (cfg.order === 'alpha') {
+        entries.sort((a, b) => a.label.localeCompare(b.label))
+      } else if (cfg.order === 'type') {
+        const rank = (e: DesktopEntry) => 'folder' in e ? 0 : 'app' in e ? 1 : 'launch' in e ? 1 : 2
+        entries.sort((a, b) => rank(a) - rank(b) || a.label.localeCompare(b.label))
+      } else if (order.length > 0) {
+        entries.sort((a, b) => {
+          const ai = order.indexOf(a.label)
+          const bi = order.indexOf(b.label)
+          if (ai !== -1 && bi !== -1) return ai - bi
+          if (ai !== -1) return -1
+          if (bi !== -1) return 1
+          return a.label.localeCompare(b.label)
+        })
+      }
+
       desktopEntries = entries
     } catch { /* desktop folder not ready yet */ }
   }
@@ -208,11 +290,18 @@
     // load saved theme
     try { applyTheme((await kernel.read(THEME_PATH)).trim()) } catch { applyTheme('dark') }
 
+    // load saved dotfiles pref
+    try { showDotfiles = (await kernel.read(DOTFILES_PATH)).trim() !== 'false' } catch { showDotfiles = true }
+
     window.addEventListener('wallpaper-change', (e) => {
       wallpaper = (e as CustomEvent<string>).detail
     })
     window.addEventListener('theme-change', (e) => {
       applyTheme((e as CustomEvent<string>).detail)
+    })
+    window.addEventListener('dotfiles-change', (e) => {
+      showDotfiles = (e as CustomEvent<boolean>).detail
+      loadDesktop()
     })
 
     await loadDesktop()
@@ -221,7 +310,8 @@
 
 <div
   class="fixed inset-0 pt-8"
-  style="background: {wallpaper ? `black url('/usr/share/wallpaper/${wallpaper}.webp') center/cover no-repeat` : 'black'};"
+  class:bg-black={!wallpaper}
+  style={wallpaper ? `background: black url('/usr/share/wallpaper/${wallpaper}.webp') center/cover no-repeat` : undefined}
   oncontextmenu={onDesktopContextMenu}
   role="none"
 >

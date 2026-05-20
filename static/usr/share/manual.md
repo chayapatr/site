@@ -1,6 +1,6 @@
 # pubOS manual
 
-pubOS is a toy operating system that runs entirely in a web browser. it simulates a Unix-like environment — processes, a filesystem, a window manager — using only JavaScript, Svelte, and localStorage.
+pubOS is a toy operating system that runs entirely in a web browser. it simulates a Unix-like environment — processes, a filesystem, a window manager — running on JavaScript, Svelte, and localStorage.
 
 ---
 
@@ -26,7 +26,7 @@ the virtual filesystem has three backends, unified behind a single interface (`s
 
 **static** — files under `static/` are served by the web server and fetched on demand. the directory tree is pre-built into `static/fs-manifest.json` at build time by `scripts/build-manifest.js`. paths: `/bin`, `/etc`, `/usr`.
 
-**localStorage** — files under `/home/` are stored in the browser's localStorage under keys prefixed with `pubOS:fs:`. they persist across sessions. this is where user files, config, and custom commands live.
+**localStorage** — all paths are writable to localStorage under keys prefixed with `pubOS:fs:`. they persist across sessions. `/home/` is the primary user space, but any static path can be shadowed (see patching below).
 
 **computed** — virtual paths that reflect live kernel state:
 
@@ -78,6 +78,8 @@ scripts do not have direct access to the kernel. they receive a `sys` object —
 - `sys.setTitle(title)` — set the window title
 - `sys.exit()` — kill the current process
 - `sys.reload()` — reload the page
+- `sys.patches()` — list system files overridden in localStorage
+- `sys.spawnApp(path, fileArg?)` — launch an app package by path
 
 all path arguments are automatically normalized — relative paths, `./`, and `../` all work correctly.
 
@@ -117,16 +119,20 @@ shell builtins (handled before file lookup): `export`, `clear`
 | `ps` | list running processes |
 | `top` | show processes, windows, and env |
 | `kill <pid>` | terminate a process and close its window |
-| `open <app>` | spawn an app window |
+| `open <app\|path>` | open an app, directory, or file |
 | `export KEY=val` | set environment variable |
 | `echo <text>` | print text |
 | `clear` | clear the terminal |
 | `reboot` | reload the page |
 | `help` | show command list |
 | `pkg list` | list available packages from the network registry |
-| `pkg install <name>` | install a package to `/usr/share/applications/` |
+| `pkg installed` | list installed packages |
+| `pkg install <name>` | install a package |
 | `pkg remove <name>` | uninstall a package |
 | `soundd [status\|reload\|mute\|unmute\|play <cue>]` | control the sound daemon |
+| `patch list` | show system files overridden by localStorage |
+| `patch reset <path>` | restore a patched file to its default |
+| `patch reset-all` | restore all patched system files |
 
 tab completion: press Tab to complete commands (first word) or file/dir paths (subsequent words).
 
@@ -147,6 +153,55 @@ webapps (app packages in `/usr/share/applications/`) run in sandboxed iframes wi
 
 ---
 
+### open
+
+`open` is the universal launcher. it resolves its argument and decides how to open it:
+
+```sh
+open terminal          # native app by name
+open finder            # same for: terminal, finder, settings, monitor
+open .                 # open current directory in Finder
+open /home/user        # open any directory in Finder
+open /usr/share/applications/browser   # launch app package
+open notes.txt         # open file in the editor
+open browser           # search /usr/share/applications/ and /home/user/apps/
+```
+
+resolution rules:
+- `.` and `..` resolve against `CWD`
+- a bare name that isn't a native app is searched in `/usr/share/applications/<name>` and `/home/user/apps/<name>`
+- a directory with `manifest.json` is launched as an app package (unless opened as `.` or `..`)
+- a directory without `manifest.json` opens in Finder
+- a file opens in the editor
+
+---
+
+### packages
+
+packages are installable app bundles distributed through the network registry.
+
+**registry:** `/net/registry.from.pub/packages.json` — a static JSON file served alongside the OS.
+
+**install directory:** `/usr/share/applications/<name>/` for app packages, or `/home/user/bin/<name>.js` for bin packages.
+
+```sh
+pkg list               # show all available packages (marks installed ones)
+pkg installed          # list only installed packages
+pkg install snake      # install from registry
+pkg remove snake       # uninstall
+```
+
+**package types:**
+
+- `app` — a directory package copied to `/usr/share/applications/`. must contain `manifest.json` and `main.app`.
+- `bin` — a single `.js` file copied to `/home/user/bin/`.
+
+installed app packages persist in localStorage (they're written as regular VFS files under `/usr/share/applications/`). removing a package calls `sys.remove()` on the install directory.
+
+**available packages:** snake, conway, clock, synth.
+
+---
+
 ### finder
 
 finder reads its sidebar bookmarks from `~/.config/finder/bookmarks` — a JSON array:
@@ -159,13 +214,14 @@ finder reads its sidebar bookmarks from `~/.config/finder/bookmarks` — a JSON 
 ]
 ```
 
-edit this file to customize your sidebar. each directory can also have a `.directory` file to control view mode:
+edit this file to customize your sidebar. each directory can also have a `.directory` file to control view mode and icon order:
 
-```json
-{ "view": "icon-grid" }
+```yaml
+view: grid
+order: Terminal, Finder, Browser, Applications
 ```
 
-default is `list`.
+`view` is `list` or `grid` (default `list`). `order` is a comma-separated list of labels — listed items come first, unlisted items follow alphabetically.
 
 ---
 
@@ -193,12 +249,18 @@ app packages: `/usr/share/applications/`. desktop icons: `/home/user/Desktop/`.
 
 ---
 
-### webapps
+### app packages
 
-webapps are app packages — directories with a `manifest.json` and `main.html` — that run inside a sandboxed iframe. they have access to `window.sys` — the same syscall interface as terminal scripts — via a postMessage bridge injected at load time. the system font and CSS variables are also injected automatically via `/usr/share/style.css`.
+app packages are directories with a `manifest.json` and `main.app` entry point, launched via `kernel.spawnApp(path)` or by clicking in Finder.
 
-example webapp `main.html`:
+`manifest.json`:
+```json
+{ "name": "My App", "icon": "/usr/share/icons/app.svg", "version": "1.0" }
+```
 
+`main.app` is an HTML file that runs inside a sandboxed iframe. it has access to `window.sys` — the same syscall interface as terminal scripts — via a postMessage bridge injected at load time. the system font and CSS variables from `/usr/share/style.css` are also injected automatically.
+
+example `main.app`:
 ```html
 <script>
   sys.setTitle('My App')
@@ -206,10 +268,24 @@ example webapp `main.html`:
 </script>
 ```
 
-`manifest.json` format:
-```json
-{ "name": "My App", "icon": "/usr/share/icons/app.svg", "version": "1.0" }
+bundled apps: **browser**, **editor**, **preview**, **camera** — all in `/usr/share/applications/`.
+installable apps: **snake**, **conway**, **clock**, **synth** — install with `pkg install <name>`.
+
+---
+
+### patching system files
+
+any static system file can be overridden by writing to the same path in localStorage. the new content shadows the original without modifying it — `patch reset` removes the override and restores the default.
+
+```sh
+# override the system style
+cat /usr/share/style.css > /home/user/style-backup.css
+# edit /usr/share/style.css in the editor, then:
+patch list                          # confirm it shows as patched
+patch reset /usr/share/style.css    # restore default
 ```
+
+patchable paths include: `/usr/share/applications/*/main.app`, `/usr/share/sounds/default/theme.js`, `/usr/share/style.css`, `/bin/*.js`, `/etc/motd`, `/etc/hostname`.
 
 ---
 
@@ -219,9 +295,21 @@ pubOS has a live sound daemon (`soundd`, pid 2) that plays named audio cues on k
 
 **theme file:** `/usr/share/sounds/default/theme.js`
 
-each cue is a JavaScript function that receives a Web Audio `AudioContext`:
+each cue is a JavaScript function that receives `(ctx: AudioContext, Tone)` — use Web Audio directly or Tone.js:
 
 ```javascript
+// using Tone.js
+cue("my-sound", (ctx, Tone) => {
+  const synth = new Tone.Synth({
+    oscillator: { type: "sine" },
+    envelope: { attack: 0.01, decay: 0.15, sustain: 0, release: 0 }
+  }).toDestination()
+  synth.volume.value = -18
+  synth.triggerAttackRelease("C5", "16n")
+  setTimeout(() => synth.dispose(), 400)
+})
+
+// using raw Web Audio
 cue("my-sound", (ctx) => {
   const o = ctx.createOscillator()
   const g = ctx.createGain()
@@ -229,8 +317,7 @@ cue("my-sound", (ctx) => {
   o.frequency.value = 440
   g.gain.setValueAtTime(0.1, ctx.currentTime)
   g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.2)
-  o.start(ctx.currentTime)
-  o.stop(ctx.currentTime + 0.2)
+  o.start(ctx.currentTime); o.stop(ctx.currentTime + 0.2)
 })
 ```
 
@@ -254,6 +341,28 @@ soundd status                      # show daemon status and loaded cues
 **built-in events:** `window-open`, `window-close`, `notify`, `error`, `ping`, `boot`
 
 to create a custom sound theme, edit `/usr/share/sounds/default/theme.js` in the editor and run `soundd reload`.
+
+---
+
+### context menus
+
+right-click anywhere to get a context menu.
+
+**desktop:**
+- New File — prompts for a filename, creates it on the Desktop
+- New Folder — prompts for a name, creates it on the Desktop
+- Open Terminal Here
+- Open Finder
+
+**finder — file or directory:**
+- Open — default action (launch app package, open in Finder, or open in editor)
+- Open With — submenu with relevant apps based on file extension:
+  - directories: Browse Folder, Launch App (if `manifest.json` present)
+  - images (`.png`, `.jpg`, `.gif`, `.svg`, …): Preview, Editor
+  - web files (`.html`, `.htm`): Browser, Editor
+  - text/code (`.md`, `.js`, `.ts`, `.css`, `.json`, `.txt`): Editor, Browser
+- Rename — prompts for a new name, moves the file
+- Delete — removes the file (only works on `/home/` paths)
 
 ---
 

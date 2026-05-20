@@ -60,5 +60,6 @@ export interface Kernel {
   kill(pid: number): void
   ps(): Process[]
   setTitle(pid: number, title: string): void
+  patches(): string[]
   env: Record<string, string>
 }

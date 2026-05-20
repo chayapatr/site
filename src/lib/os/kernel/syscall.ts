@@ -17,21 +17,28 @@ export interface Sys {
   exit(code?: number): void
   reload(): void
   resolve(path: string): string
+  patches(): string[]
 }
 
 function normalizePath(path: string): string {
   const parts: string[] = []
   for (const seg of path.split('/')) {
     if (seg === '' || seg === '.') continue
-    if (seg === '..') parts.pop()
+    if (seg === '..') { if (parts.length > 0) parts.pop() }
     else parts.push(seg)
   }
   return '/' + parts.join('/')
 }
 
 export function createSyscall(pid: number, kernel: Kernel): Sys {
-  const resolve = (path: string) =>
-    normalizePath(path.startsWith('/') ? path : (kernel.env['CWD'] ?? '/') + '/' + path)
+  const resolve = (path: string): string => {
+    // expand ~ and ~/...
+    if (path === '~' || path.startsWith('~/')) {
+      const home = kernel.env['HOME'] ?? '/home/user'
+      path = home + path.slice(1)
+    }
+    return normalizePath(path.startsWith('/') ? path : (kernel.env['CWD'] ?? '/') + '/' + path)
+  }
 
   return {
     read:   (path) => kernel.read(resolve(path)),
@@ -50,5 +57,6 @@ export function createSyscall(pid: number, kernel: Kernel): Sys {
     exit:   (_code) => kernel.kill(pid),
     reload: () => window.location.reload(),
     resolve,
+    patches: () => kernel.patches(),
   }
 }

@@ -1,14 +1,6 @@
-const target = args[0] ?? sys.env().HOME
-const raw = target.startsWith('/') ? target : sys.env().CWD + '/' + target
-
-const parts = []
-for (const seg of raw.split('/')) {
-  if (seg === '' || seg === '.') continue
-  if (seg === '..') { parts.pop() }
-  else { parts.push(seg) }
-}
-const resolved = '/' + parts.join('/')
-
-const exists = await sys.exists(resolved || '/')
-if (!exists) { print('cd: ' + target + ': no such directory') }
-else { sys.setenv('CWD', resolved || '/') }
+const target = args[0] ?? '~'
+const resolved = sys.resolve(target)
+const stat = await sys.stat(resolved).catch(() => null)
+if (!stat) { print('cd: ' + target + ': no such file or directory') }
+else if (stat.type !== 'dir') { print('cd: ' + target + ': not a directory') }
+else { sys.setenv('CWD', resolved) }

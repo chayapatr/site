@@ -1,7 +1,7 @@
-const path = args[0] ?? sys.env().CWD
+const path = sys.resolve(args[0] ?? '.')
 const entries = await sys.list(path)
 const stats = await Promise.all(entries.map(async name => {
-  const full = path === '/' ? '/' + name : path + '/' + name
+  const full = (path === '/' ? '' : path) + '/' + name
   const stat = await sys.stat(full).catch(() => null)
   return { name, isDir: stat?.type === 'dir' }
 }))

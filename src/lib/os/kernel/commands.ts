@@ -75,7 +75,15 @@ export async function executeCommand(
   }
 
   if (redirectOut) {
-    kernel.write(redirectOut, output.trimEnd())
+    // resolve redirect target against CWD
+    const parts: string[] = []
+    const raw = redirectOut.startsWith('/') ? redirectOut : (kernel.env['CWD'] ?? '/') + '/' + redirectOut
+    for (const seg of raw.split('/')) {
+      if (seg === '' || seg === '.') continue
+      if (seg === '..') { if (parts.length > 0) parts.pop() }
+      else parts.push(seg)
+    }
+    kernel.write('/' + parts.join('/'), output.trimEnd())
   }
 }
 

@@ -1,6 +1,6 @@
 import { writable, get } from 'svelte/store';
 import type { KernelState, Process, AppType, Kernel, FSManifestNode } from './types';
-import { loadManifest } from './manifest';
+import { loadManifest, findNode } from './manifest';
 import { vfsRead, vfsWrite, vfsRemove, vfsList, vfsStat, vfsExists } from './vfs';
 import { soundd } from './soundd';
 
@@ -272,11 +272,28 @@ function createKernel() {
 				s.processes.delete(pid);
 				return s;
 			});
-			soundd.play('window-close');
+			if (pid === 2) {
+				soundd.mute();
+			} else {
+				soundd.play('window-close');
+			}
 		},
 
 		ps(): Process[] {
 			return Array.from(getState().processes.values());
+		},
+
+		patches(): string[] {
+			const LS_PREFIX = 'pubOS:fs:';
+			const patched: string[] = [];
+			for (let i = 0; i < localStorage.length; i++) {
+				const key = localStorage.key(i)!;
+				if (!key.startsWith(LS_PREFIX)) continue;
+				const path = key.slice(LS_PREFIX.length);
+				if (path.startsWith('/home/')) continue;
+				if (manifest && findNode(manifest, path)?.type === 'file') patched.push(path);
+			}
+			return patched.sort();
 		},
 
 		setTitle(pid: number, title: string): void {

@@ -1,0 +1,6 @@
+{
+  "name": "Gallery",
+  "version": "1.0",
+  "description": "View photos from ~/Pictures",
+  "icon": "/usr/share/icons/app.svg"
+}

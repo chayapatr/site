@@ -23,6 +23,7 @@
 	let error = $state('');
 	let loaded = $state(false);
 	let sidebar = $state<Bookmark[]>([]);
+	let showDotfiles = $state(true);
 
 	async function loadSidebar() {
 		try {
@@ -37,13 +38,27 @@
 
 	loadSidebar();
 
+	kernel.read('/home/user/.config/show-dotfiles')
+		.then(v => { showDotfiles = v.trim() !== 'false' })
+		.catch(() => { showDotfiles = true });
+
 	$effect(() => {
 		void $kernel.fsRev;
 		if (loaded) reload();
 	});
 
+	$effect(() => {
+		const handler = (e: Event) => {
+			showDotfiles = (e as CustomEvent<boolean>).detail;
+			reload();
+		};
+		window.addEventListener('dotfiles-change', handler);
+		return () => window.removeEventListener('dotfiles-change', handler);
+	});
+
 	async function reload() {
-		const names = await kernel.list(cwd).catch(() => [] as string[]);
+		const allNames = await kernel.list(cwd).catch(() => [] as string[]);
+		const names = showDotfiles ? allNames : allNames.filter(n => !n.startsWith('.'));
 		const withStats = await Promise.all(
 			names.map(async (n) => {
 				const full = cwd === '/' ? `/${n}` : `${cwd}/${n}`;
@@ -74,8 +89,13 @@
 		);
 		entries = withStats;
 		try {
-			const cfg = JSON.parse(await kernel.read((cwd === '/' ? '' : cwd) + '/.directory'));
+			const cfg = parseDirFile(await kernel.read((cwd === '/' ? '' : cwd) + '/.directory'));
 			view = cfg.view === 'grid' ? 'grid' : 'list';
+			if (cfg.order === 'alpha') {
+				withStats.sort((a, b) => a.name.localeCompare(b.name));
+			} else if (cfg.order === 'type') {
+				withStats.sort((a, b) => (a.isDir === b.isDir ? a.name.localeCompare(b.name) : a.isDir ? -1 : 1));
+			}
 		} catch {
 			view = 'list';
 		}
@@ -209,6 +229,77 @@
 		showContextMenu(e.clientX, e.clientY, items);
 	}
 
+	function dirFile() { return (cwd === '/' ? '' : cwd) + '/.directory' }
+
+	function parseDirFile(raw: string): Record<string, string> {
+		const cfg: Record<string, string> = {}
+		for (const line of raw.split('\n')) {
+			const colon = line.indexOf(':')
+			if (colon === -1) continue
+			cfg[line.slice(0, colon).trim()] = line.slice(colon + 1).trim()
+		}
+		return cfg
+	}
+
+	async function writeDirFile(cfg: Record<string, string>) {
+		const lines = Object.entries(cfg).map(([k, v]) => `${k}: ${v}`).join('\n')
+		kernel.write(dirFile(), lines + '\n')
+	}
+
+	async function onBgContextMenu(e: MouseEvent) {
+		if ((e.target as HTMLElement).closest('button')) return
+		e.preventDefault()
+		e.stopPropagation()
+		let cfg: Record<string, string> = {}
+		try { cfg = parseDirFile(await kernel.read(dirFile())) } catch {}
+		const isGrid = cfg.view === 'grid'
+		showContextMenu(e.clientX, e.clientY, [
+			{
+				label: isGrid ? 'View: List' : 'View: Grid',
+				action: async () => {
+					const c = parseDirFile(await kernel.read(dirFile()).catch(() => ''))
+					c.view = isGrid ? 'list' : 'grid'
+					await writeDirFile(c)
+					reload()
+				}
+			},
+			{
+				label: 'Order',
+				children: [
+					{
+						label: 'Alphabetical' + (cfg.order === 'alpha' ? ' ✓' : ''),
+						action: async () => { const c = parseDirFile(await kernel.read(dirFile()).catch(() => '')); c.order = 'alpha'; await writeDirFile(c); reload() }
+					},
+					{
+						label: 'Type' + (cfg.order === 'type' ? ' ✓' : ''),
+						action: async () => { const c = parseDirFile(await kernel.read(dirFile()).catch(() => '')); c.order = 'type'; await writeDirFile(c); reload() }
+					},
+					{
+						label: 'None' + (!cfg.order || cfg.order === 'none' ? ' ✓' : ''),
+						action: async () => { const c = parseDirFile(await kernel.read(dirFile()).catch(() => '')); delete c.order; await writeDirFile(c); reload() }
+					},
+				]
+			},
+			{ separator: true as const },
+			{
+				label: 'New Folder',
+				action: async () => {
+					const name = prompt('Folder name:', 'New Folder')
+					if (!name) return
+					kernel.write(`${cwd === '/' ? '' : cwd}/${name}/.directory`, 'view: list\n')
+				}
+			},
+			{
+				label: 'New File',
+				action: async () => {
+					const name = prompt('File name:', 'untitled.txt')
+					if (!name) return
+					kernel.write(`${cwd === '/' ? '' : cwd}/${name}`, '')
+				}
+			},
+		])
+	}
+
 	navigate(cwd);
 </script>
 
@@ -239,7 +330,7 @@
 		</div>
 
 		<!-- Content -->
-		<div class="flex-1 overflow-y-auto">
+		<div class="flex-1 overflow-y-auto" oncontextmenu={onBgContextMenu} role="none">
 			{#if error}
 				<div class="p-3 font-mono text-xs text-red-500/80">{error}</div>
 			{:else if !loaded}

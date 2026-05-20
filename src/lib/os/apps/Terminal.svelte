@@ -122,27 +122,35 @@
 		} else {
 			// complete file/dir paths
 			const word = parts[parts.length - 1];
-			const isAbsolute = word.startsWith('/');
 			const slashIdx = word.lastIndexOf('/');
-			const dir =
-				slashIdx === -1
-					? kernel.env.CWD
-					: isAbsolute
-						? word.slice(0, slashIdx) || '/'
-						: kernel.env.CWD + '/' + word.slice(0, slashIdx);
+			// dir to list: everything before the last slash, resolved against CWD
+			const dirPart = slashIdx === -1 ? '' : word.slice(0, slashIdx);
 			const prefix = slashIdx === -1 ? word : word.slice(slashIdx + 1);
+
+			let dir: string;
+			if (slashIdx === -1) {
+				dir = kernel.env.CWD ?? '/';
+			} else if (word.startsWith('/')) {
+				dir = dirPart || '/';
+			} else {
+				// normalize relative dir against CWD
+				const raw = (kernel.env.CWD ?? '/') + '/' + dirPart;
+				const segs: string[] = [];
+				for (const s of raw.split('/')) {
+					if (s === '' || s === '.') continue;
+					if (s === '..') { if (segs.length > 0) segs.pop(); }
+					else segs.push(s);
+				}
+				dir = '/' + segs.join('/');
+			}
 
 			const entries = await kernel.list(dir).catch(() => [] as string[]);
 			const matches = entries.filter((e) => e.startsWith(prefix));
 			if (matches.length === 1) {
-				const full =
-					slashIdx === -1
-						? (isAbsolute ? '/' : '') + matches[0]
-						: word.slice(0, slashIdx + 1) + matches[0];
-				const stat = await kernel
-					.stat((dir === '/' ? '' : dir) + '/' + matches[0])
-					.catch(() => null);
-				parts[parts.length - 1] = full + (stat?.type === 'dir' ? '/' : '');
+				const childPath = (dir === '/' ? '' : dir) + '/' + matches[0];
+				const stat = await kernel.stat(childPath).catch(() => null);
+				const completion = (slashIdx === -1 ? '' : word.slice(0, slashIdx + 1)) + matches[0];
+				parts[parts.length - 1] = completion + (stat?.type === 'dir' ? '/' : '');
 				input = parts.join(' ');
 			} else if (matches.length > 1) {
 				print(matches.join('  '));

@@ -1,1 +1,2 @@
-{"view":"grid"}
+view: grid
+order: Terminal, Finder, Browser, Applications
