@@ -13,7 +13,7 @@ const config = {
 		adapter: adapter({
 			routes: {
 				include: ['/*'],
-				exclude: ['/_app/*', '/bin/*', '/etc/*', '/usr/*', '/net/*', '/fonts/*', '/img/*', '/fs-manifest.json', '/robots.txt']
+				exclude: ['<build>', '/bin/*', '/etc/*', '/usr/*', '/net/*', '/fonts/*', '/img/*', '/fs-manifest.json', '/robots.txt']
 			}
 		})
 	}
