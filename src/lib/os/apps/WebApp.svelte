@@ -69,7 +69,8 @@
     window.addEventListener('message', handleMessage)
     const path = args[0] ?? ''
     if (path) {
-      const html = await kernel.read(path).catch(() => '<p>could not load app</p>')
+      await kernel.init()
+      const html = await kernel.read(path).catch((e) => `<p style="font-family:monospace;padding:1rem;color:#f88">${e.message}</p>`)
       blobUrl = makeBlobUrl(html)
     }
   })
@@ -84,6 +85,6 @@
   bind:this={iframeEl}
   class="h-full w-full border-none"
   src={blobUrl || undefined}
-  sandbox="allow-scripts"
+  sandbox="allow-scripts allow-same-origin"
   title="webapp"
 ></iframe>
