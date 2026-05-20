@@ -2,7 +2,7 @@
 @plugin '@tailwindcss/typography';
 
 body {
-	font-family: 'ABC Diatype Variable Edu', sans-serif;
+	font-family: 'basier square', 'ABC Diatype Variable Edu', sans-serif;
 }
 
 * {

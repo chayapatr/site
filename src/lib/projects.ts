@@ -99,7 +99,7 @@ export const projects: ProjectYear[] = [
 				month: 'May',
 				title: 'Mad Unicorn',
 				image: 'madunicorn.webp',
-				types: ['Media'],
+				types: ['Media', 'Engineering'],
 				size: '2x2'
 			},
 			{
@@ -232,7 +232,7 @@ export const projects: ProjectYear[] = [
 				month: 'Oct',
 				title: 'MESSE',
 				image: 'messe.webp',
-				types: ['Research', 'Art & Design'],
+				types: ['Art & Design', 'Engineering', 'Research'],
 				size: '2x2'
 			}
 		]
