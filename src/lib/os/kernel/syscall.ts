@@ -8,7 +8,7 @@ export interface Sys {
   stat(path: string): Promise<StatResult>
   exists(path: string): Promise<boolean>
   spawn(app: AppType, args?: string[]): number
-  spawnWebapp(path: string, title?: string): Promise<number>
+  spawnApp(path: string, title?: string): Promise<number>
   kill(pid: number): void
   ps(): Process[]
   env(): Record<string, string>
@@ -41,7 +41,7 @@ export function createSyscall(pid: number, kernel: Kernel): Sys {
     stat:   (path) => kernel.stat(resolve(path)),
     exists: (path) => kernel.exists(resolve(path)),
     spawn:  (app, args) => kernel.spawn(app, args),
-    spawnWebapp: (path, title) => kernel.spawnWebapp(path, title),
+    spawnApp: (path, title) => kernel.spawnApp(path, title),
     kill:   (p) => kernel.kill(p),
     ps:     () => kernel.ps(),
     env:    () => ({ ...kernel.env }),

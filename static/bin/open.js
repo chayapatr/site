@@ -30,12 +30,12 @@ const nativeApps = ['finder', 'terminal', 'settings', 'monitor']
       const openAsCwd = args[0] === '.' || args[0] === '..'
       if (!openAsCwd) {
         const hasManifest = await sys.exists(app + '/manifest.json')
-        if (hasManifest) { await sys.spawnWebapp(app); return }
+        if (hasManifest) { await sys.spawnApp(app); return }
       }
       sys.spawn('finder', [app])
       return
     }
-    await sys.spawnWebapp('/usr/share/applications/editor', app)
+    await sys.spawnApp('/usr/share/applications/editor', app)
     return
   }
 
@@ -50,7 +50,7 @@ const nativeApps = ['finder', 'terminal', 'settings', 'monitor']
     const stat = await sys.stat(p)
     if (stat.type === 'dir') {
       const hasManifest = await sys.exists(p + '/manifest.json')
-      if (hasManifest) { await sys.spawnWebapp(p); return }
+      if (hasManifest) { await sys.spawnApp(p); return }
     }
   }
   print('open: ' + args[0] + ': not found')

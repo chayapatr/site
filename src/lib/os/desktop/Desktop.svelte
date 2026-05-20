@@ -5,7 +5,7 @@
   import Finder from '$lib/os/apps/Finder.svelte'
   import Settings from '$lib/os/apps/Settings.svelte'
   import Monitor from '$lib/os/apps/Monitor.svelte'
-  import WebApp from '$lib/os/apps/WebApp.svelte'
+  import App from '$lib/os/apps/App.svelte'
   import ContextMenu from './ContextMenu.svelte'
   import { contextMenu, showContextMenu, hideContextMenu } from './contextmenu'
   import { onMount } from 'svelte'
@@ -51,7 +51,7 @@
     finder: Finder,
     settings: Settings,
     monitor: Monitor,
-    app: WebApp,
+    app: App,
   }
 
   const CONFIG_PATH = '/home/user/.config/wallpaper'
@@ -154,14 +154,14 @@
       const ext = entry.file.split('.').pop() ?? ''
       const openWith: MenuItem[] = []
       if (['html','htm'].includes(ext)) {
-        openWith.push({ label: 'Browser', action: () => kernel.spawnWebapp('/usr/share/applications/browser', entry.file) })
-        openWith.push({ label: 'Editor', action: () => kernel.spawnWebapp('/usr/share/applications/editor', entry.file) })
+        openWith.push({ label: 'Browser', action: () => kernel.spawnApp('/usr/share/applications/browser', entry.file) })
+        openWith.push({ label: 'Editor', action: () => kernel.spawnApp('/usr/share/applications/editor', entry.file) })
       } else if (['png','jpg','jpeg','gif','webp','svg','bmp'].includes(ext)) {
-        openWith.push({ label: 'Preview', action: () => kernel.spawnWebapp('/usr/share/applications/preview', entry.file) })
-        openWith.push({ label: 'Editor', action: () => kernel.spawnWebapp('/usr/share/applications/editor', entry.file) })
+        openWith.push({ label: 'Preview', action: () => kernel.spawnApp('/usr/share/applications/preview', entry.file) })
+        openWith.push({ label: 'Editor', action: () => kernel.spawnApp('/usr/share/applications/editor', entry.file) })
       } else if (['md','js','ts','css','json','txt'].includes(ext)) {
-        openWith.push({ label: 'Editor', action: () => kernel.spawnWebapp('/usr/share/applications/editor', entry.file) })
-        openWith.push({ label: 'Browser', action: () => kernel.spawnWebapp('/usr/share/applications/browser', 'file://' + entry.file) })
+        openWith.push({ label: 'Editor', action: () => kernel.spawnApp('/usr/share/applications/editor', entry.file) })
+        openWith.push({ label: 'Browser', action: () => kernel.spawnApp('/usr/share/applications/browser', 'file://' + entry.file) })
       }
       if (openWith.length > 1) items.push({ label: 'Open With', children: openWith })
       items.push({ separator: true })
@@ -178,17 +178,17 @@
     if ('app' in entry) {
       kernel.spawn(entry.app)
     } else if ('launch' in entry) {
-      kernel.spawnWebapp(entry.launch)
+      kernel.spawnApp(entry.launch)
     } else if ('webapp' in entry) {
-      kernel.spawnWebapp(entry.webapp)
+      kernel.spawnApp(entry.webapp)
     } else if ('file' in entry) {
       const ext = entry.file.split('.').pop()
       if (ext && ['png','jpg','jpeg','gif','webp','svg','bmp'].includes(ext)) {
-        kernel.spawnWebapp('/usr/share/applications/preview', entry.file)
+        kernel.spawnApp('/usr/share/applications/preview', entry.file)
       } else if (ext === 'md' || ext === 'html' || ext === 'js' || ext === 'ts' || ext === 'css' || ext === 'json') {
-        kernel.spawnWebapp('/usr/share/applications/editor', entry.file)
+        kernel.spawnApp('/usr/share/applications/editor', entry.file)
       } else {
-        kernel.spawnWebapp('/usr/share/applications/editor', entry.file)
+        kernel.spawnApp('/usr/share/applications/editor', entry.file)
       }
     } else {
       kernel.spawn('finder', [entry.folder])

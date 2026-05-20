@@ -4,6 +4,13 @@
   "path": "/",
   "children": [
     {
+      "type": "file",
+      "name": "_redirects",
+      "path": "/_redirects",
+      "size": 237,
+      "mtime": 1779303635088.0264
+    },
+    {
       "type": "dir",
       "name": "bin",
       "path": "/bin",
@@ -82,8 +89,8 @@
           "type": "file",
           "name": "open.js",
           "path": "/bin/open.js",
-          "size": 1653,
-          "mtime": 1779299273896.5054
+          "size": 1644,
+          "mtime": 1779304034796.7114
         },
         {
           "type": "file",
@@ -573,8 +580,8 @@
               "children": [
                 {
                   "type": "file",
-                  "name": "main.html",
-                  "path": "/net/registry.from.pub/clock/main.html",
+                  "name": "main.app",
+                  "path": "/net/registry.from.pub/clock/main.app",
                   "size": 1044,
                   "mtime": 1779262894775.8667
                 },
@@ -594,8 +601,8 @@
               "children": [
                 {
                   "type": "file",
-                  "name": "main.html",
-                  "path": "/net/registry.from.pub/conway/main.html",
+                  "name": "main.app",
+                  "path": "/net/registry.from.pub/conway/main.app",
                   "size": 3574,
                   "mtime": 1779262894776.5176
                 },
@@ -622,8 +629,8 @@
               "children": [
                 {
                   "type": "file",
-                  "name": "main.html",
-                  "path": "/net/registry.from.pub/snake/main.html",
+                  "name": "main.app",
+                  "path": "/net/registry.from.pub/snake/main.app",
                   "size": 3168,
                   "mtime": 1779262894775.1904
                 },
@@ -643,8 +650,8 @@
               "children": [
                 {
                   "type": "file",
-                  "name": "main.html",
-                  "path": "/net/registry.from.pub/synth/main.html",
+                  "name": "main.app",
+                  "path": "/net/registry.from.pub/synth/main.app",
                   "size": 5385,
                   "mtime": 1779262894775.6074
                 },
@@ -711,8 +718,8 @@
                   "children": [
                     {
                       "type": "file",
-                      "name": "main.html",
-                      "path": "/usr/share/applications/browser/main.html",
+                      "name": "main.app",
+                      "path": "/usr/share/applications/browser/main.app",
                       "size": 10360,
                       "mtime": 1779301077821.4878
                     },
@@ -739,8 +746,8 @@
                     },
                     {
                       "type": "file",
-                      "name": "main.html",
-                      "path": "/usr/share/applications/camera/main.html",
+                      "name": "main.app",
+                      "path": "/usr/share/applications/camera/main.app",
                       "size": 4507,
                       "mtime": 1779294089113.6094
                     },
@@ -767,10 +774,10 @@
                     },
                     {
                       "type": "file",
-                      "name": "main.html",
-                      "path": "/usr/share/applications/editor/main.html",
-                      "size": 5024,
-                      "mtime": 1779298990668.7417
+                      "name": "main.app",
+                      "path": "/usr/share/applications/editor/main.app",
+                      "size": 5258,
+                      "mtime": 1779304173718.2073
                     },
                     {
                       "type": "file",
@@ -795,8 +802,8 @@
                   "children": [
                     {
                       "type": "file",
-                      "name": "main.html",
-                      "path": "/usr/share/applications/preview/main.html",
+                      "name": "main.app",
+                      "path": "/usr/share/applications/preview/main.app",
                       "size": 3311,
                       "mtime": 1779298622601.9468
                     },

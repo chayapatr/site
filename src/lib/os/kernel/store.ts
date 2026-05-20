@@ -219,7 +219,7 @@ function createKernel() {
 			return pid;
 		},
 
-		async spawnWebapp(path: string, fileArg?: string): Promise<number> {
+		async spawnApp(path: string, fileArg?: string): Promise<number> {
 			// if path is a directory, look for manifest.json + main.html
 			let htmlPath = path;
 			let icon = '/usr/share/icons/app.svg';
@@ -227,7 +227,7 @@ function createKernel() {
 			try {
 				const manifestRaw = await vfsRead(path + '/manifest.json', get({ subscribe }), manifest!);
 				const m = JSON.parse(manifestRaw);
-				htmlPath = path + '/main.html';
+				htmlPath = path + '/main.app';
 				if (m.name) name = fileArg ? (fileArg.split('/').pop() ?? m.name) : m.name;
 				if (m.icon) icon = m.icon;
 			} catch {

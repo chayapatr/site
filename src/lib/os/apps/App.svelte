@@ -21,7 +21,7 @@
   window.sys={args:${JSON.stringify(fileArg ? [fileArg] : [])},
     read:(p)=>call('read',[p]),write:(p,c)=>call('write',[p,c]),remove:(p)=>call('remove',[p]),
     list:(p)=>call('list',[p]),stat:(p)=>call('stat',[p]),exists:(p)=>call('exists',[p]),
-    spawn:(a,r)=>call('spawn',[a,r]),spawnWebapp:(p,t)=>call('spawnWebapp',[p,t]),kill:(p)=>call('kill',[p]),ps:()=>call('ps',[]),
+    spawn:(a,r)=>call('spawn',[a,r]),spawnApp:(p,t)=>call('spawnApp',[p,t]),kill:(p)=>call('kill',[p]),ps:()=>call('ps',[]),
     env:()=>call('env',[]),setenv:(k,v)=>call('setenv',[k,v]),
     setTitle:(t)=>call('setTitle',[t]),exit:()=>call('exit',[]),
     require:async(p)=>{
@@ -63,7 +63,7 @@
           case 'stat':     result = await kernel.stat(a[0]); break
           case 'exists':   result = await kernel.exists(a[0]); break
           case 'spawn':    result = kernel.spawn(a[0], a[1]); break
-          case 'spawnWebapp': result = await kernel.spawnWebapp(a[0], a[1]); break
+          case 'spawnApp': result = await kernel.spawnApp(a[0], a[1]); break
           case 'kill':     kernel.kill(a[0]); result = null; break
           case 'ps':       result = kernel.ps(); break
           case 'env':      result = { ...kernel.env }; break

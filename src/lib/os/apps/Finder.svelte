@@ -113,20 +113,20 @@
 					return;
 				}
 				if ('launch' in def) {
-					kernel.spawnWebapp(def.launch);
+					kernel.spawnApp(def.launch);
 					return;
 				}
 				if ('webapp' in def) {
-					kernel.spawnWebapp(def.webapp);
+					kernel.spawnApp(def.webapp);
 					return;
 				}
 			} catch {
 				/* fall through */
 			}
 		}
-		if (ext && ['png','jpg','jpeg','gif','webp','svg','bmp'].includes(ext)) kernel.spawnWebapp('/usr/share/applications/preview', path)
-		else if (ext && ['md','html','js','ts','css','json'].includes(ext)) kernel.spawnWebapp('/usr/share/applications/editor', path)
-		else kernel.spawnWebapp('/usr/share/applications/editor', path);
+		if (ext && ['png','jpg','jpeg','gif','webp','svg','bmp'].includes(ext)) kernel.spawnApp('/usr/share/applications/preview', path)
+		else if (ext && ['md','html','js','ts','css','json'].includes(ext)) kernel.spawnApp('/usr/share/applications/editor', path)
+		else kernel.spawnApp('/usr/share/applications/editor', path);
 	}
 
 	async function openEntry(entry: Entry) {
@@ -134,7 +134,7 @@
 		if (entry.isDir) {
 			const hasManifest = await kernel.exists(path + '/manifest.json');
 			if (hasManifest) {
-				kernel.spawnWebapp(path);
+				kernel.spawnApp(path);
 				return;
 			}
 			navigate(path);
@@ -171,16 +171,16 @@
 		if (entry.isDir) {
 			openWith.push({ label: 'Browse Folder', action: () => navigate(path) });
 			const hasManifest = await kernel.exists(path + '/manifest.json');
-			if (hasManifest) openWith.push({ label: 'Launch App', action: () => kernel.spawnWebapp(path) });
+			if (hasManifest) openWith.push({ label: 'Launch App', action: () => kernel.spawnApp(path) });
 		} else if (['png','jpg','jpeg','gif','webp','bmp'].includes(ext)) {
-			openWith.push({ label: 'Preview', action: () => kernel.spawnWebapp('/usr/share/applications/preview', path) });
-			openWith.push({ label: 'Editor', action: () => kernel.spawnWebapp('/usr/share/applications/editor', path) });
+			openWith.push({ label: 'Preview', action: () => kernel.spawnApp('/usr/share/applications/preview', path) });
+			openWith.push({ label: 'Editor', action: () => kernel.spawnApp('/usr/share/applications/editor', path) });
 		} else if (['html','htm'].includes(ext)) {
-			openWith.push({ label: 'Browser', action: () => kernel.spawnWebapp('/usr/share/applications/browser', path) });
-			openWith.push({ label: 'Editor', action: () => kernel.spawnWebapp('/usr/share/applications/editor', path) });
+			openWith.push({ label: 'Browser', action: () => kernel.spawnApp('/usr/share/applications/browser', path) });
+			openWith.push({ label: 'Editor', action: () => kernel.spawnApp('/usr/share/applications/editor', path) });
 		} else if (['md','js','ts','css','json','txt'].includes(ext)) {
-			openWith.push({ label: 'Editor', action: () => kernel.spawnWebapp('/usr/share/applications/editor', path) });
-			openWith.push({ label: 'Browser', action: () => kernel.spawnWebapp('/usr/share/applications/browser', 'file://' + path) });
+			openWith.push({ label: 'Editor', action: () => kernel.spawnApp('/usr/share/applications/editor', path) });
+			openWith.push({ label: 'Browser', action: () => kernel.spawnApp('/usr/share/applications/browser', 'file://' + path) });
 		}
 		if (openWith.length > 1) items.push({ label: 'Open With', children: openWith });
 

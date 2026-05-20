@@ -56,7 +56,7 @@ export interface Kernel {
   setEnv(key: string, value: string): void
   getState(): KernelState
   spawn(app: AppType, args?: string[]): number
-  spawnWebapp(path: string, title?: string): Promise<number>
+  spawnApp(path: string, title?: string): Promise<number>
   kill(pid: number): void
   ps(): Process[]
   setTitle(pid: number, title: string): void

@@ -97,6 +97,12 @@
       minimap: { enabled: false },
       scrollBeyondLastLine: false,
       automaticLayout: true,
+      quickSuggestions: true,
+      suggestOnTriggerCharacters: true,
+      autoClosingBrackets: 'always',
+      autoClosingQuotes: 'always',
+      autoClosingTags: true,
+      formatOnType: false,
       padding: { top: 8 },
     })
 
@@ -112,7 +118,7 @@
         sys.read(fileArg).then(content => {
           editor.setValue(content)
           const ext = fileArg.split('.').pop()
-          const langMap = { js: 'javascript', ts: 'typescript', md: 'markdown', html: 'html', css: 'css', json: 'json', sh: 'shell', py: 'python' }
+          const langMap = { js: 'javascript', ts: 'typescript', md: 'markdown', html: 'html', app: 'html', css: 'css', json: 'json', sh: 'shell', py: 'python', strudel: 'javascript' }
           if (langMap[ext]) monaco.editor.setModelLanguage(editor.getModel(), langMap[ext])
           sys.setTitle('Editor — ' + name)
         }).catch(() => {})
