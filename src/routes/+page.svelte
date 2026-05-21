@@ -23,15 +23,14 @@
 		await document.fonts.ready;
 		fontsReady = true;
 
-		// prevent iOS Safari from scrolling page when input focused inside OS
-		const onFocus = (e: FocusEvent) => {
-			const target = e.target as HTMLElement
-			if (view.showOS && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) {
-				window.scrollTo(0, 0)
-			}
+		// iOS Safari: lock scroll position when keyboard appears inside OS
+		const lockScroll = () => { if (view.showOS) window.scrollTo(0, 0) }
+		window.visualViewport?.addEventListener('resize', lockScroll)
+		window.visualViewport?.addEventListener('scroll', lockScroll)
+		return () => {
+			window.visualViewport?.removeEventListener('resize', lockScroll)
+			window.visualViewport?.removeEventListener('scroll', lockScroll)
 		}
-		window.addEventListener('focusin', onFocus)
-		return () => window.removeEventListener('focusin', onFocus)
 
 		const update = () => {
 			bostonTime = new Date()
