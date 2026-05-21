@@ -35,7 +35,7 @@
 </script>
 
 <svelte:head>
-	<title>{view.showOS ? 'pubOS' : "pub's site"}</title>
+	<title>{view.showOS ? 'PubOS' : "Pub's Site"}</title>
 </svelte:head>
 
 {#if fontsReady}

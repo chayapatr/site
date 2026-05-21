@@ -33,15 +33,32 @@
 >
 	{#if isMobile}
 		<div class="flex w-full items-center justify-between pb-2.5">
-			{#if showGallery}
+			{#if view.showOS}
+				<button onclick={() => (view.showOS = false)} class="text-md text-neutral-400">PubOS</button>
+				<div class="flex items-center gap-2 overflow-x-auto">
+					{#each [...$kernel.processes.values()] as proc}
+						{#if proc.windowId}
+							{@const focused = $kernel.windows.get(proc.windowId)?.focused}
+							<button
+								class="shrink-0 border px-2 py-0.5 font-mono text-xs transition-colors"
+								style={focused
+									? 'border-color: var(--os-text); color: var(--os-text);'
+									: 'border-color: var(--os-border); color: var(--os-text-dim);'}
+								onclick={() => focusWindow(proc.windowId)}
+							>{proc.name}</button>
+						{/if}
+					{/each}
+				</div>
+			{:else if showGallery}
 				<div class="flex gap-3">
 					<div>Gallery</div>
 					<div class="text-neutral-400">Writings</div>
 					<div class="text-neutral-400">Settings</div>
 				</div>
 			{:else}
-				<div>Pub</div>
+				<button onclick={() => (view.showOS = !view.showOS)}>Pub</button>
 			{/if}
+			{#if !view.showOS}
 			<button
 				class="flex items-center gap-1 text-[11px] text-neutral-500"
 				aria-label="Toggle gallery"
@@ -51,6 +68,7 @@
 					<div class="absolute top-0.5 h-2.5 w-2.5 rounded-full bg-white transition-all {showGallery ? 'left-3' : 'left-0.5'}"></div>
 				</div>
 			</button>
+			{/if}
 		</div>
 	{:else if view.showOS}
 		<div class="absolute inset-0 flex items-center px-5" transition:fly={{ y: -8, duration: 250 }}>
