@@ -208,8 +208,8 @@ function createKernel() {
 					title: meta.title,
 					appType: app,
 					appState: { args, icon: meta.icon },
-					position: { x: 80 + Math.random() * 200, y: 60 + Math.random() * 100 },
-					size: { width: 640, height: 440 },
+					position: { x: window.innerWidth < 768 ? 8 : 80 + Math.random() * 200, y: window.innerWidth < 768 ? 48 : 60 + Math.random() * 100 },
+					size: { width: window.innerWidth < 768 ? window.innerWidth - 16 : 640, height: window.innerWidth < 768 ? Math.round(window.innerHeight * 0.6) : 440 },
 					zIndex: Math.max(0, ...Array.from(s.windows.values()).map((w) => w.zIndex)) + 1,
 					focused: true,
 					minimized: false
@@ -261,8 +261,8 @@ function createKernel() {
 					title: name,
 					appType: 'app',
 					appState: { path: htmlPath, icon, fileArg: fileArg ?? null },
-					position: { x: 80 + Math.random() * 200, y: 60 + Math.random() * 100 },
-					size: { width: 640, height: 440 },
+					position: { x: window.innerWidth < 768 ? 8 : 80 + Math.random() * 200, y: window.innerWidth < 768 ? 48 : 60 + Math.random() * 100 },
+					size: { width: window.innerWidth < 768 ? window.innerWidth - 16 : 640, height: window.innerWidth < 768 ? Math.round(window.innerHeight * 0.6) : 440 },
 					zIndex: Math.max(0, ...Array.from(s.windows.values()).map((w) => w.zIndex)) + 1,
 					focused: true,
 					minimized: false

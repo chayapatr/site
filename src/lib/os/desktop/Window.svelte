@@ -155,13 +155,33 @@
 		</div>
 	</div>
 
-	<!-- Resize handles (outside overflow-hidden) -->
-	<div class="absolute top-0 left-0 h-2 w-2 cursor-nw-resize" onmousedown={(e) => startResize(e, 'nw')} role="none"></div>
-	<div class="absolute top-0 right-0 h-2 w-2 cursor-ne-resize" onmousedown={(e) => startResize(e, 'ne')} role="none"></div>
-	<div class="absolute bottom-0 left-0 h-2 w-2 cursor-sw-resize" onmousedown={(e) => startResize(e, 'sw')} role="none"></div>
-	<div class="absolute bottom-0 right-0 h-2 w-2 cursor-se-resize" onmousedown={(e) => startResize(e, 'se')} role="none"></div>
-	<div class="absolute top-0 left-2 right-2 h-1 cursor-n-resize" onmousedown={(e) => startResize(e, 'n')} role="none"></div>
-	<div class="absolute bottom-0 left-2 right-2 h-1 cursor-s-resize" onmousedown={(e) => startResize(e, 's')} role="none"></div>
-	<div class="absolute top-2 bottom-2 left-0 w-1 cursor-w-resize" onmousedown={(e) => startResize(e, 'w')} role="none"></div>
-	<div class="absolute top-2 bottom-2 right-0 w-1 cursor-e-resize" onmousedown={(e) => startResize(e, 'e')} role="none"></div>
+	<!-- Resize handles — desktop (mouse only) -->
+	<div class="absolute top-0 left-0 h-2 w-2 cursor-nw-resize max-md:hidden" onmousedown={(e) => startResize(e, 'nw')} role="none"></div>
+	<div class="absolute top-0 right-0 h-2 w-2 cursor-ne-resize max-md:hidden" onmousedown={(e) => startResize(e, 'ne')} role="none"></div>
+	<div class="absolute bottom-0 left-0 h-2 w-2 cursor-sw-resize max-md:hidden" onmousedown={(e) => startResize(e, 'sw')} role="none"></div>
+	<div class="absolute bottom-0 right-0 h-2 w-2 cursor-se-resize max-md:hidden" onmousedown={(e) => startResize(e, 'se')} role="none"></div>
+	<div class="absolute top-0 left-2 right-2 h-1 cursor-n-resize max-md:hidden" onmousedown={(e) => startResize(e, 'n')} role="none"></div>
+	<div class="absolute bottom-0 left-2 right-2 h-1 cursor-s-resize max-md:hidden" onmousedown={(e) => startResize(e, 's')} role="none"></div>
+	<div class="absolute top-2 bottom-2 left-0 w-1 cursor-w-resize max-md:hidden" onmousedown={(e) => startResize(e, 'w')} role="none"></div>
+	<div class="absolute top-2 bottom-2 right-0 w-1 cursor-e-resize max-md:hidden" onmousedown={(e) => startResize(e, 'e')} role="none"></div>
+
+	<!-- Resize handles — mobile (touch, bottom corners only) -->
+	<div
+		class="absolute bottom-0 left-0 hidden h-8 w-8 cursor-sw-resize items-end justify-start p-1 max-md:flex"
+		style="touch-action: none;"
+		onmousedown={(e) => startResize(e, 'sw')}
+		ontouchstart={(e) => startResize(e, 'sw')}
+		role="none"
+	>
+		<div class="h-3 w-3 border-b-2 border-l-2 rounded-bl" style="border-color: var(--os-text-dim);"></div>
+	</div>
+	<div
+		class="absolute bottom-0 right-0 hidden h-8 w-8 cursor-se-resize items-end justify-end p-1 max-md:flex"
+		style="touch-action: none;"
+		onmousedown={(e) => startResize(e, 'se')}
+		ontouchstart={(e) => startResize(e, 'se')}
+		role="none"
+	>
+		<div class="h-3 w-3 border-b-2 border-r-2 rounded-br" style="border-color: var(--os-text-dim);"></div>
+	</div>
 </div>
