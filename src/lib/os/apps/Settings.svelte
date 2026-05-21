@@ -7,7 +7,7 @@
   let { pid, args = [] }: { pid: number; args?: string[] } = $props()
 
   const wallpapers = ['w1', 'w2', 'w3', 'w4']
-  const liveWallpapers = ['noise.js', 'particles.js', 'grid.js']
+  const liveWallpapers = ['noise.js', 'particles.js', 'grid.js', 'conway.js']
   const WALLPAPER_PATH = '/home/user/.config/wallpaper'
   const THEME_PATH = '/home/user/.config/theme'
   const DOTFILES_PATH = '/home/user/.config/show-dotfiles'

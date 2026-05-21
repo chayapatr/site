@@ -986,6 +986,13 @@
               "children": [
                 {
                   "type": "file",
+                  "name": "conway.js",
+                  "path": "/usr/share/wallpaper/conway.js",
+                  "size": 2261,
+                  "mtime": 1779330271590.8638
+                },
+                {
+                  "type": "file",
                   "name": "grid.js",
                   "path": "/usr/share/wallpaper/grid.js",
                   "size": 3282,
