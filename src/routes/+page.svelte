@@ -34,6 +34,10 @@
 	});
 </script>
 
+<svelte:head>
+	<title>{view.showOS ? 'pubOS' : "pub's site"}</title>
+</svelte:head>
+
 {#if fontsReady}
 <NavBar
 	isMobile={view.isMobile}
