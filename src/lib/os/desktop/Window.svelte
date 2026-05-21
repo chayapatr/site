@@ -51,34 +51,36 @@
 		}
 	}
 
-	function startDrag(e: MouseEvent) {
+	function startDrag(e: MouseEvent | TouchEvent) {
 		if (fullscreen) return;
 		if ((e.target as HTMLElement).closest('.no-drag')) return;
+		const pt = 'touches' in e ? e.touches[0] : e;
 		dragging = true;
 		isDragging.set(true);
-		dragStart = { x: e.clientX, y: e.clientY, wx: localX, wy: localY };
+		dragStart = { x: pt.clientX, y: pt.clientY, wx: localX, wy: localY };
 		onFocus();
 	}
 
-	function startResize(e: MouseEvent, edge: Edge) {
+	function startResize(e: MouseEvent | TouchEvent, edge: Edge) {
 		e.stopPropagation();
+		const pt = 'touches' in e ? e.touches[0] : e;
 		resizeEdge = edge;
 		isDragging.set(true);
-		resizeStart = { x: e.clientX, y: e.clientY, w: localW, h: localH, wx: localX, wy: localY };
+		resizeStart = { x: pt.clientX, y: pt.clientY, w: localW, h: localH, wx: localX, wy: localY };
 	}
 
 	$effect(() => {
 		document.body.style.userSelect = (dragging || resizeEdge) ? 'none' : ''
 	})
 
-	function onMouseMove(e: MouseEvent) {
+	function move(clientX: number, clientY: number) {
 		if (dragging) {
-			localX = dragStart.wx + (e.clientX - dragStart.x);
-			localY = dragStart.wy + (e.clientY - dragStart.y);
+			localX = dragStart.wx + (clientX - dragStart.x);
+			localY = dragStart.wy + (clientY - dragStart.y);
 		}
 		if (resizeEdge) {
-			const dx = e.clientX - resizeStart.x;
-			const dy = e.clientY - resizeStart.y;
+			const dx = clientX - resizeStart.x;
+			const dy = clientY - resizeStart.y;
 			if (resizeEdge.includes('e')) localW = Math.max(320, resizeStart.w + dx);
 			if (resizeEdge.includes('s')) localH = Math.max(200, resizeStart.h + dy);
 			if (resizeEdge.includes('w')) {
@@ -94,6 +96,9 @@
 		}
 	}
 
+	function onMouseMove(e: MouseEvent) { move(e.clientX, e.clientY) }
+	function onTouchMove(e: TouchEvent) { if (dragging || resizeEdge) { e.preventDefault(); move(e.touches[0].clientX, e.touches[0].clientY) } }
+
 	function onMouseUp() {
 		if (dragging) onMove(localX, localY);
 		if (resizeEdge) onResize(localW, localH);
@@ -101,9 +106,11 @@
 		resizeEdge = null;
 		isDragging.set(false);
 	}
+
+	const onTouchEnd = onMouseUp;
 </script>
 
-<svelte:window onmousemove={onMouseMove} onmouseup={onMouseUp} />
+<svelte:window onmousemove={onMouseMove} onmouseup={onMouseUp} ontouchmove={onTouchMove} ontouchend={onTouchEnd} />
 
 <div
 	class="absolute rounded-md border text-xs shadow-sm"
@@ -118,8 +125,9 @@
 		<!-- Title bar -->
 		<div
 			class="no-drag-wrapper noselect flex w-full shrink-0 cursor-default items-center justify-between border-b p-2 select-none"
-			style="border-color: var(--os-border); background: var(--os-glass); backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); color: var(--os-text-dim);"
+			style="border-color: var(--os-border); background: var(--os-glass); backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); color: var(--os-text-dim); touch-action: none;"
 			onmousedown={startDrag}
+			ontouchstart={startDrag}
 			role="none"
 		>
 			<div class="no-drag flex gap-2">

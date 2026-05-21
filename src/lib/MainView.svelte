@@ -31,10 +31,14 @@
 	let contentFraction = $state(0);
 	let isScrolling = $state(false);
 	let labelTops = $state<number[]>([]);
+	let scrollEndTimer: ReturnType<typeof setTimeout>;
 
 	$effect(() => {
 		if (view.isMobile) return;
 		contentFraction = scrollY / (document.body.scrollHeight - window.innerHeight || 1);
+		isScrolling = true;
+		clearTimeout(scrollEndTimer);
+		scrollEndTimer = setTimeout(() => { isScrolling = false; }, 600);
 	});
 
 	// --- gallery scroll ---
