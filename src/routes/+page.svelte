@@ -27,10 +27,6 @@
 		const lockScroll = () => { if (view.showOS) window.scrollTo(0, 0) }
 		window.visualViewport?.addEventListener('resize', lockScroll)
 		window.visualViewport?.addEventListener('scroll', lockScroll)
-		return () => {
-			window.visualViewport?.removeEventListener('resize', lockScroll)
-			window.visualViewport?.removeEventListener('scroll', lockScroll)
-		}
 
 		const update = () => {
 			bostonTime = new Date()
@@ -39,7 +35,12 @@
 		};
 		update();
 		const interval = setInterval(update, 1000);
-		return () => clearInterval(interval);
+
+		return () => {
+			window.visualViewport?.removeEventListener('resize', lockScroll)
+			window.visualViewport?.removeEventListener('scroll', lockScroll)
+			clearInterval(interval)
+		}
 	});
 </script>
 

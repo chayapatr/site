@@ -38,8 +38,8 @@
 		<div class="flex items-center gap-2 {isMobile ? 'w-full' : 'absolute inset-0 px-5'}" transition:fly={{ y: -8, duration: 250 }}>
 			<button
 				onclick={() => (view.showOS = false)}
-				class="text-md shrink-0 text-neutral-400 hover:text-neutral-200"
-			>PubOS</button>
+				class="text-md flex shrink-0 items-center gap-1.5 text-neutral-400 hover:text-neutral-200"
+			><img src="/imgs/pub.svg" alt="Pub" class="h-4 w-4" />PubOS</button>
 
 			<div class="flex min-w-0 flex-1 items-center gap-2 overflow-x-auto {isMobile ? '' : 'ml-2 divide-x divide-neutral-500'}">
 				{#each [...$kernel.processes.values()] as proc}
@@ -60,36 +60,33 @@
 				<div class="text-md ml-auto shrink-0 text-neutral-600">{bostonTime} (Boston)</div>
 			{/if}
 		</div>
-	{:else}
-		<div class="flex items-center {isMobile ? 'w-full justify-between' : 'absolute inset-0 justify-between gap-1.5 px-5'}" transition:fly={{ y: -8, duration: 250 }}>
-			<div class="flex items-center gap-3 {isMobile ? '' : 'gap-1.5'}">
-				<button onclick={() => (view.showOS = !view.showOS)} class:text-neutral-400={!view.showOS}>Pub</button>
-				{#if !isMobile}
-					<button onclick={onToggleSplit}>{splitView ? '🌱 Projects' : 'Projects'}</button>
-					<div>Writings</div>
-					<div>Settings</div>
-				{:else if showGallery}
+	{:else if isMobile}
+		<div class="flex w-full items-center justify-between" transition:fly={{ y: -8, duration: 250 }}>
+			<div class="flex items-center gap-3">
+				<button onclick={() => (view.showOS = !view.showOS)}>Pub</button>
+				{#if showGallery}
 					<div class="text-neutral-400">Writings</div>
 					<div class="text-neutral-400">Settings</div>
 				{/if}
 			</div>
-
-			<div class="flex items-center gap-3">
-				{#if !isMobile}
-					<div>{bostonTime} (Boston)</div>
-				{/if}
-				{#if isMobile}
-					<button
-						class="flex items-center gap-1 text-[11px] text-neutral-500"
-						aria-label="Toggle gallery"
-						onclick={onToggleGallery}
-					>
-						<div class="relative h-3.5 w-6 rounded-full transition-colors {showGallery ? 'bg-neutral-800' : 'bg-neutral-200'}">
-							<div class="absolute top-0.5 h-2.5 w-2.5 rounded-full bg-white transition-all {showGallery ? 'left-3' : 'left-0.5'}"></div>
-						</div>
-					</button>
-				{/if}
-			</div>
+			<button
+				class="flex items-center gap-1 text-[11px] text-neutral-500"
+				aria-label="Toggle gallery"
+				onclick={onToggleGallery}
+			>
+				<div class="relative h-3.5 w-6 rounded-full transition-colors {showGallery ? 'bg-neutral-800' : 'bg-neutral-200'}">
+					<div class="absolute top-0.5 h-2.5 w-2.5 rounded-full bg-white transition-all {showGallery ? 'left-3' : 'left-0.5'}"></div>
+				</div>
+			</button>
+		</div>
+	{:else}
+		<div class="absolute inset-0 flex items-center justify-between gap-1.5 px-5" transition:fly={{ y: -8, duration: 250 }}>
+			<button onclick={() => (view.showOS = !view.showOS)} class="flex items-center gap-1.5 text-black">
+				<img src="/imgs/pub.svg" alt="Pub" class="h-4 w-4" />Pub</button>
+			<button onclick={onToggleSplit}>{splitView ? '🌱 Projects' : 'Projects'}</button>
+			<div>Writings</div>
+			<div>Settings</div>
+			<div>{bostonTime} (Boston)</div>
 		</div>
 	{/if}
 </div>
