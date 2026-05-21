@@ -9,7 +9,20 @@
 	let { data } = $props();
 
 	let bostonTime = $state('');
-	onMount(() => {
+	let fontsReady = $state(false);
+
+	$effect(() => {
+		if (view.showOS) {
+			document.body.classList.add('os-active')
+		} else {
+			document.body.classList.remove('os-active')
+		}
+	})
+
+	onMount(async () => {
+		await document.fonts.ready;
+		fontsReady = true;
+
 		const update = () => {
 			bostonTime = new Date()
 				.toLocaleTimeString('en-US', { timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit', hour12: true })
@@ -21,6 +34,7 @@
 	});
 </script>
 
+{#if fontsReady}
 <NavBar
 	isMobile={view.isMobile}
 	showGallery={view.showGallery}
@@ -31,6 +45,7 @@
 />
 
 <MainView {data} />
+{/if}
 
 {#if view.showOS}
 	<div class="fixed inset-0 z-40" transition:fade={{ duration: 300 }}>

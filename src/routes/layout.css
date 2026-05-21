@@ -2,6 +2,24 @@
 @plugin '@tailwindcss/typography';
 
 @font-face {
+	font-family: 'basier square';
+	src: url('/fonts/basier-regular.woff2') format('woff2');
+	font-weight: 400;
+}
+
+@font-face {
+	font-family: 'basier square';
+	src: url('/fonts/basier-medium.woff2') format('woff2');
+	font-weight: 500;
+}
+
+@font-face {
+	font-family: 'basier square';
+	src: url('/fonts/basier-semibold.woff2') format('woff2');
+	font-weight: 600;
+}
+
+@font-face {
 	font-family: 'Zed Mono Extended';
 	src: url('/fonts/zed-mono-extended.ttf') format('truetype');
 	font-weight: 400;
@@ -13,6 +31,11 @@
 
 body {
 	font-family: 'basier square', 'ABC Diatype Variable Edu', sans-serif;
+	background: white;
+	transition: background 300ms ease;
+}
+
+body.os-active {
 	background: #000000;
 }
 
