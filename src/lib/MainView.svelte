@@ -2,9 +2,35 @@
 	import { onMount } from 'svelte';
 	import { view, gallery, allTypes, visibleGroups } from '$lib/store.svelte';
 	import GalleryPanel from '$lib/GalleryPanel.svelte';
+	import WritingsPanel from '$lib/WritingsPanel.svelte';
 	import ContentPanel from '$lib/ContentPanel.svelte';
 	import Ruler from '$lib/Ruler.svelte';
 	import LineNumbers from '$lib/LineNumbers.svelte';
+	import { writings } from '$lib/writings';
+	import { fade } from 'svelte/transition';
+
+	let writingsActiveSource = $state<import('$lib/writings').WritingSource | null>(null);
+
+	// track last active panel so closing doesn't flash back to default
+	let displayPanel = $state<'projects' | 'writings'>('projects');
+	let panelContentVisible = $state(true);
+	let panelSwitchTimer: ReturnType<typeof setTimeout>;
+	let prevRightPanel: null | 'projects' | 'writings' = null;
+	$effect(() => {
+		const curr = view.rightPanel;
+		if (curr && curr !== prevRightPanel && prevRightPanel !== null) {
+			// switching between open panels: fade out, swap, fade in
+			panelContentVisible = false;
+			clearTimeout(panelSwitchTimer);
+			panelSwitchTimer = setTimeout(() => {
+				displayPanel = curr;
+				panelContentVisible = true;
+			}, 150);
+		} else if (curr) {
+			displayPanel = curr;
+		}
+		prevRightPanel = curr;
+	});
 
 	type Block = { slug: string; content: string; lineCount: number };
 	type Props = { data: { content: string; lineCount: number } };
@@ -81,24 +107,34 @@
 		bind:isScrolling
 		bind:labelTops
 		mobile={true}
-		visible={!view.showGallery}
+		visible={!view.rightPanel}
 	/>
 	<div
-		class="fixed inset-0 overflow-y-auto px-4 pt-14 pb-3 transition-opacity duration-300 {view.showGallery
+		class="fixed inset-0 overflow-y-auto px-4 pt-14 pb-3 transition-opacity duration-300 {view.rightPanel
 			? 'opacity-100'
 			: 'pointer-events-none opacity-0'}"
 	>
-		<GalleryPanel
-			visibleGroups={visibleGroups()}
-			{allTypes}
-			bind:activeFilter={gallery.activeFilter}
-			bind:listView={gallery.listView}
-			mobile={true}
-		/>
+		<div class="transition-opacity duration-150 {panelContentVisible ? 'opacity-100' : 'opacity-0'}">
+			{#if displayPanel === 'writings'}
+				<WritingsPanel
+					writingYears={writings}
+					bind:activeSource={writingsActiveSource}
+					mobile={true}
+				/>
+			{:else}
+				<GalleryPanel
+					visibleGroups={visibleGroups()}
+					{allTypes}
+					bind:activeFilter={gallery.activeFilter}
+					bind:listView={gallery.listView}
+					mobile={true}
+				/>
+			{/if}
+		</div>
 	</div>
 {:else}
 	<div
-		class="mx-auto flex min-h-svh w-full gap-8 px-10 pb-3 transition-[max-width] duration-500 xl:px-16 {view.splitView
+		class="mx-auto flex min-h-svh w-full gap-8 px-10 pb-3 transition-[max-width] duration-500 xl:px-16 {view.rightPanel
 			? 'max-w-[1600px]'
 			: 'max-w-5xl'}"
 	>
@@ -108,21 +144,28 @@
 			bind:blockEls
 			bind:labelTops
 			bind:isScrolling
-			splitView={view.splitView}
-		/>
+			splitView={!!view.rightPanel}
+/>
 		<div
 			bind:this={galleryEl}
-			class="sticky top-0 h-svh shrink-0 overflow-y-auto pt-12 transition-all duration-500 {view.splitView
+			class="sticky top-0 h-svh shrink-0 overflow-y-auto pt-10 transition-all duration-500 {view.rightPanel
 				? 'w-1/2 opacity-100'
 				: 'pointer-events-none w-0 overflow-hidden opacity-0'}"
 		>
-			<div class="w-full max-w-2xl">
-				<GalleryPanel
-					visibleGroups={visibleGroups()}
-					{allTypes}
-					bind:activeFilter={gallery.activeFilter}
-					bind:listView={gallery.listView}
-				/>
+			<div class="w-full max-w-2xl transition-opacity duration-150 {panelContentVisible ? 'opacity-100' : 'opacity-0'}">
+				{#if displayPanel === 'writings'}
+					<WritingsPanel
+						writingYears={writings}
+						bind:activeSource={writingsActiveSource}
+					/>
+				{:else}
+					<GalleryPanel
+						visibleGroups={visibleGroups()}
+						{allTypes}
+						bind:activeFilter={gallery.activeFilter}
+						bind:listView={gallery.listView}
+					/>
+				{/if}
 			</div>
 		</div>
 	</div>
@@ -136,7 +179,7 @@
 	{labelTops}
 	{blocks}
 	{blockEls}
-	splitView={view.splitView}
+	splitView={!!view.rightPanel}
 	isMobile={view.isMobile}
 	showGallery={view.showGallery}
 	onLabelClick={(i) => contentPanel?.scrollToBlock(i)}

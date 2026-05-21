@@ -23,17 +23,6 @@
 		'Media': ['#FDF5D5', '#8A6A00'],
 	};
 
-	let projectsGrid = $state<HTMLElement | null>(null);
-	let rowSize = $state(0);
-
-	$effect(() => {
-		if (!projectsGrid) return;
-		const ro = new ResizeObserver(() => {
-			rowSize = (projectsGrid!.offsetWidth - 2 * 8) / 3;
-		});
-		ro.observe(projectsGrid);
-		return () => ro.disconnect();
-	});
 </script>
 
 <!-- controls -->
@@ -89,16 +78,15 @@
 	</div>
 {:else}
 	<div
-		bind:this={projectsGrid}
 		class="grid grid-cols-3 gap-2 py-2"
-		style="grid-auto-rows: {mobile ? 'calc((100vw - 2rem) / 3)' : rowSize + 'px'}; grid-auto-flow: dense"
+		style="grid-auto-flow: dense"
 		transition:fade={{ duration: 150 }}
 	>
 		{#each visibleGroups.flatMap((g) => g.projects) as project (project.title)}
 			<div
 				transition:fade={{ duration: 150 }}
 				animate:flip={{ duration: 300 }}
-				class="group relative overflow-hidden rounded-sm bg-neutral-100 hover:cursor-pointer {!project.size ? 'aspect-square' : project.size === '2x2' ? 'col-span-2 row-span-2' : 'col-span-2'}"
+				class="group relative overflow-hidden rounded-sm bg-neutral-100 hover:cursor-pointer {!project.size ? 'aspect-square' : project.size === '2x2' ? 'col-span-2 row-span-2 aspect-square' : 'col-span-2 aspect-[2/1]'}"
 			>
 				<div class="absolute inset-x-0 top-0 z-10 p-2" data-label>
 					<div class="flex items-start justify-between gap-1">

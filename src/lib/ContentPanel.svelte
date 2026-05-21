@@ -108,7 +108,7 @@
 	bind:this={el}
 	class={mobile
 		? `fixed inset-0 overflow-y-auto pt-10 pr-10 pb-3 pl-3.5 transition-opacity duration-300 ${visible ? 'opacity-100' : 'pointer-events-none opacity-0'}`
-		: 'flex min-w-0 flex-1 flex-col pt-12'}
+		: 'flex min-w-0 flex-1 flex-col pt-10'}
 	role="presentation"
 	onclick={handleClick}
 	onkeydown={() => {}}

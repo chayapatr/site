@@ -6,13 +6,11 @@
 	type Props = {
 		isMobile: boolean;
 		showGallery: boolean;
-		splitView: boolean;
 		bostonTime: string;
 		onToggleGallery?: () => void;
-		onToggleSplit?: () => void;
 	};
 
-	let { isMobile, showGallery, splitView, bostonTime, onToggleGallery, onToggleSplit }: Props = $props();
+	let { isMobile, showGallery, bostonTime, onToggleGallery }: Props = $props();
 
 	function focusWindow(windowId: string | null) {
 		if (!windowId) return;
@@ -32,7 +30,7 @@
 	class:bg-neutral-900={view.showOS}
 	class:border-neutral-200={!view.showOS}
 	class:bg-white={!view.showOS}
-	style="height: {isMobile ? 'auto' : '2rem'}; padding: {isMobile ? '0.625rem 0.5rem 0.625rem 1rem' : '0'};"
+	style="height: {isMobile ? 'auto' : '2.25rem'}; padding: {isMobile ? '0.625rem 0.5rem 0.625rem 1rem' : '0'};"
 >
 	{#if view.showOS}
 		<div class="flex items-center gap-2 {isMobile ? 'w-full' : 'absolute inset-0 px-5'}" transition:fly={{ y: -8, duration: 250 }}>
@@ -63,10 +61,17 @@
 	{:else if isMobile}
 		<div class="flex w-full items-center justify-between" transition:fly={{ y: -8, duration: 250 }}>
 			<div class="flex items-center gap-3">
-				<button onclick={() => (view.showOS = !view.showOS)}>Pub</button>
 				{#if showGallery}
-					<div class="text-neutral-400">Writings</div>
-					<div class="text-neutral-400">Settings</div>
+					<button
+						class={view.rightPanel === 'projects' ? '' : 'text-neutral-400'}
+						onclick={() => { view.rightPanel = view.rightPanel === 'projects' ? null : 'projects'; }}
+					>{view.rightPanel === 'projects' ? '🌱 Projects' : 'Projects'}</button>
+					<button
+						class={view.rightPanel === 'writings' ? '' : 'text-neutral-400'}
+						onclick={() => { view.rightPanel = view.rightPanel === 'writings' ? null : 'writings'; }}
+					>{view.rightPanel === 'writings' ? '🖋️ Writings' : 'Writings'}</button>
+				{:else}
+					<button onclick={() => (view.showOS = !view.showOS)}>Pub</button>
 				{/if}
 			</div>
 			<button
@@ -83,9 +88,8 @@
 		<div class="absolute inset-0 flex items-center justify-between gap-1.5 px-5" transition:fly={{ y: -8, duration: 250 }}>
 			<button onclick={() => (view.showOS = !view.showOS)} class="flex items-center gap-1.5 text-black">
 				<img src="/imgs/pub.svg" alt="Pub" class="h-4 w-4" />Pub</button>
-			<button onclick={onToggleSplit}>{splitView ? '🌱 Projects' : 'Projects'}</button>
-			<div>Writings</div>
-			<div>Settings</div>
+			<button onclick={() => view.rightPanel = view.rightPanel === 'projects' ? null : 'projects'}>{view.rightPanel === 'projects' ? '🌱 Projects' : 'Projects'}</button>
+			<button onclick={() => view.rightPanel = view.rightPanel === 'writings' ? null : 'writings'}>{view.rightPanel === 'writings' ? '🖋️ Writings' : 'Writings'}</button>
 			<div>{bostonTime} (Boston)</div>
 		</div>
 	{/if}

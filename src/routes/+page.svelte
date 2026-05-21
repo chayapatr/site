@@ -13,34 +13,41 @@
 
 	$effect(() => {
 		if (view.showOS) {
-			document.body.classList.add('os-active')
+			document.body.classList.add('os-active');
 		} else {
-			document.body.classList.remove('os-active')
+			document.body.classList.remove('os-active');
 		}
-	})
+	});
 
 	onMount(async () => {
 		await document.fonts.ready;
 		fontsReady = true;
 
 		// iOS Safari: lock scroll position when keyboard appears inside OS
-		const lockScroll = () => { if (view.showOS) window.scrollTo(0, 0) }
-		window.visualViewport?.addEventListener('resize', lockScroll)
-		window.visualViewport?.addEventListener('scroll', lockScroll)
+		const lockScroll = () => {
+			if (view.showOS) window.scrollTo(0, 0);
+		};
+		window.visualViewport?.addEventListener('resize', lockScroll);
+		window.visualViewport?.addEventListener('scroll', lockScroll);
 
 		const update = () => {
 			bostonTime = new Date()
-				.toLocaleTimeString('en-US', { timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit', hour12: true })
+				.toLocaleTimeString('en-US', {
+					timeZone: 'America/New_York',
+					hour: 'numeric',
+					minute: '2-digit',
+					hour12: true
+				})
 				.toLowerCase();
 		};
 		update();
 		const interval = setInterval(update, 1000);
 
 		return () => {
-			window.visualViewport?.removeEventListener('resize', lockScroll)
-			window.visualViewport?.removeEventListener('scroll', lockScroll)
-			clearInterval(interval)
-		}
+			window.visualViewport?.removeEventListener('resize', lockScroll);
+			window.visualViewport?.removeEventListener('scroll', lockScroll);
+			clearInterval(interval);
+		};
 	});
 </script>
 
@@ -49,16 +56,14 @@
 </svelte:head>
 
 {#if fontsReady}
-<NavBar
-	isMobile={view.isMobile}
-	showGallery={view.showGallery}
-	splitView={view.splitView}
-	{bostonTime}
-	onToggleGallery={() => (view.showGallery = !view.showGallery)}
-	onToggleSplit={() => (view.splitView = !view.splitView)}
-/>
+	<NavBar
+		isMobile={view.isMobile}
+		showGallery={view.showGallery}
+		{bostonTime}
+		onToggleGallery={() => { view.showGallery = !view.showGallery; view.rightPanel = view.showGallery ? 'projects' : null; }}
+	/>
 
-<MainView {data} />
+	<MainView {data} />
 {/if}
 
 {#if view.showOS}

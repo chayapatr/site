@@ -31,7 +31,7 @@
 
 	let activeTick = $derived.by(() => {
 		if (typeof window === 'undefined') return 0;
-		const sidebarHeight = window.innerHeight - 48 - 16;
+		const sidebarHeight = window.innerHeight - 40 - 16;
 		const dotTop = contentFraction * sidebarHeight;
 		return Math.round((dotTop / sidebarHeight) * 40);
 	});
@@ -44,7 +44,7 @@
 		? 'hidden'
 		: isMobile
 			? 'top-14 h-[calc(100svh-3.5rem-16px)]'
-			: 'top-12 h-[calc(100svh-3rem-16px)]'}"
+			: 'top-10 h-[calc(100svh-2.5rem-16px)]'}"
 >
 	<div class="absolute top-0 right-2 flex h-full flex-col items-end justify-between">
 		{#each Array.from({ length: 41 }, (_, i) => i) as i (i)}
