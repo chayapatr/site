@@ -1,3 +1,4 @@
+// pubOS kernel store
 import { writable, get } from 'svelte/store';
 import type { KernelState, Process, AppType, Kernel, FSManifestNode } from './types';
 import { loadManifest, findNode } from './manifest';
