@@ -71,7 +71,7 @@
 						onclick={() => { view.rightPanel = view.rightPanel === 'writings' ? null : 'writings'; }}
 					>{view.rightPanel === 'writings' ? '🖋️ Writings' : 'Writings'}</button>
 				{:else}
-					<button onclick={() => (view.showOS = !view.showOS)}>Pub</button>
+					<button onclick={() => (view.showOS = !view.showOS)} class="flex items-center gap-1.5"><img src="/imgs/pub.svg" alt="Pub" class="h-4 w-4" />Pub</button>
 				{/if}
 			</div>
 			<button

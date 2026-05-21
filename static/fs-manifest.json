@@ -276,6 +276,27 @@
       "children": [
         {
           "type": "file",
+          "name": "basier-medium.woff2",
+          "path": "/fonts/basier-medium.woff2",
+          "size": 16096,
+          "mtime": 1779334578667.914
+        },
+        {
+          "type": "file",
+          "name": "basier-regular.woff2",
+          "path": "/fonts/basier-regular.woff2",
+          "size": 15448,
+          "mtime": 1779334578667.3813
+        },
+        {
+          "type": "file",
+          "name": "basier-semibold.woff2",
+          "path": "/fonts/basier-semibold.woff2",
+          "size": 22684,
+          "mtime": 1779334578668.3882
+        },
+        {
+          "type": "file",
           "name": "zed-mono-extended.ttf",
           "path": "/fonts/zed-mono-extended.ttf",
           "size": 4915968,
@@ -567,6 +588,20 @@
               "mtime": 1779229551296.3633
             }
           ]
+        }
+      ]
+    },
+    {
+      "type": "dir",
+      "name": "imgs",
+      "path": "/imgs",
+      "children": [
+        {
+          "type": "file",
+          "name": "pub.svg",
+          "path": "/imgs/pub.svg",
+          "size": 1318,
+          "mtime": 1779336515514.7654
         }
       ]
     },
@@ -988,8 +1023,8 @@
                   "type": "file",
                   "name": "conway.js",
                   "path": "/usr/share/wallpaper/conway.js",
-                  "size": 5003,
-                  "mtime": 1779331082072.3057
+                  "size": 5495,
+                  "mtime": 1779332095882.016
                 },
                 {
                   "type": "file",

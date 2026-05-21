@@ -4,7 +4,7 @@ import { projects } from '$lib/projects';
 
 // --- view mode ---
 export const view = $state({
-	rightPanel: 'projects' as null | 'projects' | 'writings',
+	rightPanel: null as null | 'projects' | 'writings',
 	isMobile: false,
 	showGallery: false,
 	showOS: false,
