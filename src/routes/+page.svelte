@@ -23,6 +23,16 @@
 		await document.fonts.ready;
 		fontsReady = true;
 
+		// prevent iOS Safari from scrolling page when input focused inside OS
+		const onFocus = (e: FocusEvent) => {
+			const target = e.target as HTMLElement
+			if (view.showOS && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) {
+				window.scrollTo(0, 0)
+			}
+		}
+		window.addEventListener('focusin', onFocus)
+		return () => window.removeEventListener('focusin', onFocus)
+
 		const update = () => {
 			bostonTime = new Date()
 				.toLocaleTimeString('en-US', { timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit', hour12: true })
@@ -52,7 +62,7 @@
 {/if}
 
 {#if view.showOS}
-	<div class="fixed inset-0 z-40" transition:fade={{ duration: 300 }}>
+	<div class="fixed inset-0 z-40" style="height: 100svh;" transition:fade={{ duration: 300 }}>
 		<Desktop />
 	</div>
 {/if}
