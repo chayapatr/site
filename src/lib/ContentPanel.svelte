@@ -146,6 +146,22 @@
 	function popOutBlock(index: number) {
 		openFloatingPanel(blocks[index].slug);
 	}
+
+	// prepends the home note as a new block above whatever's currently
+	// showing, instead of navigating away — same "stack of opened sections"
+	// model as clicking an internal link, just inserted at the very top
+	async function openHomeAtTop() {
+		const slug = '!@$';
+		if (blocks[0]?.slug === slug) {
+			scrollToBlock(0);
+			return;
+		}
+		const { content, lineCount } = await getContent(slug);
+		blocks.unshift({ slug, content, lineCount });
+		await tick();
+		await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+		scrollToBlock(0);
+	}
 </script>
 
 <div
@@ -157,6 +173,14 @@
 	onclick={handleClick}
 	onkeydown={() => {}}
 >
+	{#if blocks[0]?.slug !== '!@$'}
+		<button
+			class="text-md -mt-1 mb-6 flex h-9 w-full cursor-pointer items-center justify-center border-b border-neutral-200 bg-[repeating-linear-gradient(315deg,var(--pattern-fg)_0,var(--pattern-fg)_1px,transparent_0,transparent_50%)] bg-size-[10px_10px] bg-fixed text-neutral-500 [--pattern-fg:var(--color-neutral-900)]/5 hover:[--pattern-fg:var(--color-neutral-900)]/10"
+			onclick={openHomeAtTop}
+		>
+			Home
+		</button>
+	{/if}
 	{#each blocks as block, i (block.slug)}
 		{#if i > 0}
 			<div

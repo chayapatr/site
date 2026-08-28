@@ -35,7 +35,7 @@
 	});
 
 	type Block = { slug: string; content: string; lineCount: number };
-	type Props = { data: { content: string; lineCount: number } };
+	type Props = { data: { slug: string; content: string; lineCount: number } };
 	let { data }: Props = $props();
 
 	// --- mobile detection ---
@@ -49,10 +49,22 @@
 	});
 
 	// --- blocks ---
-	let blocks = $state<Block[]>([{ slug: '!@$', content: '', lineCount: 0 }]);
+	// seeded directly from the initial load — the effect below only handles
+	// *later* navigation (when data.slug actually changes), never the first
+	// render, so content isn't left empty waiting for an effect that already
+	// considers itself "up to date"
+	let blocks = $state<Block[]>([
+		{ slug: data.slug, content: data.content, lineCount: data.lineCount },
+	]);
+	// only re-seeds blocks[0] when the route's loaded slug actually changes
+	// (real navigation) — not on every re-run of this effect, since the user
+	// can locally unshift/splice blocks (e.g. the in-page Home button), and
+	// re-stamping blocks[0] unconditionally would silently revert that
+	let lastLoadedSlug = data.slug;
 	$effect(() => {
-		blocks[0].content = data.content;
-		blocks[0].lineCount = data.lineCount;
+		if (data.slug === lastLoadedSlug) return;
+		lastLoadedSlug = data.slug;
+		blocks = [{ slug: data.slug, content: data.content, lineCount: data.lineCount }];
 	});
 	let blockEls = $state<HTMLElement[]>([]);
 
@@ -95,6 +107,7 @@
 </script>
 
 {#if !view.showOS}
+
 	<LineNumbers contentEl={contentColumnEl} {isScrolling} isMobile={view.isMobile} />
 
 	{#if view.isMobile}
