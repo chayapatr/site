@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
-	import type { WritingSource, WritingYear } from '$lib/writings';
+	import type { WritingSource, WritingYear } from '$lib/content/writings';
 
 	type Props = {
 		writingYears: WritingYear[];

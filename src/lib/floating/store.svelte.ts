@@ -1,4 +1,4 @@
-import { getContent } from '$lib/content';
+import { getContent } from '$lib/content/content';
 
 export type FloatingPanel = {
 	id: number;

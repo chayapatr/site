@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { view } from '$lib/store.svelte';
-	import NavBar from '$lib/NavBar.svelte';
-	import MainView from '$lib/MainView.svelte';
+	import NavBar from '$lib/main/NavBar.svelte';
+	import MainView from '$lib/main/MainView.svelte';
 	import Desktop from '$lib/os/desktop/Desktop.svelte';
 	import { fade } from 'svelte/transition';
 

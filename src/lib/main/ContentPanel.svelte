@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { getContent } from '$lib/content';
+	import { getContent } from '$lib/content/content';
 	import { tick, onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { openFloatingPanel } from '$lib/floating/store.svelte';
-	import LinkTooltip from '$lib/LinkTooltip.svelte';
+	import LinkTooltip from '$lib/main/LinkTooltip.svelte';
 
 	type Block = { slug: string; content: string; lineCount: number };
 

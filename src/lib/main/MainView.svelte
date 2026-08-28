@@ -1,17 +1,17 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { view, gallery, allTypes, visibleGroups } from '$lib/store.svelte';
-	import GalleryPanel from '$lib/GalleryPanel.svelte';
-	import WritingsPanel from '$lib/WritingsPanel.svelte';
-	import ContentPanel from '$lib/ContentPanel.svelte';
-	import Ruler from '$lib/Ruler.svelte';
-	import LineNumbers from '$lib/LineNumbers.svelte';
-	import BlueprintGrid from '$lib/BlueprintGrid.svelte';
+	import GalleryPanel from '$lib/content/GalleryPanel.svelte';
+	import WritingsPanel from '$lib/content/WritingsPanel.svelte';
+	import ContentPanel from '$lib/main/ContentPanel.svelte';
+	import Ruler from '$lib/main/Ruler.svelte';
+	import LineNumbers from '$lib/main/LineNumbers.svelte';
+	import BlueprintGrid from '$lib/main/BlueprintGrid.svelte';
 	import FloatingLayer from '$lib/floating/FloatingLayer.svelte';
-	import { writings } from '$lib/writings';
+	import { writings } from '$lib/content/writings';
 	import { fade } from 'svelte/transition';
 
-	let writingsActiveSource = $state<import('$lib/writings').WritingSource | null>(null);
+	let writingsActiveSource = $state<import('$lib/content/writings').WritingSource | null>(null);
 
 	// track last active panel so closing doesn't flash back to default
 	let displayPanel = $state<'projects' | 'writings'>('projects');

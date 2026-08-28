@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
-	import type { ProjectType } from '$lib/projects';
+	import type { ProjectType } from '$lib/content/projects';
 
 	type ProjectGroup = { year: number; projects: { title: string; image: string; types: ProjectType[]; size?: '2x1' | '2x2' }[] };
 

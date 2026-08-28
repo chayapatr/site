@@ -41,9 +41,7 @@
 {#if hoveredLinkHref}
 	<div
 		class="pointer-events-none fixed z-50 flex items-center gap-1.5 rounded-sm border border-black px-2 py-1 font-mono text-xs text-black shadow-sm"
-		style="left: {tooltipX + 12}px; top: {tooltipY + 16}px; background-color: {hoveredLinkIsInternal
-			? '#FFF8A7'
-			: '#E1DFED'}"
+		style="left: {tooltipX + 12}px; top: {tooltipY + 16}px; background-color: #FFF8A7"
 	>
 		{#if hoveredLinkIsInternal}
 			<img src="/imgs/pub.svg" alt="" class="h-3.5 w-3.5" />

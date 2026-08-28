@@ -7,7 +7,7 @@
 		focusState,
 		type FloatingPanel,
 	} from './store.svelte';
-	import LinkTooltip from '$lib/LinkTooltip.svelte';
+	import LinkTooltip from '$lib/main/LinkTooltip.svelte';
 
 	type Props = { panel: FloatingPanel };
 	let { panel }: Props = $props();

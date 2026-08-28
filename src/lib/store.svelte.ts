@@ -1,6 +1,6 @@
 import { onMount } from 'svelte';
-import type { ProjectType } from '$lib/projects';
-import { projects } from '$lib/projects';
+import type { ProjectType } from '$lib/content/projects';
+import { projects } from '$lib/content/projects';
 
 // --- view mode ---
 export const view = $state({
