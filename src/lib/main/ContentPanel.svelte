@@ -3,6 +3,7 @@
 	import { tick, onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { openFloatingPanel } from '$lib/floating/store.svelte';
+	import { view } from '$lib/store.svelte';
 	import LinkTooltip from '$lib/main/LinkTooltip.svelte';
 
 	type Block = { slug: string; content: string; lineCount: number };
@@ -117,6 +118,12 @@
 		e.preventDefault();
 		const slug = (target as HTMLElement).dataset.internalSlug;
 		if (!slug) return;
+		// "works" toggles the existing Projects gallery panel instead of being
+		// fetched/rendered as a markdown block like any other internal link
+		if (slug === 'works') {
+			view.rightPanel = view.rightPanel === 'projects' ? null : 'projects';
+			return;
+		}
 		const existing = blocks.findIndex((b) => b.slug === slug);
 		if (existing !== -1) {
 			const blockEl = blockEls[existing];

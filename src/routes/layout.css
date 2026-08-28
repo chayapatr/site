@@ -64,14 +64,9 @@ h6 {
 	position: relative;
 }
 
-/* image frame — a border around the image. <img> is a replaced element and
-   never renders ::before/::after content (spec behavior, not a browser
-   quirk), so ContentPanel.svelte wraps each image in a real
-   <span class="img-frame"> for the border to apply to. */
 .img-frame {
 	display: block;
 	position: relative;
-	border: 1px solid var(--color-neutral-300);
 }
 
 .img-frame img {
@@ -120,11 +115,15 @@ h6 {
 	background: var(--os-hover);
 }
 
-body {
+/* disables text selection only while PubOS is active (dragging windows/icons
+   there shouldn't accidentally select text) — scoped to body.os-active
+   instead of body itself, which previously blocked selecting the actual
+   article content everywhere on the site */
+body.os-active {
 	user-select: none;
 }
 
-input, textarea, [contenteditable] {
+body.os-active input, body.os-active textarea, body.os-active [contenteditable] {
 	user-select: text;
 }
 

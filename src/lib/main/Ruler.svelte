@@ -56,7 +56,9 @@
 			!isScrolling
 				? 'opacity-0'
 				: ''}"
-			style="top: {Math.max(labelTops[i] ?? 0, 10)}px; right: 1.5rem; transform: translateY(-50%)"
+			style="top: {Math.max(labelTops[i] ?? 0, 10)}px; right: {isMobile
+				? '1.5rem'
+				: '3rem'}; transform: translateY(-50%)"
 			onclick={() => onLabelClick?.(i)}
 		>
 			{b.slug}
