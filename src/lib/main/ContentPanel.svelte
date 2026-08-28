@@ -168,7 +168,7 @@
 <div
 	bind:this={el}
 	class={mobile
-		? `fixed inset-0 overflow-y-auto overscroll-none pt-10 pr-10 pb-3 pl-3.5 transition-opacity duration-300 ${visible ? 'opacity-100' : 'pointer-events-none opacity-0'}`
+		? `fixed inset-0 overflow-y-auto overscroll-none pt-10 pr-9 pb-3 pl-3.5 transition-opacity duration-300 ${visible ? 'opacity-100' : 'pointer-events-none opacity-0'}`
 		: 'flex h-full min-w-0 flex-1 flex-col overflow-y-auto overscroll-none pt-10 pb-3'}
 	role="presentation"
 	onclick={handleClick}
