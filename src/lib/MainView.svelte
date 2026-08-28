@@ -7,6 +7,7 @@
 	import Ruler from '$lib/Ruler.svelte';
 	import LineNumbers from '$lib/LineNumbers.svelte';
 	import BlueprintGrid from '$lib/BlueprintGrid.svelte';
+	import FloatingLayer from '$lib/floating/FloatingLayer.svelte';
 	import { writings } from '$lib/writings';
 	import { fade } from 'svelte/transition';
 
@@ -194,4 +195,6 @@
 		showGallery={view.showGallery}
 		onLabelClick={(i) => contentPanel?.scrollToBlock(i)}
 	/>
+
+	<FloatingLayer />
 {/if}

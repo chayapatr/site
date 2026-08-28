@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { getContent } from '$lib/content';
 	import { tick, onMount } from 'svelte';
+	import { openFloatingPanel } from '$lib/floating/store.svelte';
+	import LinkTooltip from '$lib/LinkTooltip.svelte';
 
 	type Block = { slug: string; content: string; lineCount: number };
 
@@ -25,7 +27,7 @@
 		isScrolling = $bindable(false),
 		labelTops = $bindable([]),
 		blockEls = $bindable([]),
-		contentEl = $bindable(null),
+		contentEl = $bindable(null)
 	}: Props = $props();
 
 	let el = $state<HTMLElement | null>(null);
@@ -34,26 +36,6 @@
 	});
 	let dividers = $state<HTMLElement[]>([]);
 	let scrollEndTimer: ReturnType<typeof setTimeout>;
-
-	// link hover tooltip — shows the real destination (external URL, or the
-	// original path for internal links, which content.ts otherwise rewrites
-	// to href="#") near the cursor
-	let hoveredLinkHref = $state<string | null>(null);
-	let hoveredLinkIsInternal = $state(false);
-	let tooltipX = $state(0);
-	let tooltipY = $state(0);
-
-	function handlePointerMove(e: MouseEvent) {
-		const target = (e.target as HTMLElement).closest('a[data-href]') as HTMLElement | null;
-		hoveredLinkHref = target?.dataset.href ?? null;
-		hoveredLinkIsInternal = target?.dataset.internalSlug !== undefined;
-		tooltipX = e.clientX;
-		tooltipY = e.clientY;
-	}
-
-	function handlePointerLeave() {
-		hoveredLinkHref = null;
-	}
 
 	// content is raw {@html} markdown output — <img> is a replaced element,
 	// so ::before/::after pseudo-elements never render on it directly (spec
@@ -81,11 +63,9 @@
 			scrollFraction = fraction;
 			isScrolling = true;
 			clearTimeout(scrollEndTimer);
-			scrollEndTimer = setTimeout(() => { isScrolling = false; }, 600);
-			// scrolling moves content under a stationary cursor without firing
-			// mousemove/mouseleave, so the link tooltip would otherwise stay
-			// stuck pointing at whatever was under the cursor before the scroll
-			hoveredLinkHref = null;
+			scrollEndTimer = setTimeout(() => {
+				isScrolling = false;
+			}, 600);
 		};
 		el.addEventListener('scroll', handler);
 		return () => el!.removeEventListener('scroll', handler);
@@ -102,7 +82,10 @@
 	$effect(() => {
 		if (blockEls.length === 0) return;
 		const totalHeight = blockEls.reduce((sum, e) => sum + (e?.offsetHeight ?? 0), 0);
-		if (totalHeight === 0) { labelTops = blockEls.map(() => 0); return; }
+		if (totalHeight === 0) {
+			labelTops = blockEls.map(() => 0);
+			return;
+		}
 		const sidebarHeight = typeof window !== 'undefined' ? window.innerHeight - 36 - 16 : 0;
 		let cumulative = 0;
 		labelTops = blockEls.map((e) => {
@@ -142,7 +125,9 @@
 			return;
 		}
 		const blockEl = (e.target as HTMLElement).closest('[data-block-index]');
-		const afterIndex = blockEl ? Number((blockEl as HTMLElement).dataset.blockIndex) : blocks.length - 1;
+		const afterIndex = blockEl
+			? Number((blockEl as HTMLElement).dataset.blockIndex)
+			: blocks.length - 1;
 		openSlug(slug, afterIndex, target as HTMLElement);
 	}
 
@@ -157,6 +142,10 @@
 		// no need to splice it manually here
 		blocks.splice(index, 1);
 	}
+
+	function popOutBlock(index: number) {
+		openFloatingPanel(blocks[index].slug);
+	}
 </script>
 
 <div
@@ -167,12 +156,13 @@
 	role="presentation"
 	onclick={handleClick}
 	onkeydown={() => {}}
-	onmousemove={handlePointerMove}
-	onmouseleave={handlePointerLeave}
 >
 	{#each blocks as block, i (block.slug)}
 		{#if i > 0}
-			<div class="my-6 flex items-center gap-1.5 text-xs text-neutral-400" bind:this={dividers[i - 1]}>
+			<div
+				class="my-6 flex items-center gap-1.5 text-xs text-neutral-400"
+				bind:this={dividers[i - 1]}
+			>
 				<div class="h-px flex-1 bg-neutral-200"></div>
 				<span>{block.slug}</span>
 				<button
@@ -185,27 +175,29 @@
 				>
 					[x]
 				</button>
+				<button
+					class="cursor-pointer text-xs text-neutral-400 hover:text-neutral-700"
+					onclick={(e) => {
+						e.stopPropagation();
+						popOutBlock(i);
+					}}
+					aria-label="Open as floating panel"
+				>
+					[o]
+				</button>
 				<div class="h-px flex-1 bg-neutral-200"></div>
 			</div>
 		{/if}
 		<div bind:this={blockEls[i]} data-block-index={i} class="flex justify-center">
-			<div class="{splitView ? 'pl-5' : 'pl-0'} prose w-full max-w-3xl overflow-visible py-4 text-base text-[15px] leading-relaxed transition-[padding] duration-500 lg:text-base xl:text-[17px]">
+			<div
+				class="{splitView
+					? 'pl-5'
+					: 'pl-0'} prose w-full max-w-3xl overflow-visible py-4 text-base text-[15px] leading-relaxed transition-[padding] duration-500 lg:text-base xl:text-[17px]"
+			>
 				{@html block.content}
 			</div>
 		</div>
 	{/each}
 </div>
 
-{#if hoveredLinkHref}
-	<div
-		class="pointer-events-none fixed z-50 flex items-center gap-1.5 rounded-sm border border-black px-2 py-1 font-mono text-xs text-black shadow-sm"
-		style="left: {tooltipX + 12}px; top: {tooltipY + 16}px; background-color: #FFF8A7"
-	>
-		{#if hoveredLinkIsInternal}
-			<img src="/imgs/pub.svg" alt="" class="h-3.5 w-3.5" />
-		{:else}
-			<span>🌐</span>
-		{/if}
-		{hoveredLinkHref}
-	</div>
-{/if}
+<LinkTooltip containerEl={el} />
