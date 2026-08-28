@@ -33,12 +33,14 @@ export function focusPanel(id: number) {
 }
 
 export async function openFloatingPanel(slug: string, parentId: number | null = null) {
+	// opening a panel — whether it dedupes to an existing one or creates a
+	// new one below — always means the user wants to see it
+	visibilityState.hidden = false;
+
 	// if this slug is already open somewhere, don't create a duplicate —
-	// just bring it to front and make sure it's visible (undoing a global
-	// hide via the toolbar's eye button, if that's why it wasn't showing)
+	// just bring it to front
 	const existing = floatingPanels.find((p) => p.slug === slug);
 	if (existing) {
-		visibilityState.hidden = false;
 		focusPanel(existing.id);
 		return;
 	}
@@ -46,12 +48,20 @@ export async function openFloatingPanel(slug: string, parentId: number | null = 
 	const id = nextId++;
 	nextZ += 1;
 
-	const width = 560;
-	const height = 440;
+	const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
+	const viewportHeight = typeof window !== 'undefined' ? window.innerHeight : 0;
+	// a 560px draggable window doesn't fit a narrow viewport — below the
+	// same breakpoint MainView uses for its own mobile layout, just open
+	// panels near-fullscreen instead of cascading small windows offscreen
+	const isNarrow = viewportWidth < 768;
+
+	const width = isNarrow ? Math.max(280, viewportWidth - 24) : 560;
+	const height = isNarrow ? Math.max(200, viewportHeight - 96) : 440;
 
 	// cascade new panels slightly so they don't stack exactly on top of
-	// each other when opened in quick succession
-	const offset = (floatingPanels.length % 6) * 24;
+	// each other when opened in quick succession (skip on mobile — panels
+	// are already full-width, an offset would just push them off-screen)
+	const offset = isNarrow ? 0 : (floatingPanels.length % 6) * 24;
 
 	const panel: FloatingPanel = {
 		id,
@@ -60,8 +70,8 @@ export async function openFloatingPanel(slug: string, parentId: number | null = 
 		title: slug,
 		content: '',
 		loading: true,
-		x: (typeof window !== 'undefined' ? window.innerWidth / 2 : 0) - width / 2 + offset,
-		y: (typeof window !== 'undefined' ? window.innerHeight / 2 : 0) - height / 2 + offset,
+		x: viewportWidth / 2 - width / 2 + offset,
+		y: viewportHeight / 2 - height / 2 + offset,
 		z: nextZ,
 		width,
 		height,

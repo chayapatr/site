@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { getContent } from '$lib/content';
 	import { tick, onMount } from 'svelte';
+	import { fade } from 'svelte/transition';
 	import { openFloatingPanel } from '$lib/floating/store.svelte';
 	import LinkTooltip from '$lib/LinkTooltip.svelte';
 
@@ -172,6 +173,7 @@
 	role="presentation"
 	onclick={handleClick}
 	onkeydown={() => {}}
+	transition:fade={{ duration: 250 }}
 >
 	{#if blocks[0]?.slug !== '!@$'}
 		<button

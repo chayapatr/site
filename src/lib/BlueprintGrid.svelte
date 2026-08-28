@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { fade } from 'svelte/transition';
 
 	type Props = {
 		contentEl: HTMLElement | null;
@@ -97,7 +98,7 @@
 </script>
 
 {#if !isMobile}
-	<div class="pointer-events-none fixed inset-0 z-0">
+	<div class="pointer-events-none fixed inset-0 z-0" transition:fade={{ duration: 250 }}>
 		{#if contentRect}
 			<!-- content column left edge -->
 			<div

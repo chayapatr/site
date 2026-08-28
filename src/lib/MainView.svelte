@@ -122,7 +122,7 @@
 			visible={!view.rightPanel}
 		/>
 		<div
-			class="fixed inset-0 overflow-y-auto bg-[#f3f3f0] px-4 pt-14 pb-3 transition-opacity duration-300 {view.rightPanel
+			class="fixed inset-0 overflow-y-auto bg-white px-4 pt-14 pb-3 transition-opacity duration-300 {view.rightPanel
 				? 'opacity-100'
 				: 'pointer-events-none opacity-0'}"
 		>

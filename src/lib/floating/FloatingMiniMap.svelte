@@ -2,12 +2,25 @@
 	import { onMount } from 'svelte';
 	import { floatingPanels, focusState, focusPanel } from './store.svelte';
 
-	const WIDTH = 160;
 	const HEIGHT = 110;
+	// width tracks the real viewport aspect ratio (height stays fixed) so the
+	// minimap's shape actually resembles the window it's representing instead
+	// of always being a fixed 160x110 box
+	let WIDTH = $state(160);
 
 	let canvas = $state<HTMLCanvasElement | null>(null);
 	let ctx: CanvasRenderingContext2D | null = null;
 	let pixelRatio = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1;
+
+	function sizeCanvas() {
+		if (!canvas || typeof window === 'undefined') return;
+		WIDTH = Math.round(HEIGHT * (window.innerWidth / window.innerHeight));
+		canvas.width = WIDTH * pixelRatio;
+		canvas.height = HEIGHT * pixelRatio;
+		canvas.style.width = `${WIDTH}px`;
+		canvas.style.height = `${HEIGHT}px`;
+		ctx!.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+	}
 
 	// our floating panels live in plain viewport coordinates (no pan/zoom
 	// canvas like the v10 reference had), so the minimap world is just the
@@ -54,14 +67,13 @@
 
 	onMount(() => {
 		ctx = canvas!.getContext('2d');
-		canvas!.width = WIDTH * pixelRatio;
-		canvas!.height = HEIGHT * pixelRatio;
-		canvas!.style.width = `${WIDTH}px`;
-		canvas!.style.height = `${HEIGHT}px`;
-		ctx!.scale(pixelRatio, pixelRatio);
+		sizeCanvas();
 		draw();
 
-		const onResize = () => draw();
+		const onResize = () => {
+			sizeCanvas();
+			draw();
+		};
 		window.addEventListener('resize', onResize);
 		return () => window.removeEventListener('resize', onResize);
 	});

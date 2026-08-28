@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { fade } from 'svelte/transition';
+
 	type Block = { slug: string };
 
 	type Props = {
@@ -46,6 +48,7 @@
 		: isMobile
 			? 'top-9.5 h-[calc(100svh-3.5rem)]'
 			: 'top-9 h-[calc(100svh-2.25rem)]'}"
+	transition:fade={{ duration: 250 }}
 >
 	{#each blocks as b, i (b.slug)}
 		<button

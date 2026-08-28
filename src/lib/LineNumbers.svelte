@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { fade } from 'svelte/transition';
 
 	type Props = { contentEl: HTMLElement | null; isScrolling: boolean; isMobile: boolean };
 	let { contentEl, isScrolling, isMobile }: Props = $props();
@@ -52,6 +53,7 @@
 {#if !isMobile}
 	<div
 		class="pointer-events-none fixed top-0 left-0 z-40 h-svh w-8 overflow-hidden border-r border-neutral-200 bg-white"
+		transition:fade={{ duration: 250 }}
 	>
 		{#each lineEntries as entry (entry.key)}
 			<div

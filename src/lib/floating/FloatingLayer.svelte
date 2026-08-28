@@ -6,6 +6,13 @@
 	import FloatingMiniMap from './FloatingMiniMap.svelte';
 
 	let showMiniMap = $state(true);
+	// single derived flag instead of two nested {#if}s — a panel exists AND
+	// the layer isn't toggled off. Two separate {#if} boundaries that happen
+	// to flip true in the same tick (e.g. the very first panel opening, when
+	// "hidden" was already false) don't reliably fire the inner block's own
+	// transition:fade, since Svelte treats the inner block as part of the
+	// outer block's initial mount rather than as its own toggle.
+	let layerVisible = $derived(floatingPanels.length > 0 && !visibilityState.hidden);
 
 	// panel-center-to-panel-center connector for any panel opened from a
 	// link inside another panel (parentId set) — panels opened from the
@@ -23,49 +30,51 @@
 	}
 </script>
 
-{#if floatingPanels.length > 0}
-	{#if !visibilityState.hidden}
-		<!-- dims the rest of the page while any panel is open, clears once the
-		     last one closes. NavBar/Ruler/LineNumbers all sit at z-50, so the dim
-		     needs to be above that (z-60) to actually cover them, and the panels
-		     layer above the dim itself (z-70). Fades in/out quickly so the dim
-		     never just pops in — no sudden jump behind the panel. -->
+{#if layerVisible}
+	<div
+		class="pointer-events-none fixed inset-0 z-60 bg-black/80"
+		transition:fade={{ duration: 120 }}
+	></div>
+
+	<svg
+		class="pointer-events-none fixed inset-0 z-65 h-full w-full"
+		transition:fade={{ duration: 120 }}
+	>
+		{#each floatingPanels as panel (panel.id)}
+			{@const line = connector(panel)}
+			{#if line}
+				<line
+					x1={line.x1}
+					y1={line.y1}
+					x2={line.x2}
+					y2={line.y2}
+					stroke="#fbbf24"
+					stroke-width="2"
+					opacity="0.5"
+				/>
+			{/if}
+		{/each}
+	</svg>
+
+	<div class="fixed inset-0 z-70" transition:fade={{ duration: 120 }}>
+		{#each floatingPanels as panel (panel.id)}
+			<FloatingPanel {panel} />
+		{/each}
+	</div>
+
+	{#if showMiniMap}
 		<div
-			class="pointer-events-none fixed inset-0 z-60 bg-black/80"
+			class="pointer-events-auto fixed right-4 bottom-4 z-80"
 			transition:fade={{ duration: 120 }}
-		></div>
-
-		<svg class="pointer-events-none fixed inset-0 z-65 h-full w-full">
-			{#each floatingPanels as panel (panel.id)}
-				{@const line = connector(panel)}
-				{#if line}
-					<line
-						x1={line.x1}
-						y1={line.y1}
-						x2={line.x2}
-						y2={line.y2}
-						stroke="#fbbf24"
-						stroke-width="2"
-						opacity="0.5"
-					/>
-				{/if}
-			{/each}
-		</svg>
-
-		<div class="fixed inset-0 z-70">
-			{#each floatingPanels as panel (panel.id)}
-				<FloatingPanel {panel} />
-			{/each}
+		>
+			<FloatingMiniMap />
 		</div>
-
-		{#if showMiniMap}
-			<div class="pointer-events-auto fixed right-4 bottom-4 z-80">
-				<FloatingMiniMap />
-			</div>
-		{/if}
 	{/if}
+{/if}
 
-	<!-- toolbar always stays, even while panels are hidden, so [👁️] can bring
-	     them back -->
+<!-- toolbar has its own top-level {#if}: it must stay mounted even while
+     the layer above is hidden (floatingPanels.length > 0 but hidden === true),
+     so [👁️] remains clickable to bring the layer back -->
+{#if floatingPanels.length > 0}
 	<FloatingToolbar bind:showMiniMap />
 {/if}
