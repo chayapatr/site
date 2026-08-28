@@ -25,8 +25,33 @@
 	font-weight: 400;
 }
 
+@font-face {
+	font-family: 'Source Serif 4';
+	src: url('/fonts/source-serif-4.ttf') format('truetype');
+	font-weight: 400;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Source Serif 4';
+	src: url('/fonts/source-serif-4-italic.ttf') format('truetype');
+	font-weight: 400;
+	font-style: italic;
+}
+
 @theme {
 	--font-mono: 'Zed Mono Extended', ui-monospace, monospace;
+}
+
+/* typography preferences (Sidebar > Typography) — the sans stack matches
+   body's own default font, so switching "back" to sans is a no-op visually */
+:root {
+	--font-header-sans: 'basier square', 'ABC Diatype Variable Edu', sans-serif;
+	--font-header-serif: 'Source Serif 4', Georgia, serif;
+	--font-header-mono: 'Zed Mono Extended', ui-monospace, monospace;
+	--font-body-sans: 'basier square', 'ABC Diatype Variable Edu', sans-serif;
+	--font-body-serif: 'Source Serif 4', Georgia, serif;
+	--font-body-mono: 'Zed Mono Extended', ui-monospace, monospace;
 }
 
 html {
@@ -64,9 +89,29 @@ h6 {
 	position: relative;
 }
 
+/* typography preferences (Sidebar > Typography) apply only to the main
+   article content, not the app chrome (navbar, ruler, etc.) */
+.prose {
+	font-family: var(--font-body-current, var(--font-body-serif));
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+	font-family: var(--font-header-current, var(--font-header-sans));
+}
+
+/* image frame — a border around the image. <img> is a replaced element and
+   never renders ::before/::after content (spec behavior, not a browser
+   quirk), so ContentPanel.svelte wraps each image in a real
+   <span class="img-frame"> for the border to apply to. */
 .img-frame {
 	display: block;
 	position: relative;
+	border: 1px solid var(--color-neutral-300);
 }
 
 .img-frame img {
@@ -85,8 +130,13 @@ h6 {
 }
 
 @keyframes link-loading-pulse {
-	0%, 100% { opacity: 1; }
-	50% { opacity: 0.35; }
+	0%,
+	100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.35;
+	}
 }
 
 .external-link {
@@ -123,47 +173,49 @@ body.os-active {
 	user-select: none;
 }
 
-body.os-active input, body.os-active textarea, body.os-active [contenteditable] {
+body.os-active input,
+body.os-active textarea,
+body.os-active [contenteditable] {
 	user-select: text;
 }
 
 /* Theme-sensitive CSS variables — dark by default */
 :root {
-	--os-glass:          rgba(20, 20, 20, 0.75);
-	--os-glass-blur:     blur(12px);
-	--os-desktop-bg:     #000000;
-	--os-surface:        rgba(20, 20, 20, 0.95);
-	--os-hover:          #262626;
-	--os-selected:       #404040;
-	--os-border:         #262626;
-	--os-border-subtle:  #1a1a1a;
-	--os-text:           #a3a3a3;
-	--os-text-dim:       #525252;
+	--os-glass: rgba(20, 20, 20, 0.75);
+	--os-glass-blur: blur(12px);
+	--os-desktop-bg: #000000;
+	--os-surface: rgba(20, 20, 20, 0.95);
+	--os-hover: #262626;
+	--os-selected: #404040;
+	--os-border: #262626;
+	--os-border-subtle: #1a1a1a;
+	--os-text: #a3a3a3;
+	--os-text-dim: #525252;
 }
 
 [data-theme='light'] {
-	--os-glass:          rgba(240, 240, 240, 0.85);
-	--os-desktop-bg:     #e8e8e8;
-	--os-surface:        rgba(240, 240, 240, 0.97);
-	--os-hover:          #d0d0d0;
-	--os-selected:       #b0b0b0;
-	--os-border:         #c0c0c0;
-	--os-border-subtle:  #d4d4d4;
-	--os-text:           #404040;
-	--os-text-dim:       #737373;
+	--os-glass: rgba(240, 240, 240, 0.85);
+	--os-desktop-bg: #e8e8e8;
+	--os-surface: rgba(240, 240, 240, 0.97);
+	--os-hover: #d0d0d0;
+	--os-selected: #b0b0b0;
+	--os-border: #c0c0c0;
+	--os-border-subtle: #d4d4d4;
+	--os-text: #404040;
+	--os-text-dim: #737373;
 }
 
 @media (prefers-color-scheme: light) {
 	:not([data-theme='dark']) {
-		--os-glass:          rgba(240, 240, 240, 0.85);
-		--os-desktop-bg:     #e8e8e8;
-		--os-surface:        rgba(240, 240, 240, 0.97);
-		--os-hover:          #d0d0d0;
-		--os-selected:       #b0b0b0;
-		--os-border:         #c0c0c0;
-		--os-border-subtle:  #d4d4d4;
-		--os-text:           #404040;
-		--os-text-dim:       #737373;
+		--os-glass: rgba(240, 240, 240, 0.85);
+		--os-desktop-bg: #e8e8e8;
+		--os-surface: rgba(240, 240, 240, 0.97);
+		--os-hover: #d0d0d0;
+		--os-selected: #b0b0b0;
+		--os-border: #c0c0c0;
+		--os-border-subtle: #d4d4d4;
+		--os-text: #404040;
+		--os-text-dim: #737373;
 	}
 }
 
@@ -217,26 +269,66 @@ body.os-active input, body.os-active textarea, body.os-active [contenteditable] 
 }
 
 /* Light theme — override Tailwind tokens */
-[data-theme='light'] .border-neutral-800 { border-color: #d4d4d4; }
-[data-theme='light'] .border-neutral-900 { border-color: #e5e5e5; }
-[data-theme='light'] .text-neutral-200   { color: #171717; }
-[data-theme='light'] .text-neutral-300   { color: #262626; }
-[data-theme='light'] .text-neutral-400   { color: #404040; }
-[data-theme='light'] .text-neutral-500   { color: #525252; }
-[data-theme='light'] .text-neutral-600   { color: #737373; }
-[data-theme='light'] .text-neutral-700   { color: #a3a3a3; }
-[data-theme='light'] .bg-neutral-900     { background-color: #f5f5f5; }
-[data-theme='light'] .bg-neutral-950\/80 { background-color: rgba(250, 250, 250, 0.85); }
+[data-theme='light'] .border-neutral-800 {
+	border-color: #d4d4d4;
+}
+[data-theme='light'] .border-neutral-900 {
+	border-color: #e5e5e5;
+}
+[data-theme='light'] .text-neutral-200 {
+	color: #171717;
+}
+[data-theme='light'] .text-neutral-300 {
+	color: #262626;
+}
+[data-theme='light'] .text-neutral-400 {
+	color: #404040;
+}
+[data-theme='light'] .text-neutral-500 {
+	color: #525252;
+}
+[data-theme='light'] .text-neutral-600 {
+	color: #737373;
+}
+[data-theme='light'] .text-neutral-700 {
+	color: #a3a3a3;
+}
+[data-theme='light'] .bg-neutral-900 {
+	background-color: #f5f5f5;
+}
+[data-theme='light'] .bg-neutral-950\/80 {
+	background-color: rgba(250, 250, 250, 0.85);
+}
 
 @media (prefers-color-scheme: light) {
-	:not([data-theme='dark']) .border-neutral-800 { border-color: #d4d4d4; }
-	:not([data-theme='dark']) .border-neutral-900 { border-color: #e5e5e5; }
-	:not([data-theme='dark']) .text-neutral-200   { color: #171717; }
-	:not([data-theme='dark']) .text-neutral-300   { color: #262626; }
-	:not([data-theme='dark']) .text-neutral-400   { color: #404040; }
-	:not([data-theme='dark']) .text-neutral-500   { color: #525252; }
-	:not([data-theme='dark']) .text-neutral-600   { color: #737373; }
-	:not([data-theme='dark']) .text-neutral-700   { color: #a3a3a3; }
-	:not([data-theme='dark']) .bg-neutral-900     { background-color: #f5f5f5; }
-	:not([data-theme='dark']) .bg-neutral-950\/80 { background-color: rgba(250, 250, 250, 0.85); }
+	:not([data-theme='dark']) .border-neutral-800 {
+		border-color: #d4d4d4;
+	}
+	:not([data-theme='dark']) .border-neutral-900 {
+		border-color: #e5e5e5;
+	}
+	:not([data-theme='dark']) .text-neutral-200 {
+		color: #171717;
+	}
+	:not([data-theme='dark']) .text-neutral-300 {
+		color: #262626;
+	}
+	:not([data-theme='dark']) .text-neutral-400 {
+		color: #404040;
+	}
+	:not([data-theme='dark']) .text-neutral-500 {
+		color: #525252;
+	}
+	:not([data-theme='dark']) .text-neutral-600 {
+		color: #737373;
+	}
+	:not([data-theme='dark']) .text-neutral-700 {
+		color: #a3a3a3;
+	}
+	:not([data-theme='dark']) .bg-neutral-900 {
+		background-color: #f5f5f5;
+	}
+	:not([data-theme='dark']) .bg-neutral-950\/80 {
+		background-color: rgba(250, 250, 250, 0.85);
+	}
 }

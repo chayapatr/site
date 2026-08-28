@@ -5,7 +5,7 @@
 	import WritingsPanel from '$lib/content/WritingsPanel.svelte';
 	import ContentPanel from '$lib/main/ContentPanel.svelte';
 	import Ruler from '$lib/main/Ruler.svelte';
-	import LineNumbers from '$lib/main/LineNumbers.svelte';
+	import Sidebar from '$lib/main/Sidebar.svelte';
 	import BlueprintGrid from '$lib/main/BlueprintGrid.svelte';
 	import FloatingLayer from '$lib/floating/FloatingLayer.svelte';
 	import { writings } from '$lib/content/writings';
@@ -108,7 +108,7 @@
 
 {#if !view.showOS}
 
-	<LineNumbers contentEl={contentColumnEl} {isScrolling} isMobile={view.isMobile} />
+	<Sidebar contentEl={contentColumnEl} {isScrolling} isMobile={view.isMobile} />
 
 	{#if view.isMobile}
 		<ContentPanel
