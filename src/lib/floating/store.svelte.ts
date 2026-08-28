@@ -50,18 +50,19 @@ export async function openFloatingPanel(slug: string, parentId: number | null = 
 
 	const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 0;
 	const viewportHeight = typeof window !== 'undefined' ? window.innerHeight : 0;
-	// a 560px draggable window doesn't fit a narrow viewport — below the
-	// same breakpoint MainView uses for its own mobile layout, just open
-	// panels near-fullscreen instead of cascading small windows offscreen
+	// same breakpoint MainView uses for its own mobile layout
 	const isNarrow = viewportWidth < 768;
 
-	const width = isNarrow ? Math.max(280, viewportWidth - 24) : 560;
-	const height = isNarrow ? Math.max(200, viewportHeight - 96) : 440;
+	// mobile windows stay small and draggable (matching the v10 reference:
+	// a fixed 320px width, height capped at 400px) rather than going
+	// near-fullscreen — the point of a floating panel is that it floats
+	// over the content, which a fullscreen sheet defeats
+	const width = isNarrow ? Math.min(320, viewportWidth - 24) : 560;
+	const height = isNarrow ? Math.min(400, viewportHeight / 2) : 440;
 
 	// cascade new panels slightly so they don't stack exactly on top of
-	// each other when opened in quick succession (skip on mobile — panels
-	// are already full-width, an offset would just push them off-screen)
-	const offset = isNarrow ? 0 : (floatingPanels.length % 6) * 24;
+	// each other when opened in quick succession
+	const offset = (floatingPanels.length % 6) * 24;
 
 	const panel: FloatingPanel = {
 		id,

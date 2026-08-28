@@ -46,7 +46,7 @@
 	class="pointer-events-none fixed right-0 z-50 {isMobile && showGallery
 		? 'hidden'
 		: isMobile
-			? 'top-9.5 h-[calc(100svh-2.5rem)]'
+			? 'top-9 h-[calc(100svh-2.5rem)]'
 			: 'top-9 h-[calc(100svh-2.25rem)]'}"
 	transition:fade={{ duration: 250 }}
 >

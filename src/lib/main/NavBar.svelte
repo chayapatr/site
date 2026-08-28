@@ -30,13 +30,11 @@
 	class:bg-neutral-900={view.showOS}
 	class:border-neutral-200={!view.showOS}
 	class:bg-white={!view.showOS}
-	style="height: {isMobile ? 'auto' : '2.25rem'}; padding: {isMobile
-		? '0.625rem 0.5rem 0.625rem 1rem'
-		: '0'};"
+	style="height: 2.25rem; padding: {isMobile ? '0 0.5rem 0 1rem' : '0'};"
 >
 	{#if view.showOS}
 		<div
-			class="flex items-center gap-2 {isMobile ? 'w-full' : 'absolute inset-0 px-5'}"
+			class="flex items-center gap-2 {isMobile ? 'h-full w-full' : 'absolute inset-0 px-5'}"
 			transition:fly={{ y: -8, duration: 250 }}
 		>
 			<button
@@ -75,7 +73,7 @@
 			{/if}
 		</div>
 	{:else if isMobile}
-		<div class="flex w-full items-center justify-between" transition:fly={{ y: -8, duration: 250 }}>
+		<div class="flex h-full w-full items-center justify-between" transition:fly={{ y: -8, duration: 250 }}>
 			<div class="flex items-center gap-3">
 				{#if showGallery}
 					<button

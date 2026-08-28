@@ -28,27 +28,38 @@
 	const MIN_HEIGHT = 200;
 	const MAX_WIDTH = 900;
 
-	function startDrag(e: MouseEvent) {
+	// pointer events (not mouse events) so drag/resize/focus work with touch
+	// on mobile too — mousedown/mousemove never fire reliably from a touch
+	// interaction, which is why these were previously dead on phones
+	let lastPointer = { x: 0, y: 0 };
+
+	function startDrag(e: PointerEvent) {
 		if (resizing) return;
 		focusPanel(panel.id);
 		dragging = true;
+		lastPointer = { x: e.clientX, y: e.clientY };
 		e.preventDefault();
 	}
 
-	function startResize(e: MouseEvent) {
+	function startResize(e: PointerEvent) {
 		focusPanel(panel.id);
 		resizing = true;
+		lastPointer = { x: e.clientX, y: e.clientY };
 		e.preventDefault();
 		e.stopPropagation();
 	}
 
-	function handlePointerMove(e: MouseEvent) {
+	function handlePointerMove(e: PointerEvent) {
+		if (!dragging && !resizing) return;
+		const dx = e.clientX - lastPointer.x;
+		const dy = e.clientY - lastPointer.y;
+		lastPointer = { x: e.clientX, y: e.clientY };
 		if (dragging) {
-			panel.x += e.movementX;
-			panel.y += e.movementY;
+			panel.x += dx;
+			panel.y += dy;
 		} else if (resizing) {
-			panel.width = Math.min(MAX_WIDTH, Math.max(MIN_WIDTH, panel.width + e.movementX));
-			panel.height = Math.max(MIN_HEIGHT, panel.height + e.movementY);
+			panel.width = Math.min(MAX_WIDTH, Math.max(MIN_WIDTH, panel.width + dx));
+			panel.height = Math.max(MIN_HEIGHT, panel.height + dy);
 		}
 	}
 
@@ -67,18 +78,18 @@
 	}
 </script>
 
-<svelte:window onmousemove={handlePointerMove} onmouseup={stopInteraction} />
+<svelte:window onpointermove={handlePointerMove} onpointerup={stopInteraction} />
 
 <div
 	class="fixed rounded-md border shadow-lg {borderClass}"
 	style="left: {panel.x}px; top: {panel.y}px; width: {panel.width}px; height: {panel.height}px; z-index: {panel.z}; background: rgba(20, 20, 20, 0.8); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);"
-	onmousedown={() => focusPanel(panel.id)}
+	onpointerdown={() => focusPanel(panel.id)}
 	role="presentation"
 	transition:fade={{ duration: 120 }}
 >
 	<div
-		class="flex cursor-grab items-center justify-between gap-2 rounded-t-md border-b border-neutral-700 bg-black/30 px-2 py-1 select-none active:cursor-grabbing"
-		onmousedown={startDrag}
+		class="flex cursor-grab items-center justify-between gap-2 rounded-t-md border-b border-neutral-700 bg-black/30 px-2 py-1 touch-none select-none active:cursor-grabbing"
+		onpointerdown={startDrag}
 		role="presentation"
 	>
 		<span class="min-w-0 truncate font-mono text-xs text-neutral-400">{panel.title}</span>
@@ -108,8 +119,8 @@
 	</div>
 
 	<button
-		onmousedown={startResize}
-		class="absolute right-0 bottom-0 aspect-square w-3 cursor-se-resize rounded-br-md border-r-2 border-b-2 border-neutral-600"
+		onpointerdown={startResize}
+		class="absolute right-0 bottom-0 aspect-square w-3 touch-none cursor-se-resize rounded-br-md border-r-2 border-b-2 border-neutral-600"
 		aria-label="Resize panel"
 	></button>
 </div>
