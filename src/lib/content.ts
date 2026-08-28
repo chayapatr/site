@@ -45,11 +45,12 @@ export const getContent = async (slug: string): Promise<{ content: string; lineC
 	const content = String(processed)
 		.replace(
 			/<a href="((?:https?):\/\/[^"]*)"/g,
-			(_: string, url: string) => `<a href="${url}" target="_blank" class="external-link"`
+			(_: string, url: string) =>
+				`<a href="${url}" target="_blank" class="external-link" data-href="${url}"`
 		)
 		.replace(
 			/<a href="\/?([A-Za-z0-9!@$%^&*_\s-]*)(?:\.md)?"/g,
-			(_: string, slug: string) => `<a href="#" data-internal-slug="${slug}"`
+			(_: string, slug: string) => `<a href="#" data-internal-slug="${slug}" data-href="/${slug}"`
 		);
 
 	return { content, lineCount };

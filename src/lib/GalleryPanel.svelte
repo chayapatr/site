@@ -86,7 +86,7 @@
 			<div
 				transition:fade={{ duration: 150 }}
 				animate:flip={{ duration: 300 }}
-				class="group relative overflow-hidden rounded-sm bg-neutral-100 hover:cursor-pointer {!project.size ? 'aspect-square' : project.size === '2x2' ? 'col-span-2 row-span-2 aspect-square' : 'col-span-2 aspect-[2/1]'}"
+				class="group relative overflow-hidden rounded-sm bg-neutral-100 hover:cursor-pointer {!project.size ? 'aspect-square' : project.size === '2x2' ? 'col-span-2 row-span-2 aspect-square' : 'col-span-2 aspect-2/1'}"
 			>
 				<div class="absolute inset-x-0 top-0 z-10 p-2" data-label>
 					<div class="flex items-start justify-between gap-1">

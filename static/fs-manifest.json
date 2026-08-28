@@ -4,6 +4,13 @@
   "path": "/",
   "children": [
     {
+      "type": "file",
+      "name": ".DS_Store",
+      "path": "/.DS_Store",
+      "size": 6148,
+      "mtime": 1779387910347.7305
+    },
+    {
       "type": "dir",
       "name": "bin",
       "path": "/bin",
@@ -722,6 +729,13 @@
       "name": "usr",
       "path": "/usr",
       "children": [
+        {
+          "type": "file",
+          "name": ".DS_Store",
+          "path": "/usr/.DS_Store",
+          "size": 6148,
+          "mtime": 1779387910349.0686
+        },
         {
           "type": "dir",
           "name": "lib",
