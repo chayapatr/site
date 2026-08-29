@@ -106,11 +106,11 @@
 			>
 				<div
 					class="relative h-3.5 w-6 rounded-full transition-colors {showGallery
-						? 'bg-neutral-800'
-						: 'bg-neutral-200'}"
+						? 'bg-neutral-800 dark:bg-neutral-200'
+						: 'bg-neutral-200 dark:bg-neutral-700'}"
 				>
 					<div
-						class="absolute top-0.5 h-2.5 w-2.5 rounded-full bg-white transition-all {showGallery
+						class="absolute top-0.5 h-2.5 w-2.5 rounded-full bg-white transition-all dark:bg-neutral-900 {showGallery
 							? 'left-3'
 							: 'left-0.5'}"
 					></div>
