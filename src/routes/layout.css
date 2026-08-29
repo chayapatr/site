@@ -133,14 +133,6 @@ h6 {
 	font-weight: inherit;
 }
 
-/* links get the same dimmed base color as the rest of the body text — kept
-   as its own rule (rather than folded into the :not() above) so it doesn't
-   fight the internal/external link hover colors on specificity */
-[data-pub-theme='dark'][data-body-font='serif'] .prose a:not(:hover),
-[data-body-font='serif'] .panel-prose a:not(:hover) {
-	color: inherit;
-}
-
 .prose h1,
 .prose h2,
 .prose h3,
