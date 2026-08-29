@@ -101,9 +101,13 @@ h6 {
 	position: relative;
 }
 
-/* typography preferences (Sidebar > Typography) apply only to the main
-   article content, not the app chrome (navbar, ruler, etc.) */
-.prose {
+/* typography preferences (Sidebar > Typography) apply to any prose content
+   — the main article (.prose) and floating panel content (.panel-prose,
+   which also carries .prose but is listed explicitly here since it's a
+   distinct element rendered by a different component) — not the app chrome
+   (navbar, ruler, etc.) */
+.prose,
+.panel-prose {
 	font-family: var(--font-body-current, var(--font-body-serif));
 }
 
@@ -113,13 +117,18 @@ h6 {
    .prose (not just .prose itself) — the earlier "* { font-weight: 400 }"
    reset matches every element directly too, and a rule matching an element
    directly always beats an inherited value from a parent, no matter how
-   much more specific the parent's own selector is. */
-[data-pub-theme='dark'][data-body-font='serif'] .prose {
+   much more specific the parent's own selector is. .panel-prose (floating
+   panels) is always on a dark background regardless of the site-wide theme
+   toggle, so it gets the same treatment whenever the serif body font is
+   picked — not gated behind [data-pub-theme='dark']. */
+[data-pub-theme='dark'][data-body-font='serif'] .prose,
+[data-body-font='serif'] .panel-prose {
 	color: var(--color-neutral-300);
 	font-weight: 350;
 }
 
-[data-pub-theme='dark'][data-body-font='serif'] .prose :not(h1, h2, h3, h4, h5, h6, strong, b, a) {
+[data-pub-theme='dark'][data-body-font='serif'] .prose :not(h1, h2, h3, h4, h5, h6, strong, b, a),
+[data-body-font='serif'] .panel-prose :not(h1, h2, h3, h4, h5, h6, strong, b, a) {
 	color: inherit;
 	font-weight: inherit;
 }
@@ -127,7 +136,8 @@ h6 {
 /* links get the same dimmed base color as the rest of the body text — kept
    as its own rule (rather than folded into the :not() above) so it doesn't
    fight the internal/external link hover colors on specificity */
-[data-pub-theme='dark'][data-body-font='serif'] .prose a:not(:hover) {
+[data-pub-theme='dark'][data-body-font='serif'] .prose a:not(:hover),
+[data-body-font='serif'] .panel-prose a:not(:hover) {
 	color: inherit;
 }
 
@@ -136,7 +146,13 @@ h6 {
 .prose h3,
 .prose h4,
 .prose h5,
-.prose h6 {
+.prose h6,
+.panel-prose h1,
+.panel-prose h2,
+.panel-prose h3,
+.panel-prose h4,
+.panel-prose h5,
+.panel-prose h6 {
 	font-family: var(--font-header-current, var(--font-header-sans));
 }
 

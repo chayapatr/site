@@ -5,12 +5,18 @@
 		closeFloatingPanel,
 		openFloatingPanel,
 		focusState,
+		canvasState,
 		type FloatingPanel,
 	} from './store.svelte';
 	import LinkTooltip from '$lib/main/LinkTooltip.svelte';
 
 	type Props = { panel: FloatingPanel };
 	let { panel }: Props = $props();
+
+	// panel.x/y are world coordinates; screen position subtracts however far
+	// the canvas has been panned (see store.svelte.ts's canvasState)
+	let screenX = $derived(panel.x - canvasState.x);
+	let screenY = $derived(panel.y - canvasState.y);
 
 	let contentEl = $state<HTMLElement | null>(null);
 	let dragging = $state(false);
@@ -81,8 +87,8 @@
 <svelte:window onpointermove={handlePointerMove} onpointerup={stopInteraction} />
 
 <div
-	class="fixed rounded-md border shadow-lg {borderClass}"
-	style="left: {panel.x}px; top: {panel.y}px; width: {panel.width}px; height: {panel.height}px; z-index: {panel.z}; background: rgba(20, 20, 20, 0.8); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);"
+	class="pointer-events-auto fixed rounded-md border shadow-lg {borderClass}"
+	style="left: {screenX}px; top: {screenY}px; width: {panel.width}px; height: {panel.height}px; z-index: {panel.z}; background: rgba(20, 20, 20, 0.8); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);"
 	onpointerdown={() => focusPanel(panel.id)}
 	role="presentation"
 	transition:fade={{ duration: 120 }}

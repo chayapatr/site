@@ -304,6 +304,20 @@
         },
         {
           "type": "file",
+          "name": "source-serif-4-italic.ttf",
+          "path": "/fonts/source-serif-4-italic.ttf",
+          "size": 843444,
+          "mtime": 1787959554544.1143
+        },
+        {
+          "type": "file",
+          "name": "source-serif-4.ttf",
+          "path": "/fonts/source-serif-4.ttf",
+          "size": 1196808,
+          "mtime": 1787959554557.469
+        },
+        {
+          "type": "file",
           "name": "zed-mono-extended.ttf",
           "path": "/fonts/zed-mono-extended.ttf",
           "size": 4915968,

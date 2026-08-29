@@ -6,10 +6,10 @@
 </script>
 
 <div
-	class="noselect fixed bottom-0 left-0 z-80 flex w-screen flex-col items-center justify-center gap-2 p-3"
+	class="noselect pointer-events-none fixed bottom-0 left-0 z-80 flex w-screen flex-col items-center justify-center gap-2 p-3"
 >
 	<div
-		class="pill flex items-center rounded-full border p-1 text-sm shadow-sm transition-[gap] duration-200 {visibilityState.hidden
+		class="pill pointer-events-auto flex items-center rounded-full border p-1 text-sm shadow-sm transition-[gap] duration-200 {visibilityState.hidden
 			? 'is-light gap-0'
 			: 'gap-16'}"
 	>

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
-	import { floatingPanels, visibilityState } from './store.svelte';
+	import { floatingPanels, visibilityState, canvasState, panCanvasBy } from './store.svelte';
 	import FloatingPanel from './FloatingPanel.svelte';
 	import FloatingToolbar from './FloatingToolbar.svelte';
 	import FloatingMiniMap from './FloatingMiniMap.svelte';
@@ -14,7 +14,8 @@
 	// outer block's initial mount rather than as its own toggle.
 	let layerVisible = $derived(floatingPanels.length > 0 && !visibilityState.hidden);
 
-	// panel-center-to-panel-center connector for any panel opened from a
+	// panel-center-to-panel-center connector, in screen coordinates (world
+	// position minus the current pan offset) for any panel opened from a
 	// link inside another panel (parentId set) — panels opened from the
 	// main article (parentId null) get no line
 	function connector(panel: (typeof floatingPanels)[number]) {
@@ -22,17 +23,54 @@
 		const parent = floatingPanels.find((p) => p.id === panel.parentId);
 		if (!parent) return null;
 		return {
-			x1: parent.x + parent.width / 2,
-			y1: parent.y + parent.height / 2,
-			x2: panel.x + panel.width / 2,
-			y2: panel.y + panel.height / 2,
+			x1: parent.x + parent.width / 2 - canvasState.x,
+			y1: parent.y + parent.height / 2 - canvasState.y,
+			x2: panel.x + panel.width / 2 - canvasState.x,
+			y2: panel.y + panel.height / 2 - canvasState.y,
 		};
+	}
+
+	// dragging empty canvas space (the dim overlay) pans every panel at
+	// once, instead of moving any one of them — same pointer-event pattern
+	// as FloatingPanel's own drag/resize (pointer events, not mouse events,
+	// so this also works on touch)
+	let panning = $state(false);
+	let lastPointer = { x: 0, y: 0 };
+
+	function startPan(e: PointerEvent) {
+		panning = true;
+		lastPointer = { x: e.clientX, y: e.clientY };
+	}
+
+	function handlePanMove(e: PointerEvent) {
+		if (!panning) return;
+		const dx = e.clientX - lastPointer.x;
+		const dy = e.clientY - lastPointer.y;
+		lastPointer = { x: e.clientX, y: e.clientY };
+		// panning right should reveal panels to the left, i.e. move the
+		// world in the opposite direction of the drag
+		panCanvasBy(-dx, -dy);
+	}
+
+	function stopPan() {
+		panning = false;
 	}
 </script>
 
+<svelte:window onpointermove={handlePanMove} onpointerup={stopPan} />
+
 {#if layerVisible}
+	<!-- pointer-events-auto (not none) — while floating panels are open, the
+	     dim overlay should also block interaction with the content behind
+	     it, not just visually darken it. Panels themselves sit above this
+	     (z-70 > z-60) so they stay fully interactive. Dragging this empty
+	     space pans the whole canvas (see startPan/handlePanMove above). -->
 	<div
-		class="pointer-events-none fixed inset-0 z-60 bg-black/80"
+		class="pointer-events-auto fixed inset-0 z-60 bg-black/80 {panning
+			? 'cursor-grabbing'
+			: 'cursor-grab'}"
+		onpointerdown={startPan}
+		role="presentation"
 		transition:fade={{ duration: 120 }}
 	></div>
 
@@ -56,7 +94,7 @@
 		{/each}
 	</svg>
 
-	<div class="fixed inset-0 z-70" transition:fade={{ duration: 120 }}>
+	<div class="pointer-events-none fixed inset-0 z-70" transition:fade={{ duration: 120 }}>
 		{#each floatingPanels as panel (panel.id)}
 			<FloatingPanel {panel} />
 		{/each}

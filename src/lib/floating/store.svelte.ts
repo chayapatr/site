@@ -24,6 +24,22 @@ export const focusState = $state<{ id: number | null }>({ id: null });
 // closing panels, which discards them
 export const visibilityState = $state<{ hidden: boolean }>({ hidden: false });
 
+// panel x/y are stored in world coordinates; canvasOffset is how far the
+// viewport has been panned. A panel's actual screen position is always
+// panel.x - canvasOffset.x (see FloatingPanel.svelte). Dragging empty canvas
+// space pans by moving this offset instead of moving every panel.
+export const canvasState = $state<{ x: number; y: number }>({ x: 0, y: 0 });
+
+export function panCanvasBy(dx: number, dy: number) {
+	canvasState.x += dx;
+	canvasState.y += dy;
+}
+
+export function resetCanvasPan() {
+	canvasState.x = 0;
+	canvasState.y = 0;
+}
+
 export function focusPanel(id: number) {
 	const panel = floatingPanels.find((p) => p.id === id);
 	if (!panel) return;
@@ -64,6 +80,9 @@ export async function openFloatingPanel(slug: string, parentId: number | null = 
 	// each other when opened in quick succession
 	const offset = (floatingPanels.length % 6) * 24;
 
+	// new panels open centered in the current *viewport*, not the world
+	// origin — world coords are screen coords plus however far the canvas
+	// has been panned
 	const panel: FloatingPanel = {
 		id,
 		parentId,
@@ -71,8 +90,8 @@ export async function openFloatingPanel(slug: string, parentId: number | null = 
 		title: slug,
 		content: '',
 		loading: true,
-		x: viewportWidth / 2 - width / 2 + offset,
-		y: viewportHeight / 2 - height / 2 + offset,
+		x: viewportWidth / 2 - width / 2 + offset + canvasState.x,
+		y: viewportHeight / 2 - height / 2 + offset + canvasState.y,
 		z: nextZ,
 		width,
 		height,
