@@ -2,6 +2,7 @@
 	import { getContent } from '$lib/content/content';
 	import { tick, onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
+	import { SvelteSet } from 'svelte/reactivity';
 	import { openFloatingPanel } from '$lib/floating/store.svelte';
 	import { view } from '$lib/store.svelte';
 	import LinkTooltip from '$lib/main/LinkTooltip.svelte';
@@ -38,6 +39,19 @@
 	});
 	let dividers = $state<HTMLElement[]>([]);
 	let scrollEndTimer: ReturnType<typeof setTimeout>;
+
+	// purely a display concern (not persisted content data), so it's kept
+	// local here rather than added to the shared Block type — a set of
+	// collapsed slugs rather than per-block state, since blocks are keyed
+	// by slug in the {#each} anyway
+	let collapsedSlugs = new SvelteSet<string>();
+	function toggleCollapsed(slug: string) {
+		if (collapsedSlugs.has(slug)) {
+			collapsedSlugs.delete(slug);
+		} else {
+			collapsedSlugs.add(slug);
+		}
+	}
 
 	// content is raw {@html} markdown output — <img> is a replaced element,
 	// so ::before/::after pseudo-elements never render on it directly (spec
@@ -83,6 +97,10 @@
 
 	$effect(() => {
 		if (blockEls.length === 0) return;
+		// tracked explicitly so collapsing/expanding a block (which doesn't
+		// change blockEls itself, just a class on an existing element)
+		// re-triggers this recalculation too
+		void collapsedSlugs.size;
 		const totalHeight = blockEls.reduce((sum, e) => sum + (e?.offsetHeight ?? 0), 0);
 		if (totalHeight === 0) {
 			labelTops = blockEls.map(() => 0);
@@ -112,7 +130,7 @@
 		}
 	}
 
-	function handleClick(e: MouseEvent) {
+	async function handleClick(e: MouseEvent) {
 		const target = (e.target as HTMLElement).closest('[data-internal-slug]');
 		if (!target) return;
 		e.preventDefault();
@@ -126,6 +144,15 @@
 		}
 		const existing = blocks.findIndex((b) => b.slug === slug);
 		if (existing !== -1) {
+			// removing `hidden` doesn't reflow synchronously — wait for the DOM
+			// to actually update before reading offsetTop, or the scroll target
+			// is computed against the block's still-collapsed (zero) height
+			const wasCollapsed = collapsedSlugs.has(slug);
+			collapsedSlugs.delete(slug);
+			if (wasCollapsed) {
+				await tick();
+				await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+			}
 			const blockEl = blockEls[existing];
 			if (blockEl && el) {
 				el.scrollTo({ top: blockEl.offsetTop - SCROLL_OFFSET, behavior: 'smooth' });
@@ -139,9 +166,16 @@
 		openSlug(slug, afterIndex, target as HTMLElement);
 	}
 
-	export function scrollToBlock(index: number) {
+	export async function scrollToBlock(index: number) {
 		const blockEl = blockEls[index];
 		if (!blockEl || !el) return;
+		const slug = blocks[index]?.slug;
+		const wasCollapsed = slug !== undefined && collapsedSlugs.has(slug);
+		if (slug !== undefined) collapsedSlugs.delete(slug);
+		if (wasCollapsed) {
+			await tick();
+			await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+		}
 		el.scrollTo({ top: blockEl.offsetTop - SCROLL_OFFSET, behavior: 'smooth' });
 	}
 
@@ -212,6 +246,16 @@
 					class="cursor-pointer text-xs text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200"
 					onclick={(e) => {
 						e.stopPropagation();
+						toggleCollapsed(block.slug);
+					}}
+					aria-label={collapsedSlugs.has(block.slug) ? 'Expand section' : 'Collapse section'}
+				>
+					{collapsedSlugs.has(block.slug) ? '[+]' : '[-]'}
+				</button>
+				<button
+					class="cursor-pointer text-xs text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200"
+					onclick={(e) => {
+						e.stopPropagation();
 						popOutBlock(i);
 					}}
 					aria-label="Open as floating panel"
@@ -221,7 +265,11 @@
 				<div class="h-px flex-1 bg-neutral-200 dark:bg-neutral-800"></div>
 			</div>
 		{/if}
-		<div bind:this={blockEls[i]} data-block-index={i} class="flex justify-center">
+		<div
+			bind:this={blockEls[i]}
+			data-block-index={i}
+			class="flex justify-center {collapsedSlugs.has(block.slug) ? 'hidden' : ''}"
+		>
 			<div
 				class="{splitView
 					? 'pl-5'
