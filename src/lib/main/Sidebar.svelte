@@ -5,6 +5,7 @@
 		sidebar,
 		persistSidebarPrefs,
 		resetSidebarPrefs,
+		resolvedTheme,
 		type FontChoice,
 		type Theme
 	} from '$lib/main/sidebarPrefs.svelte';
@@ -91,10 +92,12 @@
 
 	// drives the "dark:" variant across the main site (see the
 	// @custom-variant in layout.css) — separate from PubOS's own always-dark
-	// [data-theme], since this is an explicit user toggle for the Pub side
+	// [data-theme], since this is an explicit user toggle for the Pub side.
+	// resolvedTheme() collapses "auto" down to whatever the live system
+	// preference currently is.
 	$effect(() => {
 		if (typeof document === 'undefined') return;
-		document.documentElement.setAttribute('data-pub-theme', sidebar.theme);
+		document.documentElement.setAttribute('data-pub-theme', resolvedTheme());
 	});
 
 	const fontOptions: { value: FontChoice; label: string }[] = [
@@ -218,6 +221,15 @@
 
 			<div class="mb-2.5 text-[13px] font-medium text-neutral-500 dark:text-neutral-400">Theme</div>
 			<div class="mb-6 flex flex-col gap-1">
+				<button
+					class="cursor-pointer rounded-sm px-2 py-1.5 text-left text-[13px] transition-colors {sidebar.theme ===
+					'auto'
+						? 'bg-neutral-100 dark:bg-neutral-800'
+						: 'text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800'}"
+					onclick={() => setTheme('auto')}
+				>
+					Auto
+				</button>
 				<button
 					class="cursor-pointer rounded-sm px-2 py-1.5 text-left text-[13px] transition-colors {sidebar.theme ===
 					'light'

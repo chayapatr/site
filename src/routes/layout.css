@@ -111,6 +111,26 @@ h6 {
 	font-family: var(--font-body-current, var(--font-body-serif));
 }
 
+/* Tailwind Typography's dark variant defaults link color to pure white,
+   which reads a bit too bright/heavy against the surrounding dimmed body
+   text — soften it slightly instead. Setting `color` directly on the
+   anchor (rather than the --tw-prose-invert-links custom property
+   Typography itself reads) since overriding that variable wasn't actually
+   winning against Typography's own declaration of it.
+
+   Two separate cases, since they compile to different classes: .panel-prose
+   (floating panels) always uses plain "prose-invert"; the main article uses
+   "dark:prose-invert", which Tailwind compiles to a literal class named
+   ".dark\:prose-invert" (colon included) scoped under [data-pub-theme='dark']
+   — NOT the same selector as plain ".prose-invert", so overriding that alone
+   never matched the main article's links at all. Keying off
+   [data-pub-theme='dark'] .prose a directly sidesteps needing to match
+   Tailwind's internal compiled class name for the variant. */
+.prose-invert :where(a):not(:where([class~='not-prose'], [class~='not-prose'] *)),
+[data-pub-theme='dark'] .prose :where(a):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+	color: var(--color-neutral-100) !important;
+}
+
 /* Source Serif 4 is a variable font, so on a dark background it can drop to
    an actual lighter weight (not just a dimmer color) to compensate for
    reading heavier there than on white. Also targets every descendant of
@@ -131,6 +151,16 @@ h6 {
 [data-body-font='serif'] .panel-prose :not(h1, h2, h3, h4, h5, h6, strong, b, a) {
 	color: inherit;
 	font-weight: inherit;
+}
+
+/* links keep their own dedicated color rule (above) so hover states aren't
+   fought on specificity, but should still get the same thinner weight as
+   the rest of the body text — Typography's own link rule sets
+   font-weight: 500 directly on the anchor, heavier than the 350 the rest
+   of the paragraph now uses */
+[data-pub-theme='dark'][data-body-font='serif'] .prose a,
+[data-body-font='serif'] .panel-prose a {
+	font-weight: 350;
 }
 
 .prose h1,
