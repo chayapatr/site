@@ -126,8 +126,8 @@ h6 {
    never matched the main article's links at all. Keying off
    [data-pub-theme='dark'] .prose a directly sidesteps needing to match
    Tailwind's internal compiled class name for the variant. */
-.prose-invert :where(a):not(:where([class~='not-prose'], [class~='not-prose'] *)),
-[data-pub-theme='dark'] .prose :where(a):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
+.prose-invert :where(a):not(:where([class~='not-prose'], [class~='not-prose'] *)):not(:hover),
+[data-pub-theme='dark'] .prose :where(a):not(:where([class~='not-prose'], [class~='not-prose'] *)):not(:hover) {
 	color: var(--color-neutral-100) !important;
 }
 
