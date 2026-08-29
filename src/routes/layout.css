@@ -119,9 +119,16 @@ h6 {
 	font-weight: 350;
 }
 
-[data-pub-theme='dark'][data-body-font='serif'] .prose :not(h1, h2, h3, h4, h5, h6, strong, b) {
+[data-pub-theme='dark'][data-body-font='serif'] .prose :not(h1, h2, h3, h4, h5, h6, strong, b, a) {
 	color: inherit;
 	font-weight: inherit;
+}
+
+/* links get the same dimmed base color as the rest of the body text — kept
+   as its own rule (rather than folded into the :not() above) so it doesn't
+   fight the internal/external link hover colors on specificity */
+[data-pub-theme='dark'][data-body-font='serif'] .prose a:not(:hover) {
+	color: inherit;
 }
 
 .prose h1,
@@ -149,6 +156,7 @@ h6 {
 
 [data-pub-theme='dark'] .prose [data-internal-slug]:hover {
 	text-decoration: underline wavy 1.5px #fff8a7;
+	color: #fff8a7;
 }
 
 /* loading indicator for a clicked internal link — pulses opacity only, never
@@ -177,6 +185,7 @@ h6 {
 
 [data-pub-theme='dark'] .external-link:hover {
 	text-decoration-color: #e0dbff;
+	color: #e0dbff;
 }
 
 * {

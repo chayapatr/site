@@ -22,7 +22,6 @@
 	let contentRect = $state<Edge | null>(null);
 	let panelRect = $state<Edge | null>(null);
 	let vh = $state(0);
-	let hoveredEdge = $state<'panel-left' | null>(null);
 
 	function measure() {
 		vh = window.innerHeight;
@@ -113,24 +112,6 @@
 					class="pointer-events-none absolute top-0 w-px bg-neutral-200 dark:bg-neutral-800"
 					style="left: {contentRect.right}px; height: {vh}px"
 				></div>
-			{/if}
-		{/if}
-
-		{#if panelRect}
-			<div
-				class="pointer-events-auto absolute top-0 w-3 -translate-x-1/2"
-				style="left: {panelRect.left}px; height: {vh}px"
-				onmouseenter={() => (hoveredEdge = 'panel-left')}
-				onmouseleave={() => (hoveredEdge = null)}
-				role="presentation"
-			></div>
-			{#if hoveredEdge === 'panel-left'}
-				<div
-					class="absolute top-12 flex -translate-x-1/2 items-center gap-1 rounded-sm bg-white px-1.5 py-0.5 font-mono text-[10px] text-purple-500 shadow-sm dark:bg-neutral-900"
-					style="left: {panelRect.left}px"
-				>
-					{Math.round(panelRect.width)}px
-				</div>
 			{/if}
 		{/if}
 

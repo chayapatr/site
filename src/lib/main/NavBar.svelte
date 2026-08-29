@@ -76,7 +76,7 @@
 		</div>
 	{:else if isMobile}
 		<div
-			class="flex h-full w-full items-center justify-between text-black dark:text-white"
+			class="flex h-full w-full items-center justify-between text-black dark:text-neutral-100"
 			transition:fly={{ y: -8, duration: 250 }}
 		>
 			<div class="flex items-center gap-3">
@@ -119,7 +119,7 @@
 		</div>
 	{:else}
 		<div
-			class="absolute inset-0 flex items-center justify-between gap-1.5 px-5 text-black dark:text-white"
+			class="absolute inset-0 flex items-center justify-between gap-1.5 px-5 text-black dark:text-neutral-100"
 			transition:fly={{ y: -8, duration: 250 }}
 		>
 			<button

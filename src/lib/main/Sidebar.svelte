@@ -191,7 +191,7 @@
 
 	{#if sidebar.open}
 		<div
-			class="fixed top-9 left-8 z-40 h-[calc(100svh-2.25rem)] w-56 overflow-y-auto border-r border-neutral-200 bg-white px-3 py-5 text-black dark:border-neutral-800 dark:bg-neutral-900 dark:text-white"
+			class="fixed top-9 left-8 z-40 h-[calc(100svh-2.25rem)] w-56 overflow-y-auto border-r border-neutral-200 bg-white px-3 py-5 text-black dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-100"
 			transition:fly={{ x: -12, duration: 200 }}
 		>
 			<div class="mb-2 text-[13px] font-medium text-neutral-700 dark:text-neutral-300">Display</div>
@@ -240,9 +240,13 @@
 
 			<div class="mt-2 mb-4 h-px bg-neutral-100 dark:bg-neutral-800"></div>
 
-			<div class="mb-4 text-[13px] font-medium text-neutral-700 dark:text-neutral-300">Typography</div>
+			<div class="mb-4 text-[13px] font-medium text-neutral-700 dark:text-neutral-300">
+				Typography
+			</div>
 
-			<div class="mb-2.5 text-[13px] font-medium text-neutral-500 dark:text-neutral-400">Header</div>
+			<div class="mb-2.5 text-[13px] font-medium text-neutral-500 dark:text-neutral-400">
+				Header
+			</div>
 			<div class="mb-4 flex flex-col gap-1">
 				{#each fontOptions as opt (opt.value)}
 					<button

@@ -225,7 +225,7 @@
 			<div
 				class="{splitView
 					? 'pl-5'
-					: 'pl-0'} prose dark:prose-invert w-full max-w-3xl overflow-visible py-4 text-base text-[15px] leading-relaxed transition-[padding] duration-500 lg:text-base xl:text-[17px]"
+					: 'pl-0'} prose w-full max-w-3xl overflow-visible py-4 text-base text-[15px] leading-relaxed transition-[padding] duration-500 lg:text-base xl:text-[17px] dark:prose-invert"
 			>
 				{@html block.content}
 			</div>
