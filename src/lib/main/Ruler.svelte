@@ -52,7 +52,7 @@
 >
 	{#each blocks as b, i (b.slug)}
 		<button
-			class="pointer-events-auto absolute cursor-pointer rounded-sm border border-neutral-900/20 bg-white px-1 py-px text-right text-xs text-neutral-900/50 transition-all duration-300 hover:border-black hover:bg-[#FFF8A7] hover:text-black {isMobile &&
+			class="pointer-events-auto absolute cursor-pointer rounded-sm border border-neutral-900/20 bg-white px-1 py-px text-right text-xs text-neutral-900/50 transition-all duration-300 hover:border-black hover:bg-[#FFF8A7] hover:text-black dark:border-neutral-100/20 dark:bg-neutral-900 dark:text-neutral-100/50 dark:hover:border-[#FFF8A7] dark:hover:text-black {isMobile &&
 			!isScrolling
 				? 'opacity-0'
 				: ''}"
@@ -66,7 +66,11 @@
 	{/each}
 
 	<!-- boxed ruler column, flush to the viewport edge -->
-	<div class="h-full w-8 bg-white {isMobile ? '' : 'border-l border-neutral-200'}">
+	<div
+		class="h-full w-8 bg-white dark:bg-neutral-900 {isMobile
+			? ''
+			: 'border-l border-neutral-200 dark:border-neutral-800'}"
+	>
 		<div class="flex h-full flex-col items-end justify-between px-1.5 py-2">
 			{#each Array.from({ length: 41 }, (_, i) => i) as i (i)}
 				<div class="relative flex items-center justify-end">
@@ -88,7 +92,9 @@
 						{/if}
 					{:else}
 						<div
-							class={i % 10 === 0 ? 'h-px w-2.5 bg-neutral-600' : 'h-px w-1 bg-neutral-400'}
+							class={i % 10 === 0
+								? 'h-px w-2.5 bg-neutral-600 dark:bg-neutral-400'
+								: 'h-px w-1 bg-neutral-400 dark:bg-neutral-600'}
 						></div>
 					{/if}
 				</div>

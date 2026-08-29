@@ -1,6 +1,13 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
+/* main-site dark mode (Sidebar > Display > Theme) — separate from PubOS's
+   own [data-theme] system, which already defaults to dark and covers only
+   the OS simulation. "dark:" utilities across the main site key off this
+   attribute instead of prefers-color-scheme, since it's an explicit
+   in-app toggle, not a system preference. */
+@custom-variant dark (&:where([data-pub-theme='dark'], [data-pub-theme='dark'] *));
+
 @font-face {
 	font-family: 'basier square';
 	src: url('/fonts/basier-regular.woff2') format('woff2');
@@ -28,7 +35,7 @@
 @font-face {
 	font-family: 'Source Serif 4';
 	src: url('/fonts/source-serif-4.ttf') format('truetype');
-	font-weight: 400;
+	font-weight: 300 400;
 	font-style: normal;
 }
 
@@ -65,6 +72,11 @@ body {
 	overscroll-behavior: none;
 }
 
+[data-pub-theme='dark'] body:not(.os-active) {
+	background: var(--color-neutral-900);
+	color: var(--color-neutral-200);
+}
+
 body.os-active {
 	background: #000000;
 	overflow: hidden;
@@ -95,6 +107,23 @@ h6 {
 	font-family: var(--font-body-current, var(--font-body-serif));
 }
 
+/* Source Serif 4 is a variable font, so on a dark background it can drop to
+   an actual lighter weight (not just a dimmer color) to compensate for
+   reading heavier there than on white. Also targets every descendant of
+   .prose (not just .prose itself) — the earlier "* { font-weight: 400 }"
+   reset matches every element directly too, and a rule matching an element
+   directly always beats an inherited value from a parent, no matter how
+   much more specific the parent's own selector is. */
+[data-pub-theme='dark'][data-body-font='serif'] .prose {
+	color: var(--color-neutral-300);
+	font-weight: 350;
+}
+
+[data-pub-theme='dark'][data-body-font='serif'] .prose :not(h1, h2, h3, h4, h5, h6, strong, b) {
+	color: inherit;
+	font-weight: inherit;
+}
+
 .prose h1,
 .prose h2,
 .prose h3,
@@ -104,14 +133,9 @@ h6 {
 	font-family: var(--font-header-current, var(--font-header-sans));
 }
 
-/* image frame — a border around the image. <img> is a replaced element and
-   never renders ::before/::after content (spec behavior, not a browser
-   quirk), so ContentPanel.svelte wraps each image in a real
-   <span class="img-frame"> for the border to apply to. */
 .img-frame {
 	display: block;
 	position: relative;
-	border: 1px solid var(--color-neutral-300);
 }
 
 .img-frame img {
@@ -121,6 +145,10 @@ h6 {
 
 .prose [data-internal-slug]:hover {
 	text-decoration: underline wavy 1.5px rgb(58, 58, 230);
+}
+
+[data-pub-theme='dark'] .prose [data-internal-slug]:hover {
+	text-decoration: underline wavy 1.5px #fff8a7;
 }
 
 /* loading indicator for a clicked internal link — pulses opacity only, never
@@ -145,6 +173,10 @@ h6 {
 
 .external-link:hover {
 	cursor: alias;
+}
+
+[data-pub-theme='dark'] .external-link:hover {
+	text-decoration-color: #e0dbff;
 }
 
 * {

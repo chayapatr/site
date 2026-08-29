@@ -1,10 +1,12 @@
 export type SidebarDisplayMode = 'number' | 'ruler';
 export type FontChoice = 'sans' | 'serif' | 'mono';
+export type Theme = 'light' | 'dark';
 
 type SidebarPrefs = {
 	displayMode: SidebarDisplayMode;
 	headerFont: FontChoice;
 	bodyFont: FontChoice;
+	theme: Theme;
 };
 
 const STORAGE_KEY = 'pub-sidebar-prefs';
@@ -13,6 +15,7 @@ const defaults: SidebarPrefs = {
 	displayMode: 'number',
 	headerFont: 'sans',
 	bodyFont: 'serif',
+	theme: 'light',
 };
 
 function loadPrefs(): SidebarPrefs {
@@ -35,13 +38,14 @@ export const sidebar = $state({
 // which shouldn't survive a reload) whenever one of them changes
 export function persistSidebarPrefs() {
 	if (typeof localStorage === 'undefined') return;
-	const { displayMode, headerFont, bodyFont } = sidebar;
-	localStorage.setItem(STORAGE_KEY, JSON.stringify({ displayMode, headerFont, bodyFont }));
+	const { displayMode, headerFont, bodyFont, theme } = sidebar;
+	localStorage.setItem(STORAGE_KEY, JSON.stringify({ displayMode, headerFont, bodyFont, theme }));
 }
 
 export function resetSidebarPrefs() {
 	sidebar.displayMode = defaults.displayMode;
 	sidebar.headerFont = defaults.headerFont;
 	sidebar.bodyFont = defaults.bodyFont;
+	sidebar.theme = defaults.theme;
 	persistSidebarPrefs();
 }

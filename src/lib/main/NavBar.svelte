@@ -29,7 +29,9 @@
 	class:border-neutral-800={view.showOS}
 	class:bg-neutral-900={view.showOS}
 	class:border-neutral-200={!view.showOS}
+	class:dark:border-neutral-800={!view.showOS}
 	class:bg-white={!view.showOS}
+	class:dark:bg-neutral-900={!view.showOS}
 	style="height: 2.25rem; padding: {isMobile ? '0 0.5rem 0 1rem' : '0'};"
 >
 	{#if view.showOS}
@@ -73,7 +75,10 @@
 			{/if}
 		</div>
 	{:else if isMobile}
-		<div class="flex h-full w-full items-center justify-between" transition:fly={{ y: -8, duration: 250 }}>
+		<div
+			class="flex h-full w-full items-center justify-between text-black dark:text-white"
+			transition:fly={{ y: -8, duration: 250 }}
+		>
 			<div class="flex items-center gap-3">
 				{#if showGallery}
 					<button
@@ -114,12 +119,12 @@
 		</div>
 	{:else}
 		<div
-			class="absolute inset-0 flex items-center justify-between gap-1.5 px-5"
+			class="absolute inset-0 flex items-center justify-between gap-1.5 px-5 text-black dark:text-white"
 			transition:fly={{ y: -8, duration: 250 }}
 		>
 			<button
 				onclick={() => (view.showOS = !view.showOS)}
-				class="flex cursor-pointer items-center gap-1.5 text-black"
+				class="flex cursor-pointer items-center gap-1.5"
 			>
 				<img src="/imgs/pub.svg" alt="Pub" class="h-4 w-4" />Pub</button
 			>

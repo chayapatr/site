@@ -170,7 +170,7 @@
 			>
 				<div
 					bind:this={panelContentEl}
-					class="w-full max-w-2xl border-r border-neutral-200 pr-5 transition-opacity duration-150 {panelContentVisible
+					class="w-full max-w-2xl border-r border-neutral-200 pr-5 transition-opacity duration-150 dark:border-neutral-800 {panelContentVisible
 						? 'opacity-100'
 						: 'opacity-0'}"
 				>

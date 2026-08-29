@@ -184,7 +184,7 @@
 >
 	{#if blocks[0]?.slug !== '!@$'}
 		<button
-			class="text-md -mt-1 mb-6 flex h-9 w-full cursor-pointer items-center justify-center border-b border-neutral-200 bg-[repeating-linear-gradient(315deg,var(--pattern-fg)_0,var(--pattern-fg)_1px,transparent_0,transparent_50%)] bg-size-[10px_10px] bg-fixed text-neutral-500 [--pattern-fg:var(--color-neutral-900)]/5 hover:[--pattern-fg:var(--color-neutral-900)]/10"
+			class="text-md -mt-1 mb-6 flex h-9 w-full cursor-pointer items-center justify-center border-b border-neutral-200 bg-[repeating-linear-gradient(315deg,var(--pattern-fg)_0,var(--pattern-fg)_1px,transparent_0,transparent_50%)] bg-size-[10px_10px] bg-fixed text-neutral-500 [--pattern-fg:var(--color-neutral-900)]/5 hover:[--pattern-fg:var(--color-neutral-900)]/10 dark:border-neutral-800 dark:text-neutral-400 dark:[--pattern-fg:var(--color-neutral-100)]/5 dark:hover:[--pattern-fg:var(--color-neutral-100)]/10"
 			onclick={openHomeAtTop}
 		>
 			Home
@@ -196,7 +196,7 @@
 				class="my-6 flex items-center gap-1.5 text-xs text-neutral-400"
 				bind:this={dividers[i - 1]}
 			>
-				<div class="h-px flex-1 bg-neutral-200"></div>
+				<div class="h-px flex-1 bg-neutral-200 dark:bg-neutral-800"></div>
 				<span>{block.slug}</span>
 				<button
 					class="cursor-pointer text-xs text-neutral-400 hover:text-red-400"
@@ -209,7 +209,7 @@
 					[x]
 				</button>
 				<button
-					class="cursor-pointer text-xs text-neutral-400 hover:text-neutral-700"
+					class="cursor-pointer text-xs text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200"
 					onclick={(e) => {
 						e.stopPropagation();
 						popOutBlock(i);
@@ -218,14 +218,14 @@
 				>
 					[o]
 				</button>
-				<div class="h-px flex-1 bg-neutral-200"></div>
+				<div class="h-px flex-1 bg-neutral-200 dark:bg-neutral-800"></div>
 			</div>
 		{/if}
 		<div bind:this={blockEls[i]} data-block-index={i} class="flex justify-center">
 			<div
 				class="{splitView
 					? 'pl-5'
-					: 'pl-0'} prose w-full max-w-3xl overflow-visible py-4 text-base text-[15px] leading-relaxed transition-[padding] duration-500 lg:text-base xl:text-[17px]"
+					: 'pl-0'} prose dark:prose-invert w-full max-w-3xl overflow-visible py-4 text-base text-[15px] leading-relaxed transition-[padding] duration-500 lg:text-base xl:text-[17px]"
 			>
 				{@html block.content}
 			</div>
