@@ -2,7 +2,7 @@
 	import { fade } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
 	import type { WritingSource, WritingYear } from '$lib/content/writings';
-	import { sidebar } from '$lib/main/sidebarPrefs.svelte';
+	import { resolvedTheme } from '$lib/main/sidebarPrefs.svelte';
 
 	type Props = {
 		writingYears: WritingYear[];
@@ -26,7 +26,7 @@
 		substack: ['#3A3117', '#F0CD6B'],
 	};
 
-	const sourceColors = $derived(sidebar.theme === 'dark' ? darkSourceColors : lightSourceColors);
+	const sourceColors = $derived(resolvedTheme() === 'dark' ? darkSourceColors : lightSourceColors);
 
 	const sourceLabels: Record<WritingSource, string> = {
 		medium:   'Medium',

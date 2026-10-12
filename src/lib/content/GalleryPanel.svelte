@@ -2,7 +2,7 @@
 	import { fade } from 'svelte/transition';
 	import { flip } from 'svelte/animate';
 	import type { ProjectType } from '$lib/content/projects';
-	import { sidebar } from '$lib/main/sidebarPrefs.svelte';
+	import { resolvedTheme } from '$lib/main/sidebarPrefs.svelte';
 
 	type ProjectGroup = { year: number; projects: { title: string; image: string; types: ProjectType[]; size?: '2x1' | '2x2' }[] };
 
@@ -36,7 +36,7 @@
 		'Media': ['#3A3117', '#F0CD6B'],
 	};
 
-	const colors = $derived(sidebar.theme === 'dark' ? darkColors : lightColors);
+	const colors = $derived(resolvedTheme() === 'dark' ? darkColors : lightColors);
 
 </script>
 
